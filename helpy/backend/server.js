@@ -17,12 +17,7 @@ app.use(express.urlencoded({extended: true}));
 require("./routes/adRoutes")(app);  
 
 mongoose  
-    .connect(process.env.URL, {  
-        useNewUrlParser: true,  
-        useUnifiedTopology: true,  
-        useFindAndModify: false,  
-        useCreateIndex: true  
-    })  
+    .connect(process.env.URL)  
     .then(() => {  
         console.log("Connected to the database!");  
     })  
