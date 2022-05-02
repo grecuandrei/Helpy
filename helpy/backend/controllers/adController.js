@@ -193,3 +193,7 @@ exports.likeAd = async (req, res) => {
         });
 
 }
+
+exports.viewAd = async (req, res) => {
+    res.status(200)
+}
