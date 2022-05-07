@@ -14,7 +14,7 @@ app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded  
 app.use(express.urlencoded({extended: true}));
 
-require("./routes/adRoutes")(app);  
+require("./routes/adRoutes")(app);
 
 mongoose  
     .connect(process.env.URL)  

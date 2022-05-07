@@ -11,5 +11,5 @@ module.exports = app => {
     router.delete("/", checkJwt, ads.deleteAll);  
     router.patch('/:id/likeAd', checkJwt, ads.likeAd);  
     router.patch('/:id/viewAd', checkJwt, ads.viewAd); 
-    app.use('/api/ads', router);  
+    app.use('/ads', router);  
 };

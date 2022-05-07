@@ -2,6 +2,7 @@
   "name": "lab-03",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8000",
   "dependencies": {
     "@auth0/auth0-react": "^1.9.0",
     "chart.js": "^3.7.1",

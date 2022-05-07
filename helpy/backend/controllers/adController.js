@@ -47,7 +47,7 @@ exports.findAll = async (req, res) => {
     const {title} = req.query;
     const condition = title ? {title: {$regex: new RegExp(title), $options: "i"}} : {};
 
-    await Ad.find(condition)
+    await Ad.find({})
         .then(data => {
             res.send(data);
         })
