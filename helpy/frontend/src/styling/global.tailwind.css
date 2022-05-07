@@ -1,0 +1,194 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* scrollbar settings */
+
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+
+/* Track */
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+    @apply bg-purple-faded rounded-xl;
+}
+
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-purple-secondary;
+}
+
+
+/* text */
+
+p {
+    @apply text-base font-normal;
+}
+
+h2 {
+    @apply text-3xl font-extrabold;
+}
+
+
+/* table */
+
+table {
+    @apply border-2 border-collapse border-none rounded-md border-purple-faded;
+    box-shadow: 0 0 0 1px #3d29730d;
+    /* this draws the table border   */
+}
+
+table tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+table tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+th,
+td {
+    @apply p-6 text-lg font-semibold text-left;
+}
+
+th {
+    @apply font-bold opacity-50;
+}
+
+tr {
+    @apply w-full border-b-2 cursor-pointer border-purple-faded;
+}
+
+thead>tr {
+    @apply cursor-default;
+}
+
+
+/* button */
+
+.button {
+    @apply flex w-fit items-center justify-center gap-2 px-4 py-2 text-lg font-semibold text-white rounded-full bg-purple-secondary;
+}
+
+.button:disabled {
+    @apply bg-gray;
+}
+
+.button svg {
+    @apply h-4 w-4;
+}
+
+.icon-button {
+    @apply text-black bg-transparent stroke-2;
+}
+
+.icon-button>svg {
+    @apply text-black bg-transparent stroke-black h-7 w-7;
+}
+
+
+/* inputs */
+
+label {
+    @apply font-semibold text-sm;
+}
+
+.input {
+    @apply w-full px-4 py-3 border-2 rounded-lg outline-none border-gray text-base font-semibold;
+}
+
+.input:focus {
+    @apply border-purple-secondary;
+}
+
+
+/* keywords */
+
+.keyword-list {
+    @apply flex items-center gap-3;
+}
+
+.keyword-list>span {
+    @apply p-4 rounded-3xl bg-purple text-white font-semibold text-sm;
+}
+
+
+/* modal */
+
+.ReactModal__Overlay,
+.ReactModal__Overlay--after-open {
+    @apply flex justify-center items-center bg-gray-background !important;
+}
+
+.modal {
+    @apply w-[465px] px-16 py-10 bg-white rounded-md;
+}
+
+.modal form {
+    @apply flex flex-col gap-5;
+}
+
+.modal .line {
+    @apply h-[1px] bg-black my-7 opacity-10 rounded-md;
+}
+
+.modal>form>button {
+    @apply mt-5 w-full bg-purple-secondary;
+}
+
+.row-center {
+    @apply flex flex-row items-center justify-center gap-3;
+}
+
+.delete-button {
+    @apply bg-red;
+}
+
+
+/* special info section */
+
+.section-container {
+    @apply bg-white font-semibold text-lg flex flex-col gap-5 w-auto m-[1px];
+}
+
+.section-title {
+    @apply font-semibold text-lg;
+}
+
+.section-container .fields {
+    @apply rounded-md p-6;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+    display: grid;
+    column-gap: 40px;
+    row-gap: 20px;
+    grid-template-columns: max-content max-content;
+    width: max-content;
+}
+
+.field-key {
+    @apply text-purple-secondary;
+}
+
+.reading-card {
+    @apply flex flex-col gap-3 p-6 border-t-[5px] w-max rounded-md m-[1px];
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.statistic-card {
+    @apply flex flex-col gap-3 p-10 border-t-[5px] border-purple-accent w-max rounded-md m-[1px];
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+}

@@ -1,0 +1,75 @@
+/* layout */
+
+.user-layout {
+  @apply flex w-screen h-screen flex-col px-44;
+}
+
+.user-content {
+  @apply flex flex-col overflow-y-auto gap-7 py-7;
+}
+
+.user-menu {
+  @apply flex flex-row justify-between items-center w-full py-8;
+}
+
+/* tabs */
+.book-tabs {
+  @apply flex gap-5;
+}
+
+.book-tabs > div {
+  @apply py-2 px-3 rounded-3xl cursor-pointer  bg-transparent text-black opacity-50 font-semibold text-sm;
+}
+
+.book-tabs > div.active {
+  @apply opacity-100;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+}
+
+.profile-link {
+  @apply font-bold text-lg;
+}
+
+.signout {
+  @apply decoration-transparent text-black opacity-50;
+}
+
+/* books layout */
+.books {
+  @apply flex flex-wrap gap-4 m-[1px];
+}
+
+/* book card */
+
+.book-card {
+  @apply p-6 rounded-3xl flex flex-col gap-3 min-w-[300px];
+  box-shadow: 0px 0px 2px #7b61ff;
+}
+
+.rented {
+  box-shadow: 0px 0px 2px #999999;
+}
+
+.book-group {
+  @apply flex flex-col gap-1;
+}
+
+.card-heading {
+  @apply flex items-center;
+}
+
+.card-heading > p:first-of-type {
+  @apply font-semibold text-base;
+}
+
+.card-heading > p {
+  @apply font-semibold text-sm;
+}
+
+.title {
+  @apply text-[28px] font-semibold;
+}
+
+.keywords {
+  @apply font-semibold text-sm opacity-50;
+}

@@ -1,0 +1,83 @@
+/* layout */
+
+.layout {
+    @apply flex w-screen h-screen;
+}
+
+.content {
+    @apply flex flex-col px-10 overflow-y-auto gap-7 py-7;
+    width: calc(100vw - 15.625rem);
+}
+
+.admin-menu {
+    @apply w-[15.625rem] h-screen bg-purple-faded flex flex-col items-center gap-24;
+}
+
+.logo-container {
+    @apply flex items-center justify-center w-full h-28;
+}
+
+
+/* navigation */
+
+.admin-nav {
+    @apply flex flex-col w-[90%] gap-5;
+}
+
+.nav-link {
+    @apply h-12 pl-4 rounded-[10px] flex items-center font-semibold gap-2 opacity-50 text-lg;
+}
+
+.active {
+    @apply text-white bg-black opacity-100;
+}
+
+
+/* header */
+
+.header {
+    @apply flex flex-row-reverse w-full;
+}
+
+.profile-container {
+    @apply flex gap-4;
+}
+
+.profile-info {
+    @apply flex flex-col items-end justify-center font-semibold;
+}
+
+.profile-info>p {
+    @apply text-lg font-bold;
+}
+
+.profile-info>a {
+    @apply underline text-purple-secondary;
+}
+
+
+/* customs */
+
+.row-between {
+    @apply flex items-center justify-between;
+}
+
+.analytic-section {
+    @apply w-[250px] mt-12;
+}
+
+.graph {
+    @apply mt-12 h-[250px];
+}
+
+.card-statistic {
+    @apply flex flex-col gap-2;
+}
+
+.card-statistic>p:first-child {
+    @apply text-[2.5rem];
+}
+
+.card-statistic>p:nth-child(2) {
+    @apply font-semibold opacity-50;
+}
