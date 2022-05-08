@@ -1,15 +1,23 @@
 /* layout */
 
 .user-layout {
-  @apply flex w-screen h-screen flex-col px-44;
+  @apply flex w-screen h-screen flex-col;
 }
 
 .user-content {
-  @apply flex flex-col overflow-y-auto gap-7 py-7;
+  @apply flex flex-row overflow-y-auto gap-7 p-4;
+}
+
+.user-content-main {
+  @apply flex flex-col overflow-y-auto gap-7;
 }
 
 .user-menu {
-  @apply flex flex-row justify-between items-center w-full py-8;
+  @apply w-full bg-purple-faded flex flex-row pr-10 pl-10 pt-4 pb-2 justify-between items-center gap-12;
+}
+
+.user-nav {
+  @apply flex flex-row w-[90%] gap-5;
 }
 
 /* tabs */
@@ -27,7 +35,7 @@
 }
 
 .profile-link {
-  @apply font-bold text-lg;
+  @apply font-bold text-lg w-20;
 }
 
 .signout {

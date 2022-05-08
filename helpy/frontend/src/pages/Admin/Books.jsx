@@ -5,7 +5,7 @@ import AdminLayout from "../../utils/AdminLayout";
 import { MdAdd } from "react-icons/md";
 import BookModal from "../../components/modals/BookModal";
 
-const Books = () => {
+const Ads = () => {
   const columns = useMemo(
     () => [
       {
@@ -127,4 +127,4 @@ const Books = () => {
   );
 };
 
-export default Books;
+export default Ads;

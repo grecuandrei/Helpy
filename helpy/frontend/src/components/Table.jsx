@@ -13,7 +13,7 @@ const Table = ({ data, columns, noHref }) => {
     });
 
   const handleRowClick = (index) => {
-    if (!noHref) navigate(`/books/${index}`, { queryParams: { id: index } });
+    if (!noHref) navigate(`/ads/${index}`, { queryParams: { id: index } });
   };
 
   // Render the UI for your table

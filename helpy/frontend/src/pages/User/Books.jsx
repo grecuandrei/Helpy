@@ -3,7 +3,7 @@ import BookCard from "../../components/BookCard";
 import RentModal from "../../components/modals/RentModal";
 import UserLayout from "../../utils/UserLayout";
 
-const UserBooks = () => {
+const UserAds = () => {
   const availableBooks = useMemo(
     () => [
       {
@@ -210,4 +210,4 @@ const UserBooks = () => {
   );
 };
 
-export default UserBooks;
+export default UserAds;

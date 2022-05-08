@@ -11,7 +11,6 @@ const App = () => {
     <Wrapper>
       <Router />
     </Wrapper>
-    // <Router />
   );
 };
 

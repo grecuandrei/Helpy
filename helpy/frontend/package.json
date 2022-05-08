@@ -2,12 +2,12 @@
   "name": "lab-03",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8000",
   "dependencies": {
     "@auth0/auth0-react": "^1.9.0",
     "chart.js": "^3.7.1",
     "chartjs-plugin-datalabels": "^2.0.0",
     "eslint-config-react-app": "^7.0.0",
+    "http-proxy-middleware": "^2.0.6",
     "react": "^16.14.0",
     "react-avatar": "^4.0.0",
     "react-chartjs-2": "^4.0.1",

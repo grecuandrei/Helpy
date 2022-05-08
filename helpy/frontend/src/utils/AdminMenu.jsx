@@ -30,8 +30,8 @@ const AdminMenu = () => {
         <img src={logo} alt="Weblib logo" />
       </div>
       <nav className="admin-nav">
-        <CustomLink to={"/books"}>
-          <MdTableRows /> Books
+        <CustomLink to={"/ads"}>
+          <MdTableRows /> Ads
         </CustomLink>
         <CustomLink to={"/analytics"}>
           <MdLeaderboard /> Analytics
