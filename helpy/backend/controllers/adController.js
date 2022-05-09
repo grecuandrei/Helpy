@@ -28,8 +28,8 @@ exports.create = (req, res) => {
     });
 
     // Save Ad in the database
-    post
-        .save(post)
+    Ad
+        .save(ad)
         .then(data => {
             res.send(data);
         })
@@ -47,7 +47,7 @@ exports.findAll = async (req, res) => {
     const {title} = req.query;
     const condition = title ? {title: {$regex: new RegExp(title), $options: "i"}} : {};
 
-    await Ad.find({})
+    await Ad.find(condition)
         .then(data => {
             res.send(data);
         })
@@ -55,7 +55,7 @@ exports.findAll = async (req, res) => {
             res.status(500).send({
                 message:
                     err.message
-                    || "Some error occurred while retrieving posts."
+                    || "Some error occurred while retrieving ads."
             });
         });
 };
@@ -68,19 +68,19 @@ exports.findOne = async (req, res) => {
         .then(data => {
             if (!data)
                 res.status(404).send({
-                    message: "Not found post with id " + id
+                    message: "Not found ad with id " + id
                 });
             else res.send(data);
         })
         .catch(err => {
             res.status(500)
                 .send({
-                    message: "Error retrieving Post with id=" + id
+                    message: "Error retrieving ad with id=" + id
                 });
         });
 };
 
-// Update a Ad by the id in the request
+// Update an Ad by the id in the request
 exports.update = async (req, res) => {
     if (!req.body) {
         return res.status(400).send({
@@ -106,7 +106,7 @@ exports.update = async (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating post with id=" + id
+                message: "Error updating ad with id=" + id
             });
         });
 };
@@ -119,24 +119,24 @@ exports.delete = async (req, res) => {
         .then(data => {
             if (!data) {
                 res.status(404).send({
-                    message: `Cannot delete post with id=${id}. Maybe post was not found!`
+                    message: `Cannot delete ad with id=${id}. Maybe ad was not found!`
                 });
             } else {
                 res.send({
-                    message: "Post was deleted successfully!"
+                    message: "Ad was deleted successfully!"
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete post with id=" + id
+                message: "Could not delete ad with id=" + id
             });
         });
 };
 
 // Delete all Ads from the database for publisher.
 exports.deleteAll = async (req, res) => {
-    await Ad.deleteMany({publisher: req.user.email})
+    await Ad.deleteMany({publisherId: req.publisher.publisherId})
         .then(data => {
             if (data) {
                 res.send({
@@ -155,45 +155,102 @@ exports.deleteAll = async (req, res) => {
 
 
 exports.likeAd = async (req, res) => {
-    if (!req.user) {
+    if (!req.publisher) {
         return res.json({message: "Unauthenticated"});
     }
 
     const {id} = req.params;
 
-    const ad = await Ad.findById(id)
-        .catch(err => {
-            res.status(500)
-                .send({
-                    message: "Error retrieving Ad with id=" + id
-                });
-        });
+    // const ad = await Ad.findById(id)
+    //     .catch(err => {
+    //         res.status(500)
+    //             .send({
+    //                 message: "Error retrieving Ad with id=" + id
+    //             });
+    //     });
 
-    const index = ad.likes.findIndex((id) => id === String(req.user.email));
+    // const index = ad.likes.findIndex((id) => id === String(req.user.email));
 
-    if (index === -1) {
-        ad.likes.push(req.user.email);
-    } else {
-        ad.likes = post.likes.filter((id) => id !== String(req.user.email));
-    }
+    // if (index === -1) {
+    //     ad.likes.push(req.user.email);
+    // } else {
+    //     ad.likes = post.likes.filter((id) => id !== String(req.user.email));
+    // }
 
-    await Ad.findByIdAndUpdate(id, ad, {new: true})
+    await Ad.findByIdAndUpdate(id, {$inc: {likes: 1}})
         .then(data => {
             if (!data) {
                 res.status(404).send({
-                    message: `Cannot delete ad with id=${id}. Maybe post was not found!`
+                    message: `Cannot update ad with id=${id}. Maybe ad was not found!`
                 });
             }
             res.status(200).json(data);
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete ad with id=" + id
+                message: "Could not update ad with id=" + id
             });
         });
+}
 
+exports.unlikeAd = async (req, res) => {
+    if (!req.publisher) {
+        return res.json({message: "Unauthenticated"});
+    }
+
+    const {id} = req.params;
+
+    // const ad = await Ad.findById(id)
+    //     .catch(err => {
+    //         res.status(500)
+    //             .send({
+    //                 message: "Error retrieving Ad with id=" + id
+    //             });
+    //     });
+
+    // const index = ad.likes.findIndex((id) => id === String(req.user.email));
+
+    // if (index === -1) {
+    //     ad.likes.push(req.user.email);
+    // } else {
+    //     ad.likes = post.likes.filter((id) => id !== String(req.user.email));
+    // }
+
+    await Ad.findByIdAndUpdate({id, likes: {$gt: 0}}, {$inc: {likes: -1}})
+        .then(data => {
+            if (!data) {
+                res.status(404).send({
+                    message: `Cannot update ad with id=${id}. Maybe ad was not found!`
+                });
+            }
+            res.status(200).json(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Could not update ad with id=" + id
+            });
+        });
 }
 
 exports.viewAd = async (req, res) => {
-    res.status(200)
+    if (!req.publisher) {
+        return res.json({message: "Unauthenticated"});
+    }
+
+    const {id} = req.params;
+
+    await Ad.findByIdAndUpdate(id, {$inc: {views: 1}})
+        .then(data => {
+            if (!data) {
+                res.status(404).send({
+                    message: `Cannot update ad with id=${id}. Maybe ad was not found!`
+                });
+            }
+            res.status(200).json(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Could not update ad with id=" + id
+            });
+        });
 }

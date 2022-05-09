@@ -25,6 +25,22 @@ const schema = mongoose.Schema(
             type: String,
             required: true
         },
+        isPublisher: {
+            type: Boolean,
+            default: false
+        },
+        score: {
+            type: Number,
+            default: 0
+        },
+        reviews: [{
+            type: ObjectId,
+            ref: 'review'
+        }],
+        adsIds: [{
+            type: ObjectId,
+            ref: 'ad'
+        }]
     },  
     {
         timestamps: true
@@ -40,4 +56,4 @@ schema.method("toJSON", function () {
     return object;  
 });  
 
-module.exports = mongoose.model("publisher", schema);
+module.exports = mongoose.model("user", schema);

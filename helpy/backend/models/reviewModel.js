@@ -3,37 +3,21 @@ const mongoose = require('mongoose');
 
 const schema = mongoose.Schema(
     {
-        publisherId: {
+        userId: {
             type: ObjectId,
             ref: 'user',
         },
-        title: {
-            type: String,
-            required: true
+        score: {
+            type: Number,
+            default: 0
         },
         description: {
             type: String,
             required: true
         },
-        address: {
-            type: String,
-            required: true
-        },
-        endDate: {
-            type: Date,
-            required: true
-        },
-        views: {
-            type: Number,
-            default: 0
-        },
-        likes: {
-            type: Number,
-            default: 0
-        },
-        taken: {
-            type: Boolean,
-            default: false
+        adId: {
+            type: ObjectId,
+            ref: 'ad',
         },
     },  
     {

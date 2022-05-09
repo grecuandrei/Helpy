@@ -15,6 +15,8 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 require("./routes/adRoutes")(app);
+require("./routes/userRoutes")(app);
+require("./routes/reviewRoutes")(app);
 
 mongoose  
     .connect(process.env.URL)  
