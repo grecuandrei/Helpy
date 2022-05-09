@@ -1,10 +1,9 @@
-const { ObjectId } = require("mongodb");
 const mongoose = require('mongoose');  
 
 const schema = mongoose.Schema(
     {
-        userId: {
-            type: ObjectId,
+        customerId: {
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'user',
         },
         score: {
@@ -16,7 +15,7 @@ const schema = mongoose.Schema(
             required: true
         },
         adId: {
-            type: ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'ad',
         },
     },  
@@ -33,4 +32,4 @@ schema.method("toJSON", function () {
     return object;  
 });  
 
-module.exports = mongoose.model("ad", schema);
+module.exports = mongoose.model("review", schema);

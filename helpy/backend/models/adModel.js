@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema(
     {
         publisherId: {
-            type: ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'user',
         },
         title: {
@@ -41,7 +41,7 @@ const schema = mongoose.Schema(
     }  
 );
 
-schema.index({ user: 1, name: 1}, {unique: true})
+schema.index({ user: 1, title: 1}, {unique: true})
 
 schema.method("toJSON", function () {  
     const {__v, _id, ...object} = this.toObject();  

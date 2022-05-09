@@ -33,12 +33,12 @@ const schema = mongoose.Schema(
             type: Number,
             default: 0
         },
-        reviews: [{
-            type: ObjectId,
+        reviewsIds: [{
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'review'
         }],
         adsIds: [{
-            type: ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'ad'
         }]
     },  

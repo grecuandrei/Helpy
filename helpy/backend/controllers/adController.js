@@ -1,10 +1,13 @@
-const fs = require("fs");
 const Ad = require('../models/adModel');
+const User = require('../models/userModel');
 
 // Create and Save a new Ad
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     //  Validate request
     if (!req.body.title) {
+        res.status(400).send({message: "Content can not be empty!"});
+        return;
+    } else if (!req.body.publisherId) {
         res.status(400).send({message: "Content can not be empty!"});
         return;
     } else if (!req.body.description) {
@@ -20,7 +23,7 @@ exports.create = (req, res) => {
 
     // Create a Ad
     const ad = new Ad({
-        publisherId: req.user.publisherId,
+        publisherId: req.body.publisherId,
         title: req.body.title,
         description: req.body.description,
         address: req.body.address,
@@ -28,7 +31,7 @@ exports.create = (req, res) => {
     });
 
     // Save Ad in the database
-    Ad
+    await ad
         .save(ad)
         .then(data => {
             res.send(data);
@@ -42,14 +45,62 @@ exports.create = (req, res) => {
         });
 };
 
-// Retrieve all ADs from the database.
+// Retrieve all ADs untaken from the database.
 exports.findAll = async (req, res) => {
+    if (!req.params) {
+        res.status(400).send({message: "Params can not be empty!"});
+        return;
+    }
     const {title} = req.query;
     const condition = title ? {title: {$regex: new RegExp(title), $options: "i"}} : {};
 
-    await Ad.find(condition)
+    await Ad.find({...condition, taken: false})
         .then(data => {
             res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message
+                    || "Some error occurred while retrieving ads."
+            });
+        });
+};
+
+// Retrieve all ADs taken from the database.
+exports.findAllPublisher = async (req, res) => {
+    if (!req.params) {
+        res.status(400).send({message: "Params can not be empty!"});
+        return;
+    }
+    const {id} = req.params;
+    const {title} = req.query;
+    const condition = title ? {title: {$regex: new RegExp(title), $options: "i"}} : {};
+
+    await Ad.find({...condition, publisherId: id})
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message
+                    || "Some error occurred while retrieving ads."
+            });
+        });
+};
+
+// Retrieve all ADs taken from the database for customer.
+exports.findAllCustomer = async (req, res) => {
+    if (!req.params) {
+        res.status(400).send({message: "Params can not be empty!"});
+        return;
+    }
+    const {id} = req.params;
+
+    await User.findById(id).populate("adsIds")
+        .then(data => {
+            res.send(data.adsIds);
         })
         .catch(err => {
             res.status(500).send({
@@ -136,6 +187,18 @@ exports.delete = async (req, res) => {
 
 // Delete all Ads from the database for publisher.
 exports.deleteAll = async (req, res) => {
+
+    // Trebuie luate intai toate adurile de la un publisher, verificate daca exista una cu true, daca nu, trb cautate in toti customerii si stersi, altfel eroare
+    // await User.findByIdAndUpdate(id, {$set: {reviewsIds: []}})
+    //     .catch(err => {
+    //         res.status(500).send({
+    //             message:
+    //                 err.message
+    //                 || "Some error occurred while removing all reviews."
+    //         });
+    //         return;
+    //     });
+
     await Ad.deleteMany({publisherId: req.publisher.publisherId})
         .then(data => {
             if (data) {
@@ -155,27 +218,11 @@ exports.deleteAll = async (req, res) => {
 
 
 exports.likeAd = async (req, res) => {
-    if (!req.publisher) {
+    if (!req.params) { // req.publisher
         return res.json({message: "Unauthenticated"});
     }
 
     const {id} = req.params;
-
-    // const ad = await Ad.findById(id)
-    //     .catch(err => {
-    //         res.status(500)
-    //             .send({
-    //                 message: "Error retrieving Ad with id=" + id
-    //             });
-    //     });
-
-    // const index = ad.likes.findIndex((id) => id === String(req.user.email));
-
-    // if (index === -1) {
-    //     ad.likes.push(req.user.email);
-    // } else {
-    //     ad.likes = post.likes.filter((id) => id !== String(req.user.email));
-    // }
 
     await Ad.findByIdAndUpdate(id, {$inc: {likes: 1}})
         .then(data => {
@@ -194,34 +241,20 @@ exports.likeAd = async (req, res) => {
 }
 
 exports.unlikeAd = async (req, res) => {
-    if (!req.publisher) {
+    if (!req.params) { // req.publisher
         return res.json({message: "Unauthenticated"});
     }
 
     const {id} = req.params;
 
-    // const ad = await Ad.findById(id)
-    //     .catch(err => {
-    //         res.status(500)
-    //             .send({
-    //                 message: "Error retrieving Ad with id=" + id
-    //             });
-    //     });
-
-    // const index = ad.likes.findIndex((id) => id === String(req.user.email));
-
-    // if (index === -1) {
-    //     ad.likes.push(req.user.email);
-    // } else {
-    //     ad.likes = post.likes.filter((id) => id !== String(req.user.email));
-    // }
-
-    await Ad.findByIdAndUpdate({id, likes: {$gt: 0}}, {$inc: {likes: -1}})
+    await Ad.findOneAndUpdate({id, likes: {$gt: 0}}, {$inc: {likes: -1}})
         .then(data => {
+            console.log(data)
             if (!data) {
                 res.status(404).send({
-                    message: `Cannot update ad with id=${id}. Maybe ad was not found!`
+                    message: `Cannot update ad with id=${id}. Maybe ad was not found or it already has 0 likes!`
                 });
+                return;
             }
             res.status(200).json(data);
         })
@@ -233,7 +266,7 @@ exports.unlikeAd = async (req, res) => {
 }
 
 exports.viewAd = async (req, res) => {
-    if (!req.publisher) {
+    if (!req.params) { // req.publisher
         return res.json({message: "Unauthenticated"});
     }
 
