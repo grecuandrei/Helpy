@@ -1,4 +1,3 @@
-const { ObjectId } = require("mongodb");
 const mongoose = require('mongoose');  
 
 const schema = mongoose.Schema(
@@ -35,6 +34,11 @@ const schema = mongoose.Schema(
             type: Boolean,
             default: false
         },
+        keywords: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'keyword',
+            default: []
+        }]
     },  
     {
         timestamps: true

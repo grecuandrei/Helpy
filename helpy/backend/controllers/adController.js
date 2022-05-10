@@ -1,24 +1,47 @@
 const Ad = require('../models/adModel');
 const User = require('../models/userModel');
+const Keywords = require('../models/keywordModel');
 
 // Create and Save a new Ad
 exports.create = async (req, res) => {
     //  Validate request
     if (!req.body.title) {
-        res.status(400).send({message: "Content can not be empty!"});
+        res.status(400).send({message: "title can not be empty!"});
         return;
     } else if (!req.body.publisherId) {
-        res.status(400).send({message: "Content can not be empty!"});
+        res.status(400).send({message: "publisherId can not be empty!"});
         return;
     } else if (!req.body.description) {
-        res.status(400).send({message: "Content can not be empty!"});
+        res.status(400).send({message: "description can not be empty!"});
         return;
     } else if (!req.body.address) {
-        res.status(400).send({message: "Content can not be empty!"});
+        res.status(400).send({message: "address can not be empty!"});
         return;
     } else if (!req.body.endDate) {
-        res.status(400).send({message: "Content can not be empty!"});
+        res.status(400).send({message: "endDate can not be empty!"});
         return;
+    } else if (!req.body.keywords) {
+        res.status(400).send({message: "keywords can not be empty!"});
+        return;
+    }
+
+    let keywords = []
+    // Create keywords if they dont exist
+    for (const keyword of req.body.keywords) {
+        var query = {name: keyword.toLowerCase()},
+        update = {},
+        options = { upsert: true, new: true, setDefaultsOnInsert: true };
+
+        const result = await Keywords.findOneAndUpdate(query, update, options).exec();
+        if (result) {
+            keywords.push(result._id)
+        } else {
+            res.status(500).send({
+                message:
+                    error.message
+                    || "Some error occurred while creating the ad."
+            });
+        }
     }
 
     // Create a Ad
@@ -27,7 +50,8 @@ exports.create = async (req, res) => {
         title: req.body.title,
         description: req.body.description,
         address: req.body.address,
-        endDate: req.body.endDate
+        endDate: req.body.endDate,
+        keywords: keywords
     });
 
     // Save Ad in the database
@@ -45,14 +69,18 @@ exports.create = async (req, res) => {
         });
 };
 
-// Retrieve all ADs untaken from the database.
+// Retrieve all ADs untaken from the database based on title and/or array of keywords.
 exports.findAll = async (req, res) => {
     if (!req.params) {
         res.status(400).send({message: "Params can not be empty!"});
         return;
     }
-    const {title} = req.query;
-    const condition = title ? {title: {$regex: new RegExp(title), $options: "i"}} : {};
+    const {title, keywords} = req.query;
+
+    let condition = title ? {title: {$regex: new RegExp(title), $options: "i"}} : {};
+    
+    const keywordsIds = await Keywords.find({name: {$in: keywords}}, {_id: 1}).exec();
+    condition = keywordsIds ? {...condition, 'keywords': {$all: keywordsIds}} : condition
 
     await Ad.find({...condition, taken: false})
         .then(data => {
