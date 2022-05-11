@@ -4,7 +4,8 @@ import { MdOutlineClose } from "react-icons/md";
 import Button from "../Button";
 import Input from "../Input";
 
-const AccountModal = ({ modalIsOpen, closeModal }) => {
+const AccountModal = ({ modalIsOpen, closeModal, userGUID }) => {
+  console.log(userGUID)
   return (
     <Modal
       isOpen={modalIsOpen}

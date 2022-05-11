@@ -3,18 +3,21 @@ const User = require('../models/userModel');
 
 // Create and Save a new Review
 exports.create = async (req, res) => {
+    let message;
     //  Validate request
     if (!req.body.score) {
-        res.status(400).send({message: "score can not be empty!"});
-        return;
+        message = "score can not be empty!";
     } else if (!req.body.description) {
-        res.status(400).send({message: "description can not be empty!"});
-        return;
+        message = "description can not be empty!";
     } else if (!req.body.customerId) {
-        res.status(400).send({message: "userId can not be empty!"});
-        return;
+        message = "userId can not be empty!";
     } else if (!req.body.adId) {
-        res.status(400).send({message: "adId can not be empty!"});
+        message = "adId can not be empty!";
+    }
+
+    if (message) {
+        console.log('[ReviewController][Create][ERROR]:' + ' ' + message);
+        res.status(400).send({message: message});
         return;
     }
 
@@ -30,9 +33,11 @@ exports.create = async (req, res) => {
     await review
         .save(review)
         .then(data => {
+            console.log('[ReviewController][Create][INFO]:' + ' ' + "review was sucessfully added!");
             res.send(data);
         })
         .catch(err => {
+            console.log('[ReviewController][Create][ERROR]:' + ' ' + "Some error occurred while creating the review.");
             res.status(500).send({
                 message:
                     err.message
@@ -44,6 +49,7 @@ exports.create = async (req, res) => {
 // Delete all reviews from the database for publisher.
 exports.deleteAll = async (req, res) => {
     if (!req.params) {
+        console.log('[ReviewController][DeleteAll][ERROR]:' + ' ' + "Params can not be empty!");
         return res.status(400).send({
             message: "Params can not be empty!"
         });
@@ -55,6 +61,7 @@ exports.deleteAll = async (req, res) => {
 
     await User.findByIdAndUpdate(id, {$set: {reviewsIds: []}})
         .catch(err => {
+            console.log('[ReviewController][DeleteAll][ERROR]:' + ' ' + "Some error occurred while removing all reviews.");
             res.status(500).send({
                 message:
                     err.message
@@ -66,17 +73,20 @@ exports.deleteAll = async (req, res) => {
     await Review.deleteMany({_id: {$in: user.reviewsIds}})
         .then(data => {
             if (data) {
+                console.log('[ReviewController][DeleteAll][INFO]:' + ' ' + `${data.deletedCount} Reviews were deleted successfully!`);
                 res.status(200).send({
                     message: `${data.deletedCount} Reviews were deleted successfully!`
                 });
                 return;
             }
+            console.log('[ReviewController][DeleteAll][ERROR]:' + ' ' + `Error deleting reviews!`);
             res.status(401).send({
                 message: `Error deleting reviews!`
             });
             return;
         })
         .catch(err => {
+            console.log('[ReviewController][DeleteAll][ERROR]:' + ' ' + "Some error occurred while removing all reviews.");
             res.status(500).send({
                 message:
                     err.message

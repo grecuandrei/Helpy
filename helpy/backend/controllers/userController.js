@@ -5,30 +5,30 @@ const Ad = require('../models/adModel');
 // Create and Save a new User
 exports.create = async (req, res) => {
     //  Validate request
-    // if (!req.body.identityGuid) {
-    //     res.status(400).send({message: "identityGuid can not be empty!"});
-    //     return;
-    // } else
-    if (!req.body.email) {
-        res.status(400).send({message: "email can not be empty!"});
-        return;
+    let message;
+    if (!req.body.guid) {
+        message = "guid can not be empty!";
+    } else if (!req.body.email) {
+        message =  "email can not be empty!";
     } else if (!req.body.name) {
-        res.status(400).send({message: "name can not be empty!"});
-        return;
+        message = "name can not be empty!";
     } else if (!req.body.surname) {
-        res.status(400).send({message: "surname can not be empty!"});
-        return;
+        message = "surname can not be empty!";
     } else if (!req.body.phone) {
-        res.status(400).send({message: "phone can not be empty!"});
-        return;
+        message = "phone can not be empty!";
     } else if (!req.body.pid) {
-        res.status(400).send({message: "pid can not be empty!"});
+        message = "pid can not be empty!";
+    }
+
+    if (message) {
+        console.log('[UserController][Create][ERROR]:' + ' ' + message);
+        res.status(400).send({message: message});
         return;
     }
 
     // Create a user
     const user = new User({
-        // identityGuid: req.body.identityGuid,
+        guid: req.body.guid,
         email: req.body.email,
         name: req.body.name,
         surname: req.body.surname,
@@ -41,9 +41,11 @@ exports.create = async (req, res) => {
     await user
         .save(user)
         .then(data => {
+            console.log('[UserController][Create][INFO]:' + ' ' + 'User was sucessfully added!');
             res.send(data);
         })
         .catch(err => {
+            console.log('[UserController][Create][ERROR]:' + ' ' + "Some error occurred while creating the user.");
             res.status(500).send({
                 message:
                     err.message
@@ -58,13 +60,19 @@ exports.findOne = async (req, res) => {
 
     await User.findById(id)
         .then(data => {
-            if (!data)
+            if (!data) {
+                console.log('[UserController][FindOne][ERROR]:' + ' ' + "Not found user with id: " + id);
                 res.status(404).send({
                     message: "Not found user with id " + id
                 });
-            else res.send(data);
+            }
+            else {
+                console.log('[UserController][FindOne][INFO]:' + ' ' + 'User was suvessfully returned!');
+                res.send(data);
+            }
         })
         .catch(err => {
+            console.log('[UserController][FindOne][ERROR]:' + ' ' + "Error retrieving user with id: " + id);
             res.status(500)
                 .send({
                     message: "Error retrieving user with id=" + id
@@ -72,9 +80,43 @@ exports.findOne = async (req, res) => {
         });
 };
 
+// Find a single user with an guiid
+exports.findRegister = async (req, res) => {
+    const {guid} = req.params;
+
+    console.log(guid)
+    if (!guid) {
+        res.status(500).send({
+            message: "Bad request"
+        });
+    }
+
+    await User.findOne({guid: guid})
+    .then(data => {
+        if (!data) {
+            console.log('[UserController][FindRegister][ERROR]:' + ' ' + "Not found user with guid: " + guid);
+            res.status(404).send({
+                message: "Not found user with guid " + guid
+            });
+        }
+        else {
+            console.log('[UserController][FindRegister][INFO]:' + ' ' + 'User was suvessfully returned!');
+            res.send(data);
+        }
+    })
+    .catch(err => {
+        console.log('[UserController][FindRegister][ERROR]:' + ' ' + "Error retrieving user with guid: " + guid);
+        res.status(500)
+            .send({
+                message: "Error retrieving user with guid=" + guid
+            });
+    });
+};
+
 // Update an Ad by the id in the request
 exports.update = async (req, res) => {
     if (!req.body) {
+        console.log('[UserController][Update][ERROR]:' + ' ' + "Data to update can not be empty!");
         return res.status(400).send({
             message: "Data to update can not be empty!"
         });
@@ -87,16 +129,19 @@ exports.update = async (req, res) => {
     }, {useFindAndModify: false})
         .then(data => {
             if (!data) {
+                console.log('[UserController][Update][ERROR]:' + ' ' + `Cannot update user with id=${id}. Maybe user was not found!`);
                 res.status(404).send({
                     message: `Cannot update user with id=${id}. Maybe user was not found!`
                 });
             } else {
+                console.log('[UserController][Update][INFO]:' + ' ' + "User was updated successfully.");
                 res.send({
                     message: "User was updated successfully."
                 });
             }
         })
         .catch(err => {
+            console.log('[UserController][Update][ERROR]:' + ' ' + "Error updating user with id: " + id);
             res.status(500).send({
                 message: "Error updating user with id=" + id
             });
@@ -110,16 +155,19 @@ exports.delete = async (req, res) => {
     await User.findByIdAndRemove(id)
         .then(data => {
             if (!data) {
+                console.log('[UserController][Delete][ERROR]:' + ' ' + `Cannot delete user with id=${id}. Maybe user was not found!`);
                 res.status(404).send({
                     message: `Cannot delete user with id=${id}. Maybe user was not found!`
                 });
             } else {
+                console.log('[UserController][Delete][INFO]:' + ' ' + "User was deleted successfully!");
                 res.send({
                     message: "User was deleted successfully!"
                 });
             }
         })
         .catch(err => {
+            console.log('[UserController][Delete][ERROR]:' + ' ' + "Could not delete user with id: " + id);
             res.status(500).send({
                 message: "Could not delete user with id=" + id
             });
@@ -129,6 +177,7 @@ exports.delete = async (req, res) => {
 // Push review into user reviews array
 exports.updateReviews = async (req, res) => {
     if (!req.params) {
+        console.log('[UserController][UpdateReviews][ERROR]:' + ' ' + "Params can not be empty!");
         return res.status(400).send({
             message: "Params can not be empty!"
         });
@@ -158,21 +207,26 @@ exports.updateReviews = async (req, res) => {
         }, {useFindAndModify: false})
             .then(data => {
                 if (!data) {
+                    console.log('[UserController][UpdateReviews][ERROR]:' + ' ' + `Cannot update User with id=${id}. Maybe user was not found!`);
                     res.status(404).send({
                         message: `Cannot update User with id=${id}. Maybe user was not found!`
                     });
                 } else {
+                    console.log('[UserController][UpdateReviews][INFO]:' + ' ' + "User was updated successfully.");
                     res.send({
                         message: "User was updated successfully."
                     });
                 }
             })
             .catch(err => {
+                console.log('[UserController][UpdateReviews][ERROR]:' + ' ' + "Error updating user with id: " + id);
                 res.status(500).send({
                     message: "Error updating user with id=" + id
                 });
             });
-    } else { res.status(401).send({
+    } else { 
+        console.log('[UserController][UpdateReviews][ERROR]:' + ' ' + "Unauthorized to do this action!");
+        res.status(401).send({
         message: "Unauthorized to do this action!"
     });
 }
@@ -181,6 +235,7 @@ exports.updateReviews = async (req, res) => {
 // Push ad into user adsId array
 exports.reserveAd = async (req, res) => {
     if (!req.params) {
+        console.log('[UserController][ReserveAd][ERROR]:' + ' ' + "Params can not be empty!");
         return res.status(400).send({
             message: "Params can not be empty!"
         });
@@ -200,12 +255,14 @@ exports.reserveAd = async (req, res) => {
         await Ad.findByIdAndUpdate({_id: adId}, {$set: {taken:true}}, {useFindAndModify: false})
             .then(data => {
                 if (!data) {
+                    console.log('[UserController][ReserveAd][ERROR]:' + ' ' + `Cannot update ad with id=${id}. Maybe ad was not found!`);
                     res.status(404).send({
                         message: `Cannot update ad with id=${id}. Maybe ad was not found!`
                     });
                 }
             })
             .catch(err => {
+                console.log('[UserController][ReserveAd][ERROR]:' + ' ' + "Error updating ad with id: " + id);
                 res.status(500).send({
                     message: "Error updating ad with id=" + id
                 });
@@ -214,21 +271,26 @@ exports.reserveAd = async (req, res) => {
         await User.findByIdAndUpdate(id, {...query}, {useFindAndModify: false})
             .then(data => {
                 if (!data) {
+                    console.log('[UserController][ReserveAd][ERROR]:' + ' ' + `Cannot update user with id=${id}. Maybe ad was not found!`);
                     res.status(404).send({
                         message: `Cannot update user with id=${id}. Maybe ad was not found!`
                     });
                 } else {
+                    console.log('[UserController][ReserveAd][INFO]:' + ' ' + "User was updated successfully.");
                     res.send({
                         message: "User was updated successfully."
                     });
                 }
             })
             .catch(err => {
+                console.log('[UserController][ReserveAd][ERROR]:' + ' ' + "Error updating user with id: " + id);
                 res.status(500).send({
                     message: "Error updating user with id=" + id
                 });
             });
-    } else { res.status(401).send({
+    } else { 
+        console.log('[UserController][ReserveAd][ERROR]:' + ' ' + "Unauthorized to do this action!");
+        res.status(401).send({
             message: "Unauthorized to do this action!"
         });
     }

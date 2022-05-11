@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const schema = mongoose.Schema(
     {
-        identityGuid: {
+        guid: {
             type: String
         },
         email: {

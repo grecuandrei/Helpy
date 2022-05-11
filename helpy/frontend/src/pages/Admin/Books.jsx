@@ -5,7 +5,7 @@ import AdminLayout from "../../utils/AdminLayout";
 import { MdAdd } from "react-icons/md";
 import BookModal from "../../components/modals/BookModal";
 
-const Ads = () => {
+const Ads = (isPublisher) => {
   const columns = useMemo(
     () => [
       {
@@ -109,7 +109,7 @@ const Ads = () => {
 
   const [openedModal, setOpenedModal] = useState(false);
   return (
-    <AdminLayout>
+    <AdminLayout isPublisher={isPublisher}>
       <BookModal
         modalIsOpen={openedModal}
         closeModal={() => {

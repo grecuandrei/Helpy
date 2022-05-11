@@ -3,7 +3,7 @@ import BookCard from "../../components/BookCard";
 import RentModal from "../../components/modals/RentModal";
 import UserLayout from "../../utils/UserLayout";
 
-const UserAds = () => {
+const UserAds = (isPublisher) => {
   const availableBooks = useMemo(
     () => [
       {
@@ -174,7 +174,7 @@ const UserAds = () => {
   };
 
   return (
-    <UserLayout>
+    <UserLayout isPublisher={isPublisher}>
       <RentModal
         book={currentBook}
         modalIsOpen={openedModal}

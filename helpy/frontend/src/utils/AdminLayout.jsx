@@ -5,16 +5,17 @@ import { authSettings } from "../AuthSettings";
 import AdminHeader from "./AdminHeader";
 import AdminMenu from "./AdminMenu";
 
-const AdminLayout = ({ children }) => {
+const AdminLayout = ({ isPublisher, children }) => {
   const { user } = useAuth0();
   const navigate = useNavigate();
 
   /* inseamna ca are utilizator ca si rol, deci nu poate vedea partea de admin */
   useEffect(() => {
-    if (user && user[authSettings.rolesKey].length === 0) {
-      navigate("/");
-    }
-  }, [user]);
+    if (!isPublisher) navigate("/");
+    // if (user && user[authSettings.rolesKey].length === 0) {
+    //   navigate("/");
+    // }
+  }, [ navigate, isPublisher]);
 
   return (
     <div className="layout">
