@@ -11,7 +11,7 @@ const AdminLayout = ({ isPublisher, children }) => {
 
   /* inseamna ca are utilizator ca si rol, deci nu poate vedea partea de admin */
   useEffect(() => {
-    if (!isPublisher) navigate("/");
+    if (!isPublisher.isPublisher) navigate("/");
     // if (user && user[authSettings.rolesKey].length === 0) {
     //   navigate("/");
     // }

@@ -241,9 +241,9 @@ exports.reserveAd = async (req, res) => {
         });
     }
 
-    const {id, adId} = req.params;
+    const {guid, adId} = req.params;
 
-    const user = await User.findById(id)
+    const user = await User.findOne({guid: guid})
 
     if (!user.isPublisher) {
         const query = {
@@ -268,7 +268,7 @@ exports.reserveAd = async (req, res) => {
                 });
             });
 
-        await User.findByIdAndUpdate(id, {...query}, {useFindAndModify: false})
+        await User.findOneAndUpdate({guid: guid}, {...query}, {useFindAndModify: false})
             .then(data => {
                 if (!data) {
                     console.log('[UserController][ReserveAd][ERROR]:' + ' ' + `Cannot update user with id=${id}. Maybe ad was not found!`);

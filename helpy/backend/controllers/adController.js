@@ -75,22 +75,22 @@ exports.create = async (req, res) => {
 
 // Retrieve all ADs untaken from the database based on title and/or array of keywords.
 exports.findAll = async (req, res) => {
-    if (!req.params) {
-        console.log( '[AdController][FindAll][Error]:' + 'Params can not be empty!');
-        res.status(400).send({message: "Params can not be empty!"});
-        return;
-    }
+    // if (!req.params) {
+    //     console.log( '[AdController][FindAll][Error]:' + 'Params can not be empty!');
+    //     res.status(400).send({message: "Params can not be empty!"});
+    //     return;
+    // }
     const {title, keywords} = req.query;
 
     let condition = title ? {title: {$regex: new RegExp(title), $options: "i"}} : {};
     
-    const keywordsIds = await Keywords.find({name: {$in: keywords}}, {_id: 1}).exec();
+    const keywordsIds = keywords ? await Keywords.find({name: {$in: keywords}}, {_id: 1}).exec() : undefined;
     condition = keywordsIds ? {...condition, 'keywords': {$all: keywordsIds}} : condition
 
-    await Ad.find({...condition, taken: false})
+    await Ad.find({...condition, taken: false}).populate('keywords', 'name')
         .then(data => {
             console.log('[AdController][FindAll][INFO]: ' + ' requested ads were returned');
-            res.send(data);
+            res.status(200).send(data);
         })
         .catch(err => {
             res.status(500).send({

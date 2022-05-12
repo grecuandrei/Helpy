@@ -15,17 +15,17 @@ module.exports = {
         colors: {
             transparent: "transparent",
             current: "currentColor",
-            white: "#FEFEFE",
-            black: "#111111",
+            white: "#FFFAF9",
+            black: "#1C1C1C",
             purple: {
-                faded: "#3d29730d",
-                accent: "#8258F4",
-                secondary: "#3D2973",
-                DEFAULT: "#B6A0F2",
+                faded: "#1A229A0d",
+                accent: "#F89E8F",
+                secondary: "#1A229A",
+                DEFAULT: "#F9CCBF",
             },
             gray: {
-                DEFAULT: "#D7D7D7",
-                background: "#11111138",
+                DEFAULT: "#D2D2D2",
+                background: "#1C1C1C38",
             },
             red: {
                 DEFAULT: "#F45858",

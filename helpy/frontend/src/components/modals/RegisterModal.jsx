@@ -5,10 +5,9 @@ import Button from "../Button";
 import Input from "../Input";
 import { useNavigate } from "react-router-dom";
 
-const RegisterModal = ({ modalIsOpen, closeModal, userGUID }) => {
+const RegisterModal = ({ modalIsOpen, closeModal, userGUID, userEmail }) => {
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
-    const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [pid, setPid] = useState('');
     const [checked, setChecked] = useState('');
@@ -23,7 +22,7 @@ const RegisterModal = ({ modalIsOpen, closeModal, userGUID }) => {
                 guid: userGUID,
                 name: name,
                 surname: surname,
-                email: email,
+                email: userEmail,
                 phone: phone,
                 pid: pid,
                 isPublisher: checked
@@ -36,6 +35,8 @@ const RegisterModal = ({ modalIsOpen, closeModal, userGUID }) => {
 
     return (
         <Modal
+        shouldCloseOnOverlayClick={false}
+        ariaHideApp={false}
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Register account"
@@ -46,13 +47,12 @@ const RegisterModal = ({ modalIsOpen, closeModal, userGUID }) => {
         </div>
         <div className="line" />
         <form>
-            <Input label="Name" placeholder="Your name" value={name} onInput={e => setName(e.target.value)}/>
-            <Input label="Surname" placeholder="Your surname" value={surname} onInput={e => setSurname(e.target.value)}/>
-            <Input label="Email" placeholder="Your email address" value={email} onInput={e => setEmail(e.target.value)}/>
-            <Input label="Phone" placeholder="Your phone number" pattern="[0-9]*" value={phone} onInput={e => setPhone(e.target.value)} />
-            <Input label="Pid" placeholder="Your personal identification number" value={pid} onInput={e => setPid(e.target.value)}/>
+            <Input label="Name" placeholder="Your name" value={name} onChange={e => setName(e.target.value)}/>
+            <Input label="Surname" placeholder="Your surname" value={surname} onChange={e => setSurname(e.target.value)}/>
+            <Input label="Phone" placeholder="Your phone number" pattern="[0-9]*" value={phone} onChange={e => setPhone(e.target.value)} />
+            <Input label="Pid" placeholder="Your personal identification number" value={pid} onChange={e => setPid(e.target.value)}/>
             <Input type="checkbox" label="Are you a publisher wanna be?" onChange={ () => {setChecked(!checked)}}/>
-            <Button type="button" onClick={ () => { saveUser() } }>
+            <Button type="button" onClick={ () => { saveUser(); closeModal(); } }>
             Save
             </Button>
         </form>

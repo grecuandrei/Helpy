@@ -4,7 +4,7 @@ import logo from "../assets/logo.svg";
 import "../styling/admin.tailwind.css";
 import Avatar from "react-avatar";
 import { useAuth0 } from "@auth0/auth0-react";
-import { MdTableRows, MdLeaderboard } from "react-icons/md";
+import { MdTableRows, MdAllInbox, MdAccountBox } from "react-icons/md";
 
 export function CustomLink({ children, to, ...props }) {
   const resolved = useResolvedPath(to);
@@ -32,11 +32,14 @@ const UserHeader = () => {
         <img src={logo} alt="Weblib logo" />
       </Link> */}
       <nav className="user-nav">
-        <CustomLink to={"/"}>
+        <CustomLink to={"/home"}>
           <MdTableRows /> Ads
         </CustomLink>
         <CustomLink to={"/analytics"}>
-          <MdLeaderboard /> Past Reservations
+          <MdAllInbox /> Past Reservations
+        </CustomLink>
+        <CustomLink to={"/profile"}>
+          <MdAccountBox /> Profile
         </CustomLink>
       </nav>
       <div className="profile-container">

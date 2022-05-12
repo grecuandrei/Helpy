@@ -15,6 +15,6 @@ module.exports = app => {
     router.put("/:id", users.update);
     router.delete("/:id", users.delete);
     router.patch("/review/:id/:reviewId", users.updateReviews); // updates the score as well
-    router.patch("/ad/:id/:adId", users.reserveAd); // takes an ad as well
+    router.patch("/ad/:guid/:adId", users.reserveAd); // takes an ad as well
     app.use('/api/users', router);
 };

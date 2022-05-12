@@ -11,7 +11,7 @@ const UserLayout = ({ isPublisher, children }) => {
 
   /* inseamna ca are admin ca si rol, deci nu poate vedea partea de utilizator */
   useEffect(() => {
-    if (isPublisher) navigate("/ads");
+    if (isPublisher.isPublisher) navigate("/ads");
     // console.log(user)
     // if (user && user[authSettings.rolesKey].length === 1) {
     //   navigate("/ads");
@@ -22,8 +22,8 @@ const UserLayout = ({ isPublisher, children }) => {
     <div className="user-layout">
       <UserHeader />
       <div className="user-content">
-        <Link to="/">
-          <img src={logo} alt="Weblib logo" />
+        <Link style={{height: '250px', width: '270px', paddingLeft: '4px'}} to="/home">
+          <img src={logo} alt="Helpy logo" />
         </Link>
         <div className="user-content-main">
           {children}
