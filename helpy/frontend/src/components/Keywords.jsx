@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { MdOutlineClose } from "react-icons/md";
 
 const Keywords = (props) => {
   const { label, keywords, setKeywords, ...rest } = props;
@@ -16,6 +17,12 @@ const Keywords = (props) => {
     setValue(event.target.value);
   };
 
+  const removeKeyword = (keyword) => {
+    console.log(keyword)
+    setKeywords(keywords.filter(item => item !== keyword))
+    // setValue(event.target.value);
+  };
+
   return (
     <>
       <label>
@@ -31,7 +38,7 @@ const Keywords = (props) => {
       {keywords.length > 0 && (
         <div className="keyword-list">
           {keywords.map((keyword, index) => (
-            <span key={index}>{keyword}</span>
+            <span key={index} onClick={ () => { removeKeyword(keyword) }}><MdOutlineClose />{keyword}</span>
           ))}
         </div>
       )}

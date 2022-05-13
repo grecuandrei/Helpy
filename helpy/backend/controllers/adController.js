@@ -84,7 +84,8 @@ exports.findAll = async (req, res) => {
 
     let condition = title ? {title: {$regex: new RegExp(title), $options: "i"}} : {};
     
-    const keywordsIds = keywords ? await Keywords.find({name: {$in: keywords}}, {_id: 1}).exec() : undefined;
+    const keywordsName = JSON.parse(keywords)
+    const keywordsIds = JSON.stringify(keywordsName) !== JSON.stringify([]) ? await Keywords.find({name: {$in: keywordsName}}, {_id: 1}).exec() : undefined;
     condition = keywordsIds ? {...condition, 'keywords': {$all: keywordsIds}} : condition
 
     await Ad.find({...condition, taken: false}).populate('keywords', 'name')
@@ -135,11 +136,31 @@ exports.findAllCustomer = async (req, res) => {
         return;
     }
     const {guid} = req.params;
+    const {keywords} = req.query;
 
-    await User.findOne({guid: guid}).populate("adsIds")
+    console.log(keywords)
+
+    await User.findOne({guid: guid})
+    .populate({
+        path : 'adsIds',
+            populate : {
+                path : 'keywords'
+            }
+    })
         .then(data => {
             console.log('[AdController][FindAllCustomer][INFO]:' + guid + '\'s' + " ads were returned.");
-            res.send(data.adsIds);
+            if (keywords === '[]') {
+                res.send(data.adsIds)
+                return;
+            }
+            let ads = []
+            const keywordsName = JSON.parse(keywords)
+            for (let ad of data.adsIds) {
+                if (keywordsName.every(element => {return ad.keywords.map(a => a.name).includes(element);})) {
+                    ads.push(ad)
+                }
+            }
+            res.send(ads);
         })
         .catch(err => {
             console.log('[AdController][FindAllCustomer][ERROR]:' + "Some error occurred while retrieving ads.");

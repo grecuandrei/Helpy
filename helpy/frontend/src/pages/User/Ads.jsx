@@ -3,15 +3,17 @@ import AdCard from "../../components/AdCard";
 import RentModal from "../../components/modals/RentModal";
 import ViewAdModal from "../../components/modals/ViewAdModal";
 import UserLayout from "../../utils/UserLayout";
+import Keywords from "../../components/Keywords";
 
 const UserAds = (isPublisher) => {
+	const [keywords, setKeywords] = useState([]);
 	const [openedModal, setOpenedModal] = useState(false);
 	const [openedViewModal, setOpenedViewModal] = useState(false);
 	const [currentAd, setAd] = useState({description:"", title:"", keywords:[], likes: 0, view: 0, address: "", endDate: null, publisherId: null, taken: false});
 	const [availableAds, setAvailableAds] = useState([]);
 	
 	const callBackendAPI = async () => {
-		const response = await fetch(`http://localhost:8000/api/ads/`);
+		const response = await fetch(`http://localhost:8000/api/ads/?keywords=${encodeURIComponent(JSON.stringify(keywords))}`);
 		const body = await response.json();
 
 		if (response.status !== 200) {
@@ -26,7 +28,7 @@ const UserAds = (isPublisher) => {
 			setAvailableAds(res)
 		})
 		.catch(err => console.log(err));
-	}, []);
+	}, [keywords]);
 
 	const handleClick = (ad) => {
 		setAd(ad);
@@ -59,6 +61,12 @@ const UserAds = (isPublisher) => {
 			closeModal={() => {
 				setOpenedViewModal(false);
 			}}
+		/>
+		<Keywords
+			keywords={keywords}
+			setKeywords={setKeywords}
+			label="Keywords"
+			placeholder="Press enter to save keyword"
 		/>
 		<div className="books">
 			{availableAds.map((ad, index) => (
