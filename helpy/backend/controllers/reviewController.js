@@ -9,8 +9,8 @@ exports.create = async (req, res) => {
         message = "score can not be empty!";
     } else if (!req.body.description) {
         message = "description can not be empty!";
-    } else if (!req.body.customerId) {
-        message = "userId can not be empty!";
+    } else if (!req.body.customerGUID) {
+        message = "customerGUID can not be empty!";
     } else if (!req.body.adId) {
         message = "adId can not be empty!";
     }
@@ -21,9 +21,11 @@ exports.create = async (req, res) => {
         return;
     }
 
+    const user = await User.findOne({guid: req.body.customerGUID}, {_id: 1});
+
     // Create a review
     const review = new Review({
-        customerId: req.body.customerId,
+        customerId: user._id,
         score: req.body.score,
         description: req.body.description,
         adId: req.body.adId
@@ -34,10 +36,11 @@ exports.create = async (req, res) => {
         .save(review)
         .then(data => {
             console.log('[ReviewController][Create][INFO]:' + ' ' + "review was sucessfully added!");
-            res.send(data);
+            res.status(200).send(data);
         })
         .catch(err => {
             console.log('[ReviewController][Create][ERROR]:' + ' ' + "Some error occurred while creating the review.");
+            console.log(err)
             res.status(500).send({
                 message:
                     err.message

@@ -50,8 +50,12 @@
 /* book card */
 
 .book-card {
-  @apply p-6 rounded-3xl flex flex-col gap-3 min-w-[300px];
+  @apply pb-6 pl-6 rounded-3xl flex flex-col gap-3 min-w-[300px];
   box-shadow: 0px 0px 2px #7b61ff;
+}
+
+.book-card-details {
+  @apply pt-6 rounded-3xl flex flex-col gap-3 min-w-[300px];
 }
 
 .rented {

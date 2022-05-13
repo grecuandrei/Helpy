@@ -158,6 +158,10 @@ label {
     @apply bg-red;
 }
 
+.modal-ad {
+    @apply w-[600px] px-16 py-10 bg-white rounded-md;
+}
+
 
 /* special info section */
 

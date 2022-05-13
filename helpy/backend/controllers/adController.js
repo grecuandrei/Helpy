@@ -342,6 +342,8 @@ exports.viewAd = async (req, res) => {
 
     const {id} = req.params;
 
+    console.log(id)
+
     await Ad.findByIdAndUpdate(id, {$inc: {views: 1}})
         .then(data => {
             if (!data) {
