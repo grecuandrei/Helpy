@@ -38,7 +38,11 @@ const schema = mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'keyword',
             default: []
-        }]
+        }],
+        reviewed: {
+            type: Boolean,
+            default: false
+        }
     },  
     {
         timestamps: true

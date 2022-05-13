@@ -8,7 +8,7 @@ import ReviewModal from "../../components/modals/ReviewModal";
 
 const ViewAdModal = ({ modalIsOpen, closeModal, ad }) => {
 	const [openedModal, setOpenedModal] = useState(false);
-	const [currentAd, setAd] = useState({description:"", title:"", keywords:[], likes: 0, view: 0, address: "", endDate: null, publisherId: null, taken: false});
+	const [currentAd, setAd] = useState({reviewed: false, description:"", title:"", keywords:[], likes: 0, view: 0, address: "", endDate: null, publisherId: null, taken: false});
 	const { user } = useAuth0();
 
 	const letReviewAd = (ad) => {
@@ -17,6 +17,7 @@ const ViewAdModal = ({ modalIsOpen, closeModal, ad }) => {
 		setOpenedModal(true);
 	}
 
+	console.log(ad)
 
 	return (
 		<Modal
@@ -39,7 +40,7 @@ const ViewAdModal = ({ modalIsOpen, closeModal, ad }) => {
 				<MdOutlineClose />
 			</Button>
 			<h2>{ad.taken}</h2>
-			{ ad.taken &&
+			{ ad.taken && !ad.reviewed &&
 			<Button type="button" onClick={ () => { letReviewAd(ad) }}>
 				<MdAdd />Add Review
 			</Button>

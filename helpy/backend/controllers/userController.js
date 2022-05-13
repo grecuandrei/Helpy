@@ -213,7 +213,8 @@ exports.updateReviews = async (req, res) => {
                     });
                 } else {
                     console.log('[UserController][UpdateReviews][INFO]:' + ' ' + "User was updated successfully.");
-                    res.send({
+                    Ad.findByIdAndUpdate({_id:reviewId}, {reviewed: true}) // TODO test this
+                    res.status(200).send({
                         message: "User was updated successfully."
                     });
                 }
