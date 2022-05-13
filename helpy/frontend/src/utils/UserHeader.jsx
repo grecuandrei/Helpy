@@ -28,15 +28,12 @@ const UserHeader = () => {
 
   return (
     <div className="user-menu">
-      {/* <Link to="/">
-        <img src={logo} alt="Weblib logo" />
-      </Link> */}
       <nav className="user-nav">
         <CustomLink to={"/home"}>
           <MdTableRows /> Ads
         </CustomLink>
-        <CustomLink to={"/analytics"}>
-          <MdAllInbox /> Past Reservations
+        <CustomLink to={"/taken"}>
+          <MdAllInbox /> Taken Ads
         </CustomLink>
         <CustomLink to={"/profile"}>
           <MdAccountBox /> Profile

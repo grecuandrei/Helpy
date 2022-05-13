@@ -25,7 +25,7 @@
 }
 
 .nav-link {
-    @apply h-12 pl-4 rounded-[6px] flex items-center font-semibold gap-2 opacity-50 text-lg;
+    @apply h-12 w-64 pl-4 rounded-[6px] flex border-solid border-2 items-center font-semibold gap-2 opacity-50 text-lg;
 }
 
 .active {

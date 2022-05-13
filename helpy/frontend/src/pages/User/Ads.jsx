@@ -24,7 +24,7 @@ const UserAds = (isPublisher) => {
         setAvailableAds(res)
       })
       .catch(err => console.log(err));
-  });
+  }, []);
 
   const handleClick = (ad) => {
     console.log(availableAds)

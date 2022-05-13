@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Analytics from "../pages/Admin/Analytics";
 import Book from "../pages/Admin/Book";
 import UserAds from "../pages/User/Ads";
+import UserTaken from "../pages/User/Taken";
 import Ads from "../pages/Admin/Books";
 import Account from "../pages/User/Account";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -20,7 +21,7 @@ const Router = () => {
     if (!isAuthenticated) {
       loginWithRedirect();
     }
-  }, [ user?.sub, isAuthenticated, loginWithRedirect]);
+  }, [ isAuthenticated, loginWithRedirect]);
 
   const callBackendAPI = async () => {
       const response = await fetch(`http://localhost:8000/api/users/register/${user.sub}`);
@@ -45,8 +46,6 @@ const Router = () => {
       })
       .catch(err => {return err});
     }, []);
-
-    console.log(userExists)
     
     return userExists;
   }
@@ -59,6 +58,7 @@ const Router = () => {
           <Route exact path="/" element={Register() ? <Navigate to={"/home"}/> : <Navigate to={"/register"}/>} />
           <Route exact path="/home" element={<UserAds isPublisher={isPublisher}/>} />
           <Route exact path="/register" element={<RegisterModal modalIsOpen={openedModal} closeModal={() => setOpenedModal(false)} userGUID={user.sub} userEmail={user.name}/>} />
+          <Route exact path="/taken" element={<UserTaken isPublisher={isPublisher} userGUID={user}/>} />
           {/* <Route exact path="/profile" element={<AccountModal userGUID={user.sub}/>} /> */}
           <Route exact path="/ads" element={<Ads isPublisher={isPublisher}/>} />
           {/* <Route exact path="/books/:id" element={<Book />} /> */}

@@ -134,11 +134,11 @@ exports.findAllCustomer = async (req, res) => {
         res.status(400).send({message: "Params can not be empty!"});
         return;
     }
-    const {id} = req.params;
+    const {guid} = req.params;
 
-    await User.findById(id).populate("adsIds")
+    await User.findOne({guid: guid}).populate("adsIds")
         .then(data => {
-            console.log('[AdController][FindAllCustomer][INFO]:' + id + '\'s' + " ads were returned.");
+            console.log('[AdController][FindAllCustomer][INFO]:' + guid + '\'s' + " ads were returned.");
             res.send(data.adsIds);
         })
         .catch(err => {
@@ -153,6 +153,12 @@ exports.findAllCustomer = async (req, res) => {
 
 // Find a single AD with an id
 exports.findOne = async (req, res) => {
+    if (!req.params) {
+        console.log( '[AdController][FindOne][ERROR]:' + 'Params can not be empty!');
+        res.status(400).send({message: "Params can not be empty!"});
+        return;
+    }
+
     const {id} = req.params;
 
     await Ad.findById(id)

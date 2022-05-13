@@ -16,7 +16,7 @@ module.exports = app => {
     // router.patch('/:id/viewAd', checkJwt, ads.viewAd);
     router.post("/", ads.create);
     router.get("/", ads.findAll);// all ADs untaken based on title and/or array of keywords.
-    router.get("/customer/:id", ads.findAllCustomer); // these are all ads taken by customer
+    router.get("/customer/:guid", ads.findAllCustomer); // these are all ads taken by customer
     router.get("/publisher/:id", ads.findAllPublisher); // all ads for a publisher
     router.get("/:id", ads.findOne);
     router.put("/:id", ads.update);
