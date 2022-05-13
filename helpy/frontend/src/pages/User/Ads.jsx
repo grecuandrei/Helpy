@@ -5,7 +5,7 @@ import UserLayout from "../../utils/UserLayout";
 
 const UserAds = (isPublisher) => {
   const [openedModal, setOpenedModal] = useState(false);
-  const [currentAd, setAd] = useState({description:"", title:""});
+  const [currentAd, setAd] = useState({description:"", title:"", keywords:[]});
   const [availableAds, setAvailableAds] = useState([]);
   
   const callBackendAPI = async () => {

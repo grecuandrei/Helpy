@@ -14,7 +14,7 @@ const Router = () => {
   const { user, isAuthenticated, loginWithRedirect } = useAuth0();
   const [openedModal, setOpenedModal] = useState(true);
   const [isPublisher, setIsPublisher] = useState(false);
-  const [userExists, setUserExists] = useState(false);
+  const [userExists, setUserExists] = useState(2);
   
   useEffect(() => {
     if (!isAuthenticated) {
@@ -37,14 +37,16 @@ const Router = () => {
       callBackendAPI()
       .then(res => {
         if (res.status === 200) {
-          setUserExists(true);
+          setUserExists(1);
           setIsPublisher(res.body.isPublisher)
         } else if (res.status === 404) {
-          setUserExists(false);
+          setUserExists(0);
         }
       })
       .catch(err => {return err});
     }, []);
+
+    console.log(userExists)
     
     return userExists;
   }

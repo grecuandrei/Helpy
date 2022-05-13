@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Modal from "react-modal";
 import { MdOutlineClose } from "react-icons/md";
 import Button from "../Button";
@@ -7,6 +7,10 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 const RentModal = ({ modalIsOpen, closeModal, ad }) => {
   const { user } = useAuth0();
+
+  useEffect(() => {
+    // console.log(ad)
+  })
   
   const reserveAd = (id) => {
     const requestOptions = {
