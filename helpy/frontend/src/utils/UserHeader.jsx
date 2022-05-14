@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import "../styling/admin.tailwind.css";
@@ -9,6 +9,7 @@ import { MdTableRows, MdAllInbox, MdAccountBox } from "react-icons/md";
 export function CustomLink({ children, to, ...props }) {
   const resolved = useResolvedPath(to);
   const match = useMatch({ path: resolved.pathname, end: true });
+
 
   return (
     <div>
@@ -44,15 +45,14 @@ const UserHeader = () => {
           <Link className="profile-link capitalize" to="/profile">
             {user.nickname}
           </Link>
-          <Link
+          <div
             className="signout"
-            to="/"
             onClick={() => {
               logout({ returnTo: window.location.origin });
             }}
           >
             Signout
-          </Link>
+          </div>
         </div>
         <Avatar name={user.nickname} round="100px" size="50px" />
       </div>

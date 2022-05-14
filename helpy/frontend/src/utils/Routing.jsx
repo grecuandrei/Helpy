@@ -7,7 +7,7 @@ import UserTaken from "../pages/User/Taken";
 import Ads from "../pages/Admin/Books";
 import Account from "../pages/User/Account";
 import { useAuth0 } from "@auth0/auth0-react";
-import AccountModal from "../components/modals/AccountModal";
+import Profile from "../pages/Profile";
 import RegisterModal from "../components/modals/RegisterModal";
 import { Navigate } from "react-router-dom";
 
@@ -24,7 +24,7 @@ const Router = () => {
 	}, [ isAuthenticated, loginWithRedirect]);
 
 	const callBackendAPI = async () => {
-		const response = await fetch(`http://localhost:8000/api/users/register/${user.sub}`);
+		const response = await fetch(`http://localhost:8000/api/users/guid/${user.sub}`);
 		const body = await response.json();
 
 		if (response.status !== 200 && response.status !== 404) {
@@ -54,12 +54,11 @@ const Router = () => {
 		isAuthenticated && (
 		<BrowserRouter>
 			<Routes>
-			{/* <Route exact path="/" element={<UserAds />} /> */}
 			<Route exact path="/" element={Register() ? <Navigate to={"/home"}/> : <Navigate to={"/register"}/>} />
 			<Route exact path="/home" element={<UserAds isPublisher={isPublisher}/>} />
 			<Route exact path="/register" element={<RegisterModal modalIsOpen={openedModal} closeModal={() => setOpenedModal(false)} userGUID={user.sub} userEmail={user.name}/>} />
 			<Route exact path="/taken" element={<UserTaken isPublisher={isPublisher} userGUID={user}/>} />
-			{/* <Route exact path="/profile" element={<AccountModal userGUID={user.sub}/>} /> */}
+			<Route exact path="/profile" element={<Profile userGUID={user.sub} isPublisher={isPublisher}/>} />
 			<Route exact path="/ads" element={<Ads isPublisher={isPublisher}/>} />
 			{/* <Route exact path="/books/:id" element={<Book />} /> */}
 			<Route exact path="/analytics" element={<Analytics />} />

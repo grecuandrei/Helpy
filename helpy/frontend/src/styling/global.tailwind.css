@@ -108,7 +108,7 @@ label {
 }
 
 .input {
-    @apply w-full px-4 py-3 border-2 rounded-lg outline-none border-gray text-base font-semibold;
+    @apply w-80 px-4 py-3 border-2 rounded-lg outline-none border-gray text-base font-semibold;
 }
 
 .input:focus {
@@ -166,7 +166,7 @@ label {
 /* special info section */
 
 .section-container {
-    @apply bg-white font-semibold text-lg flex flex-col gap-5 w-auto m-[1px];
+    @apply font-semibold text-lg flex flex-col gap-5 w-auto m-[1px];
 }
 
 .section-title {
@@ -174,13 +174,20 @@ label {
 }
 
 .section-container .fields {
-    @apply rounded-md p-6;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
-    display: grid;
+    @apply rounded-md p-6 bg-purple;
+    box-shadow: 0px 6px 10px rgb(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     column-gap: 40px;
     row-gap: 20px;
     grid-template-columns: max-content max-content;
-    width: max-content;
+    width:500px;
+}
+
+.rows {
+    @apply flex flex-row;
+    justify-content: space-between
 }
 
 .field-key {

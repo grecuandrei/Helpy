@@ -11,8 +11,6 @@ const UserTaken = ( isPublisher ) => {
 	const [currentAd, setAd] = useState({description:"", title:"", keywords:[], likes: 0, view: 0, address: "", endDate: null, publisherId: null, taken: false});
 	const [availableAds, setAvailableAds] = useState([]);
 	const { user } = useAuth0();
-
-	console.log(keywords)
 	
 	const callBackendAPI = async () => {
 		const response = await fetch(`http://localhost:8000/api/ads/customer/${user.sub}?keywords=${encodeURIComponent(JSON.stringify(keywords))}`);

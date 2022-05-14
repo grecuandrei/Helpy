@@ -80,8 +80,8 @@ exports.findOne = async (req, res) => {
         });
 };
 
-// Find a single user with an guiid
-exports.findRegister = async (req, res) => {
+// Find a single user with an guid
+exports.findByGuid = async (req, res) => {
     const {guid} = req.params;
 
     console.log(guid)
@@ -91,7 +91,7 @@ exports.findRegister = async (req, res) => {
         });
     }
 
-    await User.findOne({guid: guid})
+    await User.findOne({guid: guid}).populate('adsIds').populate('reviewsIds')
     .then(data => {
         if (!data) {
             console.log('[UserController][FindRegister][ERROR]:' + ' ' + "Not found user with guid: " + guid);
@@ -101,7 +101,7 @@ exports.findRegister = async (req, res) => {
         }
         else {
             console.log('[UserController][FindRegister][INFO]:' + ' ' + 'User was suvessfully returned!');
-            res.send(data);
+            res.status(200).send(data);
         }
     })
     .catch(err => {
@@ -122,9 +122,9 @@ exports.update = async (req, res) => {
         });
     }
 
-    const {id} = req.params;
+    const {guid} = req.params;
 
-    await User.findByIdAndUpdate(id, {
+    await User.findOneAndUpdate({guid: guid}, {
         ...req.body
     }, {useFindAndModify: false})
         .then(data => {

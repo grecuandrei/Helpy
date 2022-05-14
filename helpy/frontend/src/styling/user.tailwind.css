@@ -9,7 +9,7 @@
 }
 
 .user-content-main {
-  @apply flex flex-col overflow-y-auto gap-7;
+  @apply flex flex-col w-screen overflow-y-auto gap-7;
 }
 
 .user-menu {
@@ -40,6 +40,7 @@
 
 .signout {
   @apply decoration-transparent text-black opacity-50;
+  cursor: pointer;
 }
 
 /* books layout */

@@ -11,8 +11,8 @@ module.exports = app => {
     // router.patch("/:id/:adId", checkJwt, users.reserveAd); // takes an ad as well
     router.post("/", users.create);
     router.get("/:id", users.findOne);
-    router.get("/register/:guid", users.findRegister); // find user by guid
-    router.put("/:id", users.update);
+    router.get("/guid/:guid", users.findByGuid); // find user by guid
+    router.put("/:guid", users.update);
     router.delete("/:id", users.delete);
     router.patch("/review/:id/:reviewId", users.updateReviews); // updates the score as well
     router.patch("/ad/:guid/:adId", users.reserveAd); // takes an ad as well

@@ -25,7 +25,7 @@ const Keywords = (props) => {
 
   return (
     <>
-      <label>
+      <label style={{display: 'flex', flexDirection: 'column'}}>
         {label && <span>{label}</span>}
         <input
           {...rest}
