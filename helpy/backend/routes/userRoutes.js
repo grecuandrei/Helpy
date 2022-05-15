@@ -12,7 +12,7 @@ module.exports = app => {
     router.post("/", users.create);
     router.get("/:id", users.findOne);
     router.get("/guid/:guid", users.findByGuid); // find user by guid
-    router.put("/:guid", users.update);
+    router.put("/:guid", checkJwt, users.update);
     router.delete("/:id", users.delete);
     router.patch("/review/:id/:reviewId", users.updateReviews); // updates the score as well
     router.patch("/ad/:guid/:adId", users.reserveAd); // takes an ad as well

@@ -1,12 +1,18 @@
-import React , {useState} from "react";
+import React , {useEffect, useState, useRef} from "react";
 import Modal from "react-modal";
 import { MdOutlineClose } from "react-icons/md";
 import Button from "../Button";
 import Input from "../Input";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const AccountModal = ({ modalIsOpen, closeModal, userGUID }) => {
 	const [email, setEmail] = useState('');
 	const [phone, setPhone] = useState('');
+    const { getIdTokenClaims } = useAuth0();
+	const getToken = async () => {  
+        token = await getIdTokenClaims()  
+    }  
+    let token = getToken()
 
 	const editAccount = () => {
 		let body = {}
@@ -16,14 +22,18 @@ const AccountModal = ({ modalIsOpen, closeModal, userGUID }) => {
 		if (phone !== '') {
 			body['phone'] = phone
 		}
+		console.log(token)
 		const requestOptions = {
-		method: 'PUT',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify(body)
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token.__raw}`,
+			},
+			body: JSON.stringify(body)
 		};
 		fetch(`http://localhost:8000/api/users/${userGUID}`, requestOptions)
 			.then(response => console.log(response.json()));
-		};
+	};
 
 	return (
 		<Modal
