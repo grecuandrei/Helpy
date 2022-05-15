@@ -54,7 +54,7 @@ const Router = () => {
 		isAuthenticated && (
 		<BrowserRouter>
 			<Routes>
-			<Route exact path="/" element={Register() ? <Navigate to={"/home"}/> : <Navigate to={"/register"}/>} />
+			<Route exact path="/" element={Register() ===1 ? <Navigate to={"/home"}/> : <Navigate to={"/register"}/>} />
 			<Route exact path="/home" element={<UserAds isPublisher={isPublisher}/>} />
 			<Route exact path="/register" element={<RegisterModal modalIsOpen={openedModal} closeModal={() => setOpenedModal(false)} userGUID={user.sub} userEmail={user.name}/>} />
 			<Route exact path="/taken" element={<UserTaken isPublisher={isPublisher} userGUID={user}/>} />
