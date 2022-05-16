@@ -29,8 +29,16 @@ const RegisterModal = ({ modalIsOpen, closeModal, userGUID, userEmail }) => {
             })
         };
         fetch(`http://localhost:8000/api/users/`, requestOptions)
-            .then(response => console.log(response.json()));
-        navigate("/home");
+            .then(response => {
+                if (response.status !== 500) {
+                    closeModal();
+                    navigate("/home");
+                } else {
+                    console.log(response.json())
+                }
+            }).catch(err => {
+                console.log(err)
+            });
     }
 
     return (
@@ -52,7 +60,7 @@ const RegisterModal = ({ modalIsOpen, closeModal, userGUID, userEmail }) => {
             <Input label="Phone" placeholder="Your phone number" pattern="[0-9]*" value={phone} onChange={e => setPhone(e.target.value)} />
             <Input label="Pid" placeholder="Your personal identification number" value={pid} onChange={e => setPid(e.target.value)}/>
             <Input type="checkbox" label="Are you a publisher wanna be?" onChange={ () => {setChecked(!checked)}}/>
-            <Button type="button" onClick={ () => { saveUser(); closeModal(); } }>
+            <Button type="button" onClick={ () => { saveUser(); } }>
             Save
             </Button>
         </form>

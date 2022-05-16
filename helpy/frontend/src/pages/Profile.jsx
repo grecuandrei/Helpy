@@ -7,7 +7,7 @@ import { MdEdit } from "react-icons/md";
 import Section from "../components/Section";
 import Table from "../components/Table";
 
-const Profile = ( userGUID, isPublisher ) => {
+const Profile = ( userGUID ) => {
     const [openedModal, setOpenedModal] = useState(false);
 	const { user } = useAuth0();
     const [userBD, setUserBD] = useState({})
@@ -62,7 +62,7 @@ const Profile = ( userGUID, isPublisher ) => {
 	}, []);
 
 	return (
-        <UserLayout isPublisher={isPublisher}>
+        <UserLayout>
             <AccountModal
                 userGUID={user.sub}
                 modalIsOpen={openedModal}

@@ -5,7 +5,7 @@ import ViewAdModal from "../../components/modals/ViewAdModal";
 import UserLayout from "../../utils/UserLayout";
 import Keywords from "../../components/Keywords";
 
-const UserAds = (isPublisher) => {
+const UserAds = () => {
 	const [keywords, setKeywords] = useState([]);
 	const [openedModal, setOpenedModal] = useState(false);
 	const [openedViewModal, setOpenedViewModal] = useState(false);
@@ -47,7 +47,7 @@ const UserAds = (isPublisher) => {
 	};
 
 	return (
-		<UserLayout isPublisher={isPublisher}>
+		<UserLayout>
 		<RentModal
 			ad={currentAd}
 			modalIsOpen={openedModal}

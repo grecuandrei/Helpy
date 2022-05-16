@@ -14,7 +14,6 @@ import { Navigate } from "react-router-dom";
 const Router = () => {
 	const { user, isAuthenticated, loginWithRedirect } = useAuth0();
 	const [openedModal, setOpenedModal] = useState(true);
-	const [isPublisher, setIsPublisher] = useState(false);
 	const [userExists, setUserExists] = useState(2);
 
 	useEffect(() => {
@@ -39,7 +38,6 @@ const Router = () => {
 		.then(res => {
 			if (res.status === 200) {
 			setUserExists(1);
-			setIsPublisher(res.body.isPublisher)
 			} else if (res.status === 404) {
 			setUserExists(0);
 			}
@@ -47,19 +45,27 @@ const Router = () => {
 		.catch(err => {return err});
 		}, []);
 
-		return userExists;
+		console.log(userExists === 0)
+
+		if (userExists === 1) {
+			return <Navigate to={"/home"}/>;
+		} else if (userExists === 0) {
+			return <Navigate to={"/register"}/>
+		}
+
+		return <div>Loading...</div>;
 	}
 
 	return (
 		isAuthenticated && (
 		<BrowserRouter>
 			<Routes>
-			<Route exact path="/" element={Register() ===1 ? <Navigate to={"/home"}/> : <Navigate to={"/register"}/>} />
-			<Route exact path="/home" element={<UserAds isPublisher={isPublisher}/>} />
+			<Route exact path="/" element={Register()} />
+			<Route exact path="/home" element={<UserAds/>} />
 			<Route exact path="/register" element={<RegisterModal modalIsOpen={openedModal} closeModal={() => setOpenedModal(false)} userGUID={user.sub} userEmail={user.name}/>} />
-			<Route exact path="/taken" element={<UserTaken isPublisher={isPublisher} userGUID={user}/>} />
-			<Route exact path="/profile" element={<Profile userGUID={user.sub} isPublisher={isPublisher}/>} />
-			<Route exact path="/ads" element={<Ads isPublisher={isPublisher}/>} />
+			<Route exact path="/taken" element={<UserTaken userGUID={user}/>} />
+			<Route exact path="/profile" element={<Profile userGUID={user.sub}/>} />
+			<Route exact path="/ads" element={<Ads/>} />
 			{/* <Route exact path="/books/:id" element={<Book />} /> */}
 			<Route exact path="/analytics" element={<Analytics />} />
 			</Routes>

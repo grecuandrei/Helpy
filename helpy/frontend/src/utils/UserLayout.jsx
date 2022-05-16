@@ -5,18 +5,17 @@ import { authSettings } from "../AuthSettings";
 import UserHeader from "./UserHeader";
 import logo from "../assets/logo.svg";
 
-const UserLayout = ({ isPublisher, children }) => {
+const UserLayout = ({ children }) => {
   const { user } = useAuth0();
   const navigate = useNavigate();
 
   /* inseamna ca are admin ca si rol, deci nu poate vedea partea de utilizator */
+  console.log(user[authSettings.rolesKey])
   useEffect(() => {
-    if (isPublisher.isPublisher) navigate("/ads");
-    // console.log(user)
-    // if (user && user[authSettings.rolesKey].length === 1) {
-    //   navigate("/ads");
-    // }
-  }, [isPublisher, navigate]);
+    if (user && user[authSettings.rolesKey].length === 1) {
+      navigate("/ads");
+    }
+  }, [navigate, user]);
 
   return (
     <div className="user-layout">

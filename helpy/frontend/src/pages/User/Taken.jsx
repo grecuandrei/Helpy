@@ -5,7 +5,7 @@ import UserLayout from "../../utils/UserLayout";
 import { useAuth0 } from "@auth0/auth0-react";
 import Keywords from "../../components/Keywords";
 
-const UserTaken = ( isPublisher ) => {
+const UserTaken = () => {
 	const [keywords, setKeywords] = useState([]);
 	const [openedViewModal, setOpenedViewModal] = useState(false);
 	const [currentAd, setAd] = useState({description:"", title:"", keywords:[], likes: 0, view: 0, address: "", endDate: null, publisherId: null, taken: false});
@@ -36,7 +36,7 @@ const UserTaken = ( isPublisher ) => {
 	};
 
 	return (
-		<UserLayout isPublisher={isPublisher}>
+		<UserLayout>
 			<ViewAdModal
 				ad={currentAd}
 				modalIsOpen={openedViewModal}

@@ -1,6 +1,12 @@
 const User = require('../models/userModel');
 const Review = require('../models/reviewModel');
 const Ad = require('../models/adModel');
+require('dotenv').config();
+const domain = process.env.AUTH0_DOMAIN;
+const client_id = process.env.AUTH0_CLIENT_ID;
+const client_secret = process.env.AUTH0_CLIENT_SECRET;
+const admin_role = process.env.AUTH0_ADMIN_ROLE_ID;
+const ManagementClient = require("auth0").ManagementClient;
 
 // Create and Save a new User
 exports.create = async (req, res) => {
@@ -24,6 +30,23 @@ exports.create = async (req, res) => {
         console.log('[UserController][Create][ERROR]:' + ' ' + message);
         res.status(400).send({message: message});
         return;
+    }
+
+    // Asign publisher role
+    if (req.body.isPublisher && req.body.isPublisher == true) {
+        const management = new ManagementClient({
+            domain: `${domain}`,
+            clientId: `${client_id}`,
+            clientSecret: `${client_secret}`
+        });
+
+        var dataU = { "users" : [ req.body.guid ]};
+
+        try {
+            await management.roles.assignUsers({ id: admin_role}, dataU);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     // Create a user
