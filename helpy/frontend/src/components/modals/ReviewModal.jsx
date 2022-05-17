@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Modal from "react-modal";
 import { MdOutlineClose } from "react-icons/md";
 import Button from "../Button";
@@ -6,18 +6,21 @@ import Input from "../Input";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const ReviewModal = ({ modalIsOpen, closeModal, ad }) => {
-  const { user } = useAuth0();
+  const { user, getIdTokenClaims } = useAuth0();
   const [description, setDescription] = useState('');
   const [score, setScore] = useState('');
-
-  useEffect(() => {
-    // console.log(ad)
-  })
+	const getToken = async () => {  
+    token = await getIdTokenClaims()  
+  }  
+  let token = getToken()
   
   const review = () => {
     const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+        'Content-Type': 'application/json',
+				Authorization: `Bearer ${token.__raw}`
+       },
         body: JSON.stringify({
             customerGUID: user.sub,
             score: score,

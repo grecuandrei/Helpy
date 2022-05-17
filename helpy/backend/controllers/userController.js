@@ -173,14 +173,15 @@ exports.update = async (req, res) => {
 
 // Delete a user with the specified id in the request
 exports.delete = async (req, res) => {
-    const {id} = req.params;
+    const {guid} = req.params;
 
-    await User.findByIdAndRemove(id)
+    // TODO: also remove all his ads and reviews and ads from all customers
+    await User.findOneAndRemove({guid: guid})
         .then(data => {
             if (!data) {
-                console.log('[UserController][Delete][ERROR]:' + ' ' + `Cannot delete user with id=${id}. Maybe user was not found!`);
+                console.log('[UserController][Delete][ERROR]:' + ' ' + `Cannot delete user with guid=${guid}. Maybe user was not found!`);
                 res.status(404).send({
-                    message: `Cannot delete user with id=${id}. Maybe user was not found!`
+                    message: `Cannot delete user with guid=${guid}. Maybe user was not found!`
                 });
             } else {
                 console.log('[UserController][Delete][INFO]:' + ' ' + "User was deleted successfully!");
@@ -190,9 +191,9 @@ exports.delete = async (req, res) => {
             }
         })
         .catch(err => {
-            console.log('[UserController][Delete][ERROR]:' + ' ' + "Could not delete user with id: " + id);
+            console.log('[UserController][Delete][ERROR]:' + ' ' + "Could not delete user with guid: " + guid);
             res.status(500).send({
-                message: "Could not delete user with id=" + id
+                message: "Could not delete user with guid=" + guid
             });
         });
 };

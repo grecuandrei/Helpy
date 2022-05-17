@@ -37,6 +37,7 @@ const RegisterModal = ({ modalIsOpen, closeModal, userGUID, userEmail }) => {
                     console.log(response.json())
                 }
             }).catch(err => {
+                // TODO afisare eroare catre utilizator
                 console.log(err)
             });
     }

@@ -22,7 +22,6 @@ const AccountModal = ({ modalIsOpen, closeModal, userGUID }) => {
 		if (phone !== '') {
 			body['phone'] = phone
 		}
-		console.log(token)
 		const requestOptions = {
 			method: 'PUT',
 			headers: {

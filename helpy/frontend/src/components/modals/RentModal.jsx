@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Modal from "react-modal";
 import { MdOutlineClose } from "react-icons/md";
 import Button from "../Button";
@@ -6,16 +6,20 @@ import Input from "../Input";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const RentModal = ({ modalIsOpen, closeModal, ad }) => {
-  const { user } = useAuth0();
+  const { user, getIdTokenClaims } = useAuth0();
 
-  useEffect(() => {
-    // console.log(ad)
-  })
+	const getToken = async () => {  
+		token = await getIdTokenClaims()  
+	  }  
+	  let token = getToken()
   
   const reserveAd = (id) => {
     const requestOptions = {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token.__raw}`
+        },
     };
     fetch(`http://localhost:8000/api/users/ad/${user.sub}/${id}`, requestOptions)
         .then(response => console.log(response.json()));
