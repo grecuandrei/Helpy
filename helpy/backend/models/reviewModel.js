@@ -24,7 +24,7 @@ const schema = mongoose.Schema(
     }  
 );
 
-schema.index({ user: 1, name: 1}, {unique: true})
+schema.index({ customerId: 1, adId: 1}, {unique: true})
 
 schema.method("toJSON", function () {  
     const {__v, _id, ...object} = this.toObject();  

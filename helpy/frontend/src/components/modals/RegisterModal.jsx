@@ -74,7 +74,9 @@ const RegisterModal = ({ modalIsOpen, closeModal, userGUID, userEmail }) => {
                 <Input label="Surname" placeholder="Your surname" value={surname} onChange={e => setSurname(e.target.value)}/>
                 <Input label="Phone" placeholder="Your phone number" pattern="[0-9]*" value={phone} onChange={e => setPhone(e.target.value)} />
                 <Input label="Pid" placeholder="Your personal identification number" value={pid} onChange={e => setPid(e.target.value)}/>
-                <Input type="checkbox" label="Do you want do be a Publisher?" onChange={ () => {setChecked(!checked)}}/>
+                <div className="shiftText-right">
+                    <Input type="checkbox" class = "shiftCheckbox-left" label="Do you want do be a Publisher?" onChange={ () => {setChecked(!checked)}}/>
+                </div>
                 <Button type="button" onClick={ () => { saveUser(); } }>
                 Save
                 </Button>
