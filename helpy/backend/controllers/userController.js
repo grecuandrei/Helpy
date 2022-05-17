@@ -1,6 +1,9 @@
 const User = require('../models/userModel');
 const Review = require('../models/reviewModel');
 const Ad = require('../models/adModel');
+const ads = require("../controllers/adController.js");
+const UserService = require('../services/userServices');
+
 require('dotenv').config();
 const domain = process.env.AUTH0_DOMAIN;
 const client_id = process.env.AUTH0_CLIENT_ID;
@@ -34,18 +37,15 @@ exports.create = async (req, res) => {
 
     // Asign publisher role
     if (req.body.isPublisher && req.body.isPublisher == true) {
-        const management = new ManagementClient({
-            domain: `${domain}`,
-            clientId: `${client_id}`,
-            clientSecret: `${client_secret}`
-        });
-
-        var dataU = { "users" : [ req.body.guid ]};
-
         try {
-            await management.roles.assignUsers({ id: admin_role}, dataU);
-        } catch (e) {
-            console.log(e);
+            await UserService.assignRole(req.body.guid)
+        } catch(err) {
+            console.log('[UserController][Create][ERROR]:' + ' ' + "Some error occurred while assigning publisher role.");
+            res.status(500).send({
+                message:
+                    err.message
+                    || "Some error occurred while creating the user."
+            });
         }
     }
 
@@ -61,141 +61,153 @@ exports.create = async (req, res) => {
     });
 
     // Save user in the database
-    await user
-        .save(user)
-        .then(data => {
-            console.log('[UserController][Create][INFO]:' + ' ' + 'User was sucessfully added!');
-            res.send(data);
-        })
-        .catch(err => {
-            console.log('[UserController][Create][ERROR]:' + ' ' + "Some error occurred while creating the user.");
-            res.status(500).send({
-                message:
-                    err.message
-                    || "Some error occurred while creating the user."
-            });
+    try {
+        const result = await UserService.saveUser(user)
+        console.log('[UserController][Create][INFO]:' + ' ' + 'User was sucessfully added!');
+        res.status(201).send(result);
+    } catch(err) {
+        console.log('[UserController][Create][ERROR]:' + ' ' + "Some error occurred while creating the user.");
+        res.status(500).send({
+            message:
+                err.message
+                || "Some error occurred while creating the user."
         });
+    }
 };
 
 // Find a single user with an id
 exports.findOne = async (req, res) => {
     const {id} = req.params;
 
-    await User.findById(id)
-        .then(data => {
-            if (!data) {
-                console.log('[UserController][FindOne][ERROR]:' + ' ' + "Not found user with id: " + id);
-                res.status(404).send({
-                    message: "Not found user with id " + id
-                });
-            }
-            else {
-                console.log('[UserController][FindOne][INFO]:' + ' ' + 'User was suvessfully returned!');
-                res.send(data);
-            }
-        })
-        .catch(err => {
-            console.log('[UserController][FindOne][ERROR]:' + ' ' + "Error retrieving user with id: " + id);
-            res.status(500)
-                .send({
-                    message: "Error retrieving user with id=" + id
-                });
-        });
+    try {
+        const user = await UserService.findOne(id)
+        if (!user) {
+            console.log('[UserController][FindOne][ERROR]:' + ' ' + "Not found user with id: " + id);
+            res.status(404).send({
+                message: "Not found user with id " + id
+            });
+        }
+        else {
+            console.log('[UserController][FindOne][INFO]:' + ' ' + 'User was suvessfully returned!');
+            res.status(200).send(user);
+        }
+    } catch(err) {
+        console.log('[UserController][FindOne][ERROR]:' + ' ' + "Error retrieving user with id: " + id);
+        res.status(500)
+            .send({
+                message:
+                    err.message
+                    || "Error retrieving user with id=" + id
+            });
+    }
 };
 
 // Find a single user with an guid
 exports.findByGuid = async (req, res) => {
     const {guid} = req.params;
 
-    console.log(guid)
     if (!guid) {
-        res.status(500).send({
+        console.log('[UserController][FindByGuid][ERROR]:' + ' ' + "req.params cannot be empty");
+        res.status(400).send({
             message: "Bad request"
         });
     }
 
-    await User.findOne({guid: guid}).populate('adsIds').populate('reviewsIds')
-    .then(data => {
-        if (!data) {
-            console.log('[UserController][FindRegister][ERROR]:' + ' ' + "Not found user with guid: " + guid);
+    try {
+        const user = await UserService.findOneByGuid(guid)
+        if (!user) {
+            console.log('[UserController][FindByGuid][ERROR]:' + ' ' + "Not found user with guid: " + guid);
             res.status(404).send({
                 message: "Not found user with guid " + guid
             });
         }
         else {
-            console.log('[UserController][FindRegister][INFO]:' + ' ' + 'User was suvessfully returned!');
-            res.status(200).send(data);
+            console.log('[UserController][FindByGuid][INFO]:' + ' ' + 'User was suvessfully returned!');
+            res.status(200).send(user);
         }
-    })
-    .catch(err => {
-        console.log('[UserController][FindRegister][ERROR]:' + ' ' + "Error retrieving user with guid: " + guid);
+    } catch(err) {
+        console.log('[UserController][FindByGuid][ERROR]:' + ' ' + "Error retrieving user with guid: " + guid);
         res.status(500)
             .send({
-                message: "Error retrieving user with guid=" + guid
+                message:
+                    err.message
+                    || "Error retrieving user with guid=" + guid
             });
-    });
+    }
 };
 
-// Update an Ad by the id in the request
+// Update an User by the guid in the request
 exports.update = async (req, res) => {
+    const {id} = req.params;
+
+    let message;
+
     if (!req.body) {
-        console.log('[UserController][Update][ERROR]:' + ' ' + "Data to update can not be empty!");
+        message = "Data to update can not be empty!"
+    } else if (!id) {
+        message = "req.params can not be empty!"
+    }
+
+    if (message) {
+        console.log('[UserController][Update][ERROR]:' + ' ' + message);
         return res.status(400).send({
-            message: "Data to update can not be empty!"
+            message: message
         });
     }
 
-    const {guid} = req.params;
-
-    await User.findOneAndUpdate({guid: guid}, {
-        ...req.body
-    }, {useFindAndModify: false})
-        .then(data => {
-            if (!data) {
-                console.log('[UserController][Update][ERROR]:' + ' ' + `Cannot update user with id=${id}. Maybe user was not found!`);
-                res.status(404).send({
-                    message: `Cannot update user with id=${id}. Maybe user was not found!`
-                });
-            } else {
-                console.log('[UserController][Update][INFO]:' + ' ' + "User was updated successfully.");
-                res.send({
-                    message: "User was updated successfully."
-                });
-            }
-        })
-        .catch(err => {
-            console.log('[UserController][Update][ERROR]:' + ' ' + "Error updating user with id: " + id);
-            res.status(500).send({
-                message: "Error updating user with id=" + id
+    try {
+        const result = await UserService.updateUser(id, req.body)
+        if (!result) {
+            console.log('[UserController][Update][ERROR]:' + ' ' + `Cannot update user with id=${id}. Maybe user was not found!`);
+            res.status(404).send({
+                message: `Cannot update user with id=${id}. Maybe user was not found!`
             });
-        });
+        } else {
+            console.log('[UserController][Update][INFO]:' + ' ' + "User was updated successfully.");
+            res.status(200).send({
+                message: "User was updated successfully."
+            });
+        }
+    } catch(err) {
+        console.log('[UserController][Update][ERROR]:' + ' ' + "Error updating user with id: " + id);
+            res.status(500).send({
+                message:
+                    err.message
+                    || "Error updating user with id=" + id
+            });
+    }
 };
 
 // Delete a user with the specified id in the request
 exports.delete = async (req, res) => {
-    const {guid} = req.params;
+    const {id} = req.params;
 
-    // TODO: also remove all his ads and reviews and ads from all customers
-    await User.findOneAndRemove({guid: guid})
-        .then(data => {
-            if (!data) {
-                console.log('[UserController][Delete][ERROR]:' + ' ' + `Cannot delete user with guid=${guid}. Maybe user was not found!`);
-                res.status(404).send({
-                    message: `Cannot delete user with guid=${guid}. Maybe user was not found!`
-                });
-            } else {
-                console.log('[UserController][Delete][INFO]:' + ' ' + "User was deleted successfully!");
-                res.send({
-                    message: "User was deleted successfully!"
-                });
-            }
-        })
-        .catch(err => {
-            console.log('[UserController][Delete][ERROR]:' + ' ' + "Could not delete user with guid: " + guid);
-            res.status(500).send({
-                message: "Could not delete user with guid=" + guid
-            });
+    if (!id) {
+        console.log('[UserController][Delete][ERROR]:' + ' ' + "req.params cannot be empty");
+        res.status(400).send({
+            message: "Bad request"
         });
+    }
+
+    try {
+        const result = await UserService.deleteUser(id)
+        if (!result) {
+            console.log('[UserController][Delete][ERROR]:' + ' ' + `Cannot delete user with id=${id}. Maybe user was not found!`);
+            res.status(404).send({
+                message: `Cannot delete user with id=${id}. Maybe user was not found!`
+            });
+        } else {
+            console.log('[UserController][Delete][INFO]:' + ' ' + "User was deleted successfully!");
+            res.send({
+                message: "User was deleted successfully!"
+            });
+        }
+    } catch(err) {
+        console.log('[UserController][Delete][ERROR]:' + ' ' + "Could not delete user with id: " + id);
+        res.status(500).send({
+            message: "Could not delete user with id=" + id
+        });
+    }
 };
 
 // Push review into user reviews array

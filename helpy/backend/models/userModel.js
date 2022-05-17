@@ -25,10 +25,6 @@ const schema = mongoose.Schema(
             type: String,
             required: true
         },
-        isPublisher: {
-            type: Boolean,
-            default: false
-        },
         score: {
             type: Number,
             default: 0
