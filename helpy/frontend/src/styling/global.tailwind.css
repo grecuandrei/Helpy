@@ -22,14 +22,14 @@
 /* Handle */
 
 ::-webkit-scrollbar-thumb {
-    @apply bg-purple-faded rounded-xl;
+    @apply bg-orange-faded rounded-xl;
 }
 
 
 /* Handle on hover */
 
 ::-webkit-scrollbar-thumb:hover {
-    @apply bg-purple-secondary;
+    @apply bg-orange-secondary;
 }
 
 
@@ -47,7 +47,7 @@ h2 {
 /* table */
 
 table {
-    @apply border-2 border-collapse border-none rounded-md border-purple-faded;
+    @apply border-2 border-collapse border-none rounded-md border-orange-faded;
     box-shadow: 0 0 0 1px #3d29730d;
     /* this draws the table border   */
 }
@@ -70,7 +70,7 @@ th {
 }
 
 tr {
-    @apply w-full border-b-2 cursor-pointer border-purple-faded;
+    @apply w-full border-b-2 cursor-pointer border-orange-faded;
 }
 
 thead>tr {
@@ -81,7 +81,7 @@ thead>tr {
 /* button */
 
 .button {
-    @apply flex w-fit items-center justify-center gap-2 px-4 py-2 text-lg font-semibold text-white rounded-full bg-purple-secondary;
+    @apply flex w-fit items-center justify-center gap-2 px-4 py-2 text-lg font-semibold text-white rounded-full bg-orange-secondary;
 }
 
 .button:disabled {
@@ -112,7 +112,7 @@ label {
 }
 
 .input:focus {
-    @apply border-purple-secondary;
+    @apply border-orange-secondary;
 }
 
 
@@ -123,7 +123,7 @@ label {
 }
 
 .keyword-list>span {
-    @apply p-4 rounded-3xl bg-purple text-white font-semibold text-sm;
+    @apply p-4 rounded-3xl bg-orange text-white font-semibold text-sm;
 }
 
 
@@ -147,7 +147,7 @@ label {
 }
 
 .modal>form>button {
-    @apply mt-5 w-full bg-purple-secondary;
+    @apply mt-5 w-full bg-orange-secondary;
 }
 
 .row-center {
@@ -163,6 +163,63 @@ label {
 }
 
 
+/* modalReg */
+
+.ReactModal__Overlay,
+.ReactModal__Overlay--after-open {
+    @apply flex justify-center items-center bg-gray-background !important;
+}
+
+.modalReg {
+    @apply w-[465px] px-16 py-10 bg-white rounded-md;
+    /* transform: translate(140%, 0%);  */
+    position: fixed;
+    right: 10px;
+    /* height:100vh; 
+    min-height: 100px; */
+}
+
+.modalReg form {
+    @apply flex flex-col gap-5;
+}
+
+.modalReg .line {
+    @apply h-[1px] bg-black my-7 opacity-10 rounded-md;
+}
+
+.modalReg>form>button {
+    @apply mt-5 w-full bg-orange-accent;
+}
+
+.row-center {
+    @apply flex flex-row items-center justify-center gap-3;
+}
+
+.delete-button {
+    @apply bg-red;
+}
+
+.modalReg-ad {
+    @apply w-[600px] px-16 py-10 bg-white rounded-md;
+}
+
+/* logo position in register */
+.register-loggo {
+    transform: translate(10%, 0%);
+}
+
+.register-backgroundLoggo{
+    text-align: center;
+    background-image: url('./people_helping_people.png');
+    position:fixed;
+    min-width: 100%;
+    min-height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 0%;
+}
+
+
 /* special info section */
 
 .section-container {
@@ -174,7 +231,7 @@ label {
 }
 
 .section-container .fields {
-    @apply rounded-md p-6 bg-purple;
+    @apply rounded-md p-6 bg-orange;
     box-shadow: 0px 6px 10px rgb(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
@@ -191,7 +248,7 @@ label {
 }
 
 .field-key {
-    @apply text-purple-secondary;
+    @apply text-orange-secondary;
 }
 
 .reading-card {
@@ -200,6 +257,6 @@ label {
 }
 
 .statistic-card {
-    @apply flex flex-col gap-3 p-10 border-t-[5px] border-purple-accent w-max rounded-md m-[1px];
+    @apply flex flex-col gap-3 p-10 border-t-[5px] border-orange-accent w-max rounded-md m-[1px];
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
 }

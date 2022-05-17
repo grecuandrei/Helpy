@@ -57,7 +57,7 @@ const Router = () => {
 	}
 
 	return (
-		isAuthenticated && (
+		isAuthenticated && ( 
 		<BrowserRouter>
 			<Routes>
 			<Route exact path="/" element={Register()} />
@@ -67,7 +67,7 @@ const Router = () => {
 			<Route exact path="/profile" element={<Profile userGUID={user.sub}/>} />
 			<Route exact path="/ads" element={<Ads/>} />
 			{/* <Route exact path="/books/:id" element={<Book />} /> */}
-			{/* <Route exact path="/analytics" element={<Analytics />} /> */}
+			<Route exact path="/analytics" element={<Analytics />} />
 			</Routes>
 		</BrowserRouter>
 		)

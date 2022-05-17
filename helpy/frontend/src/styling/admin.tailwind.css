@@ -10,7 +10,7 @@
 }
 
 .admin-menu {
-    @apply w-[15.625rem] h-screen bg-purple-faded flex flex-col items-center gap-24;
+    @apply w-[15.625rem] h-screen bg-orange-faded flex flex-col items-center gap-24;
 }
 
 .logo-container {
@@ -52,7 +52,7 @@
 }
 
 .profile-info>a {
-    @apply underline text-purple-secondary;
+    @apply underline text-orange-secondary;
 }
 
 

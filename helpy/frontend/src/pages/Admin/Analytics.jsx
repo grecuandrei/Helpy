@@ -117,9 +117,9 @@ const Analytics = () => {
       </div>
       <div className="flex flex-col gap-2">
         <p className="section-title">Rented Books (11 / 23)</p>
-        <div className="relative w-full h-12 bg-purple rounded-xl">
+        <div className="relative w-full h-12 bg-orange rounded-xl">
           <div
-            className={`absolute bg-purple-secondary rounded-xl h-full `}
+            className={`absolute bg-orange-secondary rounded-xl h-full `}
             style={{ width: `${procentage}%` }}
           ></div>
         </div>

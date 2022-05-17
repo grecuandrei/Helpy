@@ -13,7 +13,7 @@
 }
 
 .user-menu {
-  @apply w-full bg-purple-faded flex flex-row pr-10 pl-10 pt-4 pb-2 justify-between items-center gap-12;
+  @apply w-full bg-orange-faded flex flex-row pr-10 pl-10 pt-4 pb-2 justify-between items-center gap-12;
 }
 
 .user-nav {

@@ -17,7 +17,7 @@ module.exports = {
             current: "currentColor",
             white: "#FFFAF9",
             black: "#1C1C1C",
-            purple: {
+            orange: {
                 faded: "#1A229A0d",
                 accent: "#F89E8F",
                 secondary: "#1A229A",
