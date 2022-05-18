@@ -170,11 +170,11 @@ exports.update = async (req, res) => {
         }
     } catch(err) {
         console.log('[UserController][Update][ERROR]:' + ' ' + "Error updating user with id: " + id);
-            res.status(500).send({
-                message:
-                    err.message
-                    || "Error updating user with id=" + id
-            });
+        res.status(500).send({
+            message:
+                err.message
+                || "Error updating user with id=" + id
+        });
     }
 };
 
@@ -205,130 +205,119 @@ exports.delete = async (req, res) => {
     } catch(err) {
         console.log('[UserController][Delete][ERROR]:' + ' ' + "Could not delete user with id: " + id);
         res.status(500).send({
-            message: "Could not delete user with id=" + id
+            message:
+                err.message
+                || "Could not delete user with id: " + id
         });
     }
 };
 
 // Push review into user reviews array
 exports.updateReviews = async (req, res) => {
-    if (!req.params) {
-        console.log('[UserController][UpdateReviews][ERROR]:' + ' ' + "Params can not be empty!");
-        return res.status(400).send({
-            message: "Params can not be empty!"
-        });
-    }
+    // let message;
+    // if (!req.params.id) {
+    //     message = "req.params.guid can not be empty!"
+    // } else if (!req.params.reviewId) {
+    //     message = "req.params.adId can not be empty!"
+    // }
 
-    const {id, reviewId} = req.params;
+    // if (message) {
+    //     console.log('[UserController][UpdateReviews][ERROR]:' + ' ' + message);
+    //     return res.status(400).send({
+    //         message: message
+    //     });
+    // }
 
-    const user = await User.findById(id)
+    // const {id, reviewId, isPublisher} = req.params;
 
-    if (user.isPublisher) {
-        const review = await Review.findById({_id: reviewId})
+    // const user = await User.findById(id)
 
-        let newScore = user.score;
-        if (newScore !== 0) {
-            newScore = (newScore + review.score) / 2.0
-        }
+    // if (user.isPublisher) {
+    //     const review = await Review.findById({_id: reviewId})
 
-        const query = {
-            $push: {
-                reviewsIds: reviewId
-            },
-            score: newScore
-        }
+    //     let newScore = user.score;
+    //     if (newScore !== 0) {
+    //         newScore = (newScore + review.score) / 2.0
+    //     }
 
-        await User.findByIdAndUpdate(id, {
-            ...query
-        }, {useFindAndModify: false})
-            .then(data => {
-                if (!data) {
-                    console.log('[UserController][UpdateReviews][ERROR]:' + ' ' + `Cannot update User with id=${id}. Maybe user was not found!`);
-                    res.status(404).send({
-                        message: `Cannot update User with id=${id}. Maybe user was not found!`
-                    });
-                } else {
-                    console.log('[UserController][UpdateReviews][INFO]:' + ' ' + "User was updated successfully.");
-                    Ad.findByIdAndUpdate({_id:reviewId}, {reviewed: true}) // TODO test this
-                    res.status(200).send({
-                        message: "User was updated successfully."
-                    });
-                }
-            })
-            .catch(err => {
-                console.log('[UserController][UpdateReviews][ERROR]:' + ' ' + "Error updating user with id: " + id);
-                res.status(500).send({
-                    message: "Error updating user with id=" + id
-                });
-            });
-    } else { 
-        console.log('[UserController][UpdateReviews][ERROR]:' + ' ' + "Unauthorized to do this action!");
-        res.status(401).send({
-        message: "Unauthorized to do this action!"
-    });
-}
+    //     const query = {
+    //         $push: {
+    //             reviewsIds: reviewId
+    //         },
+    //         score: newScore
+    //     }
+
+    //     await User.findByIdAndUpdate(id, {
+    //         ...query
+    //     }, {useFindAndModify: false})
+    //         .then(data => {
+    //             if (!data) {
+    //                 console.log('[UserController][UpdateReviews][ERROR]:' + ' ' + `Cannot update User with id=${id}. Maybe user was not found!`);
+    //                 res.status(404).send({
+    //                     message: `Cannot update User with id=${id}. Maybe user was not found!`
+    //                 });
+    //             } else {
+    //                 console.log('[UserController][UpdateReviews][INFO]:' + ' ' + "User was updated successfully.");
+    //                 Ad.findByIdAndUpdate({_id:reviewId}, {reviewed: true}) // TODO test this
+    //                 res.status(200).send({
+    //                     message: "User was updated successfully."
+    //                 });
+    //             }
+    //         })
+    //         .catch(err => {
+    //             console.log('[UserController][UpdateReviews][ERROR]:' + ' ' + "Error updating user with id: " + id);
+    //             res.status(500).send({
+    //                 message: "Error updating user with id=" + id
+    //             });
+    //         });
+    // } else { 
+    //     console.log('[UserController][UpdateReviews][ERROR]:' + ' ' + "Unauthorized to do this action!");
+    //     res.status(401).send({
+    //         message: "Unauthorized to do this action!"
+    //     });
+    // }
+    res.status(404).send()
 };
 
-// Push ad into user adsId array
+// Reserve ad
 exports.reserveAd = async (req, res) => {
-    if (!req.params) {
-        console.log('[UserController][ReserveAd][ERROR]:' + ' ' + "Params can not be empty!");
+    let message;
+    if (!req.params.guid) {
+        message = "req.params.guid can not be empty!"
+    } else if (!req.params.adId) {
+        message = "req.params.adId can not be empty!"
+    } else if (!req.params.isPublisher) {
+        message = "req.params.adId can not be empty!"
+    }
+
+    if (message) {
+        console.log('[UserController][ReserveAd][ERROR]:' + ' ' + message);
         return res.status(400).send({
-            message: "Params can not be empty!"
+            message: message
         });
     }
 
-    const {guid, adId} = req.params;
+    const {guid, adId, isPublisher} = req.params;
 
-    const user = await User.findOne({guid: guid})
-
-    if (!user.isPublisher) {
-        const query = {
-            $push: {
-                adsIds: adId
-            },
+    try {
+        const result = await UserService.reserveAd(guid, adId, isPublisher)
+        if (!result) {
+            console.log('[UserController][ReserveAd][ERROR]:' + ' ' + `Cannot reserve ad with adId=${adId}. Maybe ad was not found!`);
+            res.status(404).send({
+                message: `Cannot reserve ad with adId=${adId}. Maybe ad was not found!`
+            });
+        } else {
+            console.log('[UserController][ReserveAd][INFO]:' + ' ' + "Ad was reserved successfully.");
+            res.status(200).send({
+                message: "Ad was reserved successfully."
+            });
         }
-
-        await Ad.findByIdAndUpdate({_id: adId}, {$set: {taken:true}}, {useFindAndModify: false})
-            .then(data => {
-                if (!data) {
-                    console.log('[UserController][ReserveAd][ERROR]:' + ' ' + `Cannot update ad with id=${id}. Maybe ad was not found!`);
-                    res.status(404).send({
-                        message: `Cannot update ad with id=${id}. Maybe ad was not found!`
-                    });
-                }
-            })
-            .catch(err => {
-                console.log('[UserController][ReserveAd][ERROR]:' + ' ' + "Error updating ad with id: " + id);
-                res.status(500).send({
-                    message: "Error updating ad with id=" + id
-                });
-            });
-
-        await User.findOneAndUpdate({guid: guid}, {...query}, {useFindAndModify: false})
-            .then(data => {
-                if (!data) {
-                    console.log('[UserController][ReserveAd][ERROR]:' + ' ' + `Cannot update user with id=${id}. Maybe ad was not found!`);
-                    res.status(404).send({
-                        message: `Cannot update user with id=${id}. Maybe ad was not found!`
-                    });
-                } else {
-                    console.log('[UserController][ReserveAd][INFO]:' + ' ' + "User was updated successfully.");
-                    res.send({
-                        message: "User was updated successfully."
-                    });
-                }
-            })
-            .catch(err => {
-                console.log('[UserController][ReserveAd][ERROR]:' + ' ' + "Error updating user with id: " + id);
-                res.status(500).send({
-                    message: "Error updating user with id=" + id
-                });
-            });
-    } else { 
-        console.log('[UserController][ReserveAd][ERROR]:' + ' ' + "Unauthorized to do this action!");
-        res.status(401).send({
-            message: "Unauthorized to do this action!"
+    } catch(err) {
+        console.log('[UserController][ReserveAd][ERROR]:' + ' ' + "Could not reserve ad with id: " + adId);
+        res.status(500).send({
+            message:
+                err.message
+                || "Could not reserve ad with id: " + adId
         });
     }
 };

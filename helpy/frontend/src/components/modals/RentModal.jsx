@@ -1,12 +1,14 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import Modal from "react-modal";
 import { MdOutlineClose } from "react-icons/md";
 import Button from "../Button";
 import Input from "../Input";
 import { useAuth0 } from "@auth0/auth0-react";
+import { authSettings } from "../../AuthSettings";
 
 const RentModal = ({ modalIsOpen, closeModal, ad }) => {
   const { user, getIdTokenClaims } = useAuth0();
+  const [ isPublisher, setIsPublisher] = useState(false);
 
 	const getToken = async () => {  
 		token = await getIdTokenClaims()  
@@ -21,10 +23,15 @@ const RentModal = ({ modalIsOpen, closeModal, ad }) => {
           Authorization: `Bearer ${token.__raw}`
         },
     };
-    fetch(`http://localhost:8000/api/users/ad/${user.sub}/${id}`, requestOptions)
+    fetch(`http://localhost:8000/api/users/ad/${user.sub}/${id}/${isPublisher}`, requestOptions)
         .then(response => console.log(response.json()));
   }
 
+  useEffect(() => {
+    if (user && user[authSettings.rolesKey].length === 1) {
+      setIsPublisher(true);
+    }
+  }, [user]);
 
   return (
     <Modal

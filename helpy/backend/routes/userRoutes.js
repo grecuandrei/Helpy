@@ -9,6 +9,6 @@ module.exports = app => {
     router.put("/:id", checkJwt, users.update);
     router.delete("/:id", checkJwt, users.delete);
     router.patch("/review/:id/:reviewId", checkJwt, users.updateReviews); // updates the score as well
-    router.patch("/ad/:guid/:adId", checkJwt, users.reserveAd); // takes an ad as well
+    router.patch("/ad/:guid/:adId/:isPublisher", checkJwt, users.reserveAd); // takes an ad as well
     app.use('/api/users', router);
 };
