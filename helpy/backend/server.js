@@ -34,7 +34,7 @@ mongoose
     });
 
 initMetrics();
-sendMail("samoilescusebastian@gmail.com", "ala bala portocala")
+// sendMail("samoilescusebastian@gmail.com", "ala bala portocala")
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8000;
