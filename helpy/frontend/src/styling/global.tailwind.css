@@ -129,12 +129,13 @@ label {
 
 /* modal */
 
-.ReactModal__Overlay,
+/* .ReactModal__Overlay,
 .ReactModal__Overlay--after-open {
     @apply flex justify-center items-center bg-gray-background !important;
-}
+} */
 
 .modal {
+    /* background: none; */
     @apply w-[465px] px-16 py-10 bg-white rounded-md;
 }
 
@@ -165,12 +166,13 @@ label {
 
 /* modalReg */
 
-.ReactModal__Overlay,
+/* .ReactModal__Overlay,
 .ReactModal__Overlay--after-open {
     @apply flex justify-center items-center bg-gray-background !important;
-}
+} */
 
 .modalReg {
+    /* background: none; */
     @apply w-[465px] px-16 py-10 bg-white rounded-md;
     /* transform: translate(140%, 0%);  */
     position: fixed;
@@ -221,11 +223,11 @@ label {
 
 /* text for the checkbox */
 .shiftText-right{
-    transform: translate(18%, 0%);
+    transform: translate(20%, 0%);
 }
 
-.shiftCheckbox{
-    transform: translate(-400%, 120%); 
+.shift-checkbox{
+    transform: translate(-400%, 120%);
     width: 25px;
     height: 25px;
 }
