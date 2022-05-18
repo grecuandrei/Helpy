@@ -222,7 +222,7 @@ label {
 }
 
 /* text for the checkbox */
-.shiftText-right{
+/* .shiftText-right{
     transform: translate(20%, 0%);
 }
 
@@ -237,6 +237,15 @@ input[type=checkbox] {
     height: 25px;
     transform: translate(-100px, 30px);
 
+} */
+
+/* text for the checkbox */
+.checkbox-reg{
+    @apply flex flex-col items-center justify-center gap-3;
+}
+
+input[type=checkbox] {
+    transform: scale(1.5);
 }
 /* special check toggle */
 
