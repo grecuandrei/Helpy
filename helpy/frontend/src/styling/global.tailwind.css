@@ -129,10 +129,10 @@ label {
 
 /* modal */
 
-/* .ReactModal__Overlay,
+.ReactModal__Overlay,
 .ReactModal__Overlay--after-open {
     @apply flex justify-center items-center bg-gray-background !important;
-} */
+}
 
 .modal {
     /* background: none; */
@@ -232,6 +232,12 @@ label {
     height: 25px;
 }
 
+input[type=checkbox] {
+    width: 25px;
+    height: 25px;
+    transform: translate(-100px, 30px);
+
+}
 /* special check toggle */
 
 /* .switch {
