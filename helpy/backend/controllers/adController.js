@@ -2,7 +2,7 @@ const Ad = require('../models/adModel');
 const KeywordService = require('../services/keywordsServices');
 const AdService = require('../services/adServices');
 
-// Create and Save a new Ad
+// Create and Save a new Ads
 exports.create = async (req, res) => {
     let message;
 

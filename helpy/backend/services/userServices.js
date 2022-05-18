@@ -1,6 +1,8 @@
 const User = require('../models/userModel');
 const AdService = require('./adServices');
-const ReviewService = require('./adServices');
+const ReviewService = require('./reviewServices');
+const activeClients = require('../metrics/prometheus').activeClients;
+
 
 require('dotenv').config();
 const domain = process.env.AUTH0_DOMAIN;
@@ -31,6 +33,7 @@ module.exports.assignRole = assignRole;
 async function saveUser(user) {
     try {
         const res = await user.save()
+        activeClients.inc(1);
         return res;
     } catch (err) {
         throw Error(err)
@@ -92,13 +95,16 @@ module.exports.updateUserByGuid = updateUserByGuid;
 // Delete user
 async function deleteUser(id, isPublisher) {
     try {
-        if (isPublisher) { // are review-uri si trb sterse
+        // if (isPublisher) { // are review-uri si trb sterse
             await ReviewService.deleteAll(id)
-        }
-        else { // are ad-uri in bd si trb sterse
-            await AdService.deleteAllFromPublisher(id) // in asta ar trb sterse si din lista customerilor daca exista in ele
-        }
+        // }
+        // else { // are ad-uri in bd si trb sterse
+        //     await AdService.deleteAllFromPublisher(id) // in asta ar trb sterse si din lista customerilor daca exista in ele
+        // }
         const res = await User.findByIdAndRemove(id)
+        if (res) {
+            activeClients.dec(1);
+        }
         return res;
     } catch(err) {
         throw Error(err)

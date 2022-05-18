@@ -1,6 +1,7 @@
 const Review = require('../models/reviewModel');
 const UserService = require('../services/userServices');
 const ReviewService = require('../services/reviewServices');
+const activeReviews = require('../metrics/prometheus').activeReviews;
 
 // Create and Save a new Review
 exports.create = async (req, res) => {

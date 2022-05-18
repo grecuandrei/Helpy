@@ -1,11 +1,13 @@
 const Ad = require('../models/adModel');
 const UserService = require('./userServices');
 const KeywordService = require('../models/keywordModel');
+const activeAds = require('../metrics/prometheus').activeAds;
 
 // Create ad
 async function saveAd(ad) {
     try {
         const res = await ad.save()
+        activeAds.inc(1)
         return res;
     } catch (err) {
         throw Error(err)
@@ -108,6 +110,9 @@ async function deleteAd(id) {
         const ad = await findOne(id)
         if (!ad.taken) {
             const result = await Ad.findByIdAndRemove(id)
+            if (result) {
+                activeAds.dec(1)
+            }
             return result;
         } else {
             throw Error('Can\'t delete an ad that is reserved!')
@@ -120,7 +125,9 @@ module.exports.deleteAd = deleteAd;
 
 // Delete All ads from publisher
 async function deleteAllFromPublisher(id) {
+
     // TODO
+    // *** add activeAds.reset() after all ads deletion
     // try {
     //     const ad = await findOne(id)
     //     if (!ad.taken) {

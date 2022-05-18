@@ -19,7 +19,9 @@
     "express-jwt": "^7.5.2",
     "jwks-rsa": "^2.1.0",
     "mongodb": "^4.5.0",
-    "mongoose": "^6.3.1"
+    "mongoose": "^6.3.1",
+    "prom-client": "^14.0.1",
+    "amqplib": "0.9.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.16"

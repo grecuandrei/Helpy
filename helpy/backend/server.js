@@ -3,7 +3,11 @@ const cors = require("cors");
 const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
+const { sendMail } = require("./rabbit/rabbit");
+
 require('dotenv').config();
+const initMetrics = require("./metrics/prometheus").initMetrics;
+
 
 // enable CORS
 app.use(cors());
@@ -17,6 +21,7 @@ app.use(express.urlencoded({extended: true}));
 require("./routes/adRoutes")(app);
 require("./routes/userRoutes")(app);
 require("./routes/reviewRoutes")(app);
+require("./routes/prometheusRoutes")(app);
 
 mongoose
     .connect(process.env.URL)
@@ -28,10 +33,8 @@ mongoose
         process.exit();
     });
 
-// // simple route
-// app.get("/", (req, res) => {
-//   res.json({ message: "Welcome!!🥳" });
-// });
+initMetrics();
+sendMail("samoilescusebastian@gmail.com", "ala bala portocala")
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8000;
