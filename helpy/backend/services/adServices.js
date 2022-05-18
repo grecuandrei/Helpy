@@ -1,7 +1,6 @@
 const Ad = require('../models/adModel');
 const UserService = require('./userServices');
-const User = require('../models/userModel');
-const Keywords = require('../models/keywordModel');
+const KeywordService = require('../models/keywordModel');
 
 // Create ad
 async function saveAd(ad) {
@@ -32,7 +31,9 @@ async function findAll(title, keywords) {
 
         if (keywords !== '[]') {
             const keywordsName = JSON.parse(keywords)
-            const keywordsIds = JSON.stringify(keywordsName) !== JSON.stringify([]) ? await Keywords.find({name: {$in: keywordsName}}, {_id: 1}).exec() : undefined;
+            const query = {name: {$in: keywordsName}}
+            const toKeep = {_id: 1}
+            const keywordsIds = JSON.stringify(keywordsName) !== JSON.stringify([]) ? await KeywordService.findKeywords(query, toKeep) : undefined;
             condition = keywordsIds ? {...condition, 'keywords': {$all: keywordsIds}} : condition
         }
     
@@ -52,7 +53,9 @@ async function findAllPublisher(title, keywords, guid) {
 
         if (keywords) {
             const keywordsName = JSON.parse(keywords)
-            const keywordsIds = JSON.stringify(keywordsName) !== JSON.stringify([]) ? await Keywords.find({name: {$in: keywordsName}}, {_id: 1}).exec() : undefined;
+            const query = {name: {$in: keywordsName}}
+            const toKeep = {_id: 1}
+            const keywordsIds = JSON.stringify(keywordsName) !== JSON.stringify([]) ? await KeywordService.findKeywords(query, toKeep) : undefined;
             condition = keywordsIds ? {...condition, 'keywords': {$all: keywordsIds}} : condition
         }
 

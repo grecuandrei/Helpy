@@ -4,6 +4,5 @@ const checkJwt = require("../middleware/jwtCheck");
 
 module.exports = app => {
     router.post("/", checkJwt, reviews.create);
-    router.delete("/:id", checkJwt, reviews.deleteAll);
     app.use('/api/reviews', router);
 };

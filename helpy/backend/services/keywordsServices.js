@@ -14,3 +14,14 @@ async function saveKeyword(keyword) {
     };
 }
 module.exports.saveKeyword = saveKeyword;
+
+// Create keyword
+async function findKeywords(query, toKeep) {
+    try {
+        const result = await Keywords.find(query, toKeep).exec();
+        return result;
+    } catch (err) {
+        throw Error(err)
+    };
+}
+module.exports.findKeywords = findKeywords;

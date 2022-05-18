@@ -213,7 +213,7 @@ exports.delete = async (req, res) => {
 };
 
 // Push review into user reviews array
-exports.updateReviews = async (req, res) => {
+exports.review = async (req, res) => {
     // let message;
     // if (!req.params.id) {
     //     message = "req.params.guid can not be empty!"

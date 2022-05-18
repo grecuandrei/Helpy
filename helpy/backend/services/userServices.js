@@ -93,10 +93,7 @@ module.exports.updateUserByGuid = updateUserByGuid;
 async function deleteUser(id, isPublisher) {
     try {
         if (isPublisher) { // are review-uri si trb sterse
-            const user = await User.findById(id).populate('reviewsIds')
-            if (user.reviewsIds.length !== 0) {
-                for (let reviewId of user.reviewsIds) await ReviewService.delete(reviewId)
-            }
+            await ReviewService.deleteAll(id)
         }
         else { // are ad-uri in bd si trb sterse
             await AdService.deleteAllFromPublisher(id) // in asta ar trb sterse si din lista customerilor daca exista in ele
