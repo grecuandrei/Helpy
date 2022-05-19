@@ -1,15 +1,6 @@
 const User = require('../models/userModel');
-const Review = require('../models/reviewModel');
-const Ad = require('../models/adModel');
-const ads = require("../controllers/adController.js");
 const UserService = require('../services/userServices');
 
-require('dotenv').config();
-const domain = process.env.AUTH0_DOMAIN;
-const client_id = process.env.AUTH0_CLIENT_ID;
-const client_secret = process.env.AUTH0_CLIENT_SECRET;
-const admin_role = process.env.AUTH0_ADMIN_ROLE_ID;
-const ManagementClient = require("auth0").ManagementClient;
 
 // Create and Save a new User
 exports.create = async (req, res) => {

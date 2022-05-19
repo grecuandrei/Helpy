@@ -49,7 +49,7 @@ const Register = ({ userGUID, userEmail }) => {
     }
 
     return (
-        <div className="register-cols">
+        <div className="register-row">
             <img className="register-backgroundLoggo" src={bg} alt="bg"/>
             
             <div className="modalReg">

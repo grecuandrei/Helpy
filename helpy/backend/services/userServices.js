@@ -2,7 +2,9 @@ const User = require('../models/userModel');
 const AdService = require('./adServices');
 const ReviewService = require('./reviewServices');
 const activeClients = require('../metrics/prometheus').activeClients;
-
+const { sendMail } = require("../rabbit/rabbit");
+const { ObjectId } = require('mongodb');
+const { default: mongoose } = require('mongoose');
 
 require('dotenv').config();
 const domain = process.env.AUTH0_DOMAIN;
@@ -10,6 +12,10 @@ const client_id = process.env.AUTH0_CLIENT_ID;
 const client_secret = process.env.AUTH0_CLIENT_SECRET;
 const admin_role = process.env.AUTH0_ADMIN_ROLE_ID;
 const ManagementClient = require("auth0").ManagementClient;
+
+registerEmail='This is an auto-generated email! Do not reply!\nHello, you have just registered in our application!\n\nCongratulations!!!\n\nRegards,\nHelpy Team!'
+reserveCustomerEmail='This is an auto-generated email! Do not reply!\nHello, you have just reserve an ad!\n\nCongratulations!!!\n\nRegards,\nHelpy Team!'
+reservePublisherEmail='This is an auto-generated email! Do not reply!\nHello, you had one ad reserved in our application!\n\nCongratulations!!!\n\nRegards,\nHelpy Team!'
 
 // Asign publisher Role
 async function assignRole(userGuid) {
@@ -32,6 +38,7 @@ module.exports.assignRole = assignRole;
 // Create user
 async function saveUser(user) {
     try {
+        // sendMail("samoilescusebastian@gmail.com", registerEmail) // req.body.email
         const res = await user.save()
         activeClients.inc(1);
         return res;
@@ -95,12 +102,12 @@ module.exports.updateUserByGuid = updateUserByGuid;
 // Delete user
 async function deleteUser(id, isPublisher) {
     try {
-        // if (isPublisher) { // are review-uri si trb sterse
+        if (isPublisher) { // are review-uri si trb sterse
             await ReviewService.deleteAll(id)
-        // }
-        // else { // are ad-uri in bd si trb sterse
-        //     await AdService.deleteAllFromPublisher(id) // in asta ar trb sterse si din lista customerilor daca exista in ele
-        // }
+        } else { // are ad-uri in bd si trb sterse
+            // se sterg ad-urile si din lista customerilor daca exista in ele
+            await AdService.deleteAllFromPublisher(id)
+        }
         const res = await User.findByIdAndRemove(id)
         if (res) {
             activeClients.dec(1);
@@ -114,7 +121,7 @@ module.exports.deleteUser = deleteUser;
 
 async function updateReviewsScore(id, reviewId, reviewScore, isPublisher) {
     try {
-        if (isPublisher) {
+        if (isPublisher === 'true') {
             const user = await findOne(id)
             let newScore = user.score;
             if (newScore !== 0) {
@@ -139,11 +146,25 @@ async function updateReviewsScore(id, reviewId, reviewScore, isPublisher) {
 }
 module.exports.updateReviewsScore = updateReviewsScore;
 
+async function removeAdFromCustomers(id) {
+    try {
+        let query = { $pull: {adsIds: id}}
+        const result = await User.updateOne({'adsIds': id}, query)
+        return result;
+    } catch (err) {
+        throw Error(err)
+    }
+}
+module.exports.removeAdFromCustomers = removeAdFromCustomers;
+
 // Reserve ad
 async function reserveAd(guid, adId, isPublisher) {
     try {
         if (isPublisher === 'false') {
-            console.log(isPublisher === false)
+            // const user = await findOneByGuid(guid)
+            // sendMail("samoilescusebastian@gmail.com", reserveCustomerEmail) // user.email
+            // const ad = await Ad.findOne(adId).populate('publisherId')
+            // sendMail("samoilescusebastian@gmail.com", reservePublisherEmail) // ad.publisherId.email
             const query = {
                 $push: {
                     adsIds: adId

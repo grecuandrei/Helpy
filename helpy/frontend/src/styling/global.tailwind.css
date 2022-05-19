@@ -171,12 +171,12 @@ label {
     @apply flex justify-center items-center bg-gray-background !important;
 } */
 
-.register-cols {
+.register-row {
     @apply flex flex-row content-evenly;
 }
 
 .modalReg {
-    @apply flex flex-col w-[455px] h-screen px-16 py-10 bg-white rounded-md;
+    @apply flex flex-col w-[465px] h-screen px-16 py-10 bg-white rounded-md;
     justify-content: center;
     align-items: center;
     position: fixed;

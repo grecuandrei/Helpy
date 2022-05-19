@@ -125,21 +125,17 @@ module.exports.deleteAd = deleteAd;
 
 // Delete All ads from publisher
 async function deleteAllFromPublisher(id) {
-
-    // TODO
-    // *** add activeAds.reset() after all ads deletion
-    // try {
-    //     const ad = await findOne(id)
-    //     if (!ad.taken) {
-    //         const result = await Ad.findByIdAndRemove(id)
-    //         return result;
-    //     } else {
-    //         throw Error('Can\'t delete an ad that is reserved!')
-    //     }
-    // } catch(err) {
-    //     throw Error(err)
-    // }
-    throw Error('Not implemented yet')
+    try {
+        const user = await UserService.findOne(id)
+        const ads = await findAllPublisher(undefined, undefined, user.guid)
+        for (let ad of ads) {
+            await UserService.removeAdFromCustomers(ad.id)
+            await deleteAd(ad.id)
+        }
+        return;
+    } catch(err) {
+        throw Error(err)
+    }
 }
 module.exports.deleteAllFromPublisher = deleteAllFromPublisher;
 
@@ -154,3 +150,13 @@ async function unlikeAd(id, query) {
     }
 }
 module.exports.unlikeAd = unlikeAd;
+
+async function makeAvailable(id) {
+    try {
+        const res = await Ad.updateAd(id, {$set : { taken: false }})
+        return res;
+    } catch(err) {
+        throw Error(err)
+    }
+}
+module.exports.makeAvailable = makeAvailable
