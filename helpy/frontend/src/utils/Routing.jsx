@@ -8,7 +8,7 @@ import Ads from "../pages/Admin/Books";
 import Account from "../pages/User/Account";
 import { useAuth0 } from "@auth0/auth0-react";
 import Profile from "../pages/Profile";
-import RegisterModal from "../components/modals/RegisterModal";
+import Register from "../components/modals/Register";
 import { Navigate } from "react-router-dom";
 
 const Router = () => {
@@ -32,14 +32,14 @@ const Router = () => {
 		return response;
 	};
 
-	function Register() {
+	function CheckRegister() {
 		useEffect(() => {
 		callBackendAPI()
 		.then(res => {
 			if (res.status === 200) {
-			setUserExists(1);
+				setUserExists(1);
 			} else if (res.status === 404) {
-			setUserExists(0);
+				setUserExists(0);
 			}
 		})
 		.catch(err => {return err});
@@ -60,9 +60,9 @@ const Router = () => {
 		isAuthenticated && ( 
 		<BrowserRouter>
 			<Routes>
-			<Route exact path="/" element={Register()} />
+			<Route exact path="/" element={CheckRegister()} />
 			<Route exact path="/home" element={<UserAds/>} />
-			<Route exact path="/register" element={<RegisterModal modalIsOpen={openedModal} closeModal={() => setOpenedModal(false)} userGUID={user.sub} userEmail={user.name}/>} />
+			<Route exact path="/register" element={<Register userGUID={user.sub} userEmail={user.name}/>} />
 			<Route exact path="/taken" element={<UserTaken userGUID={user}/>} />
 			<Route exact path="/profile" element={<Profile userGUID={user.sub}/>} />
 			<Route exact path="/ads" element={<Ads/>} />

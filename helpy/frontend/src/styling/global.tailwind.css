@@ -166,15 +166,19 @@ label {
 
 /* modalReg */
 
-.ReactModal__Overlay,
+/* .ReactModal__Overlay,
 .ReactModal__Overlay--after-open {
     @apply flex justify-center items-center bg-gray-background !important;
+} */
+
+.register-cols {
+    @apply flex flex-row content-evenly;
 }
 
 .modalReg {
-    background: none; 
-    @apply w-[465px] px-16 py-10 bg-white rounded-md;
-
+    @apply flex flex-col w-[455px] h-screen px-16 py-10 bg-white rounded-md;
+    justify-content: center;
+    align-items: center;
     position: fixed;
     right: 1px;
     outline: none;
@@ -191,44 +195,30 @@ label {
     outline: none; */
 }
 
+.modalReg>img {
+    max-width: 200px; 
+    max-height: 200px;
+}
+
 .modalReg form {
-    @apply flex flex-col gap-5;
+    @apply flex flex-col gap-2;
 }
 
 .modalReg .line {
-    @apply h-[1px] bg-black my-7 opacity-10 rounded-md;
+    @apply h-[1px] bg-black my-2 rounded-md;
 }
 
 .modalReg>form>button {
-    @apply mt-5 w-full bg-orange-accent;
+    @apply w-full bg-orange-secondary;
 }
 
-.row-center {
-    @apply flex flex-row items-center justify-center gap-3;
-}
-
-.delete-button {
-    @apply bg-red;
-}
-
-.modalReg-ad {
-    @apply w-[600px] px-16 py-10 bg-white rounded-md;
-}
-
-/* logo position in register */
-.register-loggo {
-    transform: translate(10%, 0%);
+.modalReg>form>p {
+    @apply w-full text-center;
 }
 
 .register-backgroundLoggo{
-    text-align: center;
-    background-image: url('./people_helping_people.png');
-    position:fixed;
-    min-width: 100%;
-    min-height: 100%;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: 0%;
+    @apply h-screen;
+    position: relative;
 }
 
 /* text for the checkbox */
