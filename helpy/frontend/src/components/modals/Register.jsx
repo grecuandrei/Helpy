@@ -36,7 +36,7 @@ const Register = ({ userGUID, userEmail }) => {
                 isPublisher: checked
             })
         };
-        fetch(`http://localhost:8000/api/users/`, requestOptions)
+        fetch(`${process.env.REACT_APP_URL}/users/`, requestOptions)
             .then(response => {
                 if (response.status !== 500) {
                     navigate("/home");

@@ -30,7 +30,7 @@ const AccountModal = ({ modalIsOpen, closeModal, userGUID }) => {
 			},
 			body: JSON.stringify(body)
 		};
-		fetch(`http://localhost:8000/api/users/${userGUID}`, requestOptions)
+		fetch(`${process.env.REACT_APP_URL}/users/${userGUID}`, requestOptions)
 			.then(response => console.log(response.json()));
 	};
 

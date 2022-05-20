@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Analytics from "../pages/Admin/Analytics";
-import Book from "../pages/Admin/Book";
 import UserAds from "../pages/User/Ads";
 import UserTaken from "../pages/User/Taken";
-import Ads from "../pages/Admin/Books";
+import Ads from "../pages/Admin/Ads";
 import Account from "../pages/User/Account";
 import { useAuth0 } from "@auth0/auth0-react";
 import Profile from "../pages/Profile";
 import Register from "../components/modals/Register";
 import { Navigate } from "react-router-dom";
+import Loading from "../components/Loading";
 
 const Router = () => {
 	const { user, isAuthenticated, loginWithRedirect } = useAuth0();
@@ -23,7 +23,7 @@ const Router = () => {
 	}, [ isAuthenticated, loginWithRedirect]);
 
 	const callBackendAPI = async () => {
-		const response = await fetch(`http://localhost:8000/api/users/guid/${user.sub}`);
+		const response = await fetch(`${process.env.REACT_APP_URL}/users/guid/${user.sub}`);
 		const body = await response.json();
 
 		if (response.status !== 200 && response.status !== 404) {
@@ -53,7 +53,7 @@ const Router = () => {
 			return <Navigate to={"/register"}/>
 		}
 
-		return <div>Loading...</div>;
+		return <Loading />;
 	}
 
 	return (
@@ -64,10 +64,9 @@ const Router = () => {
 			<Route exact path="/home" element={<UserAds/>} />
 			<Route exact path="/register" element={<Register userGUID={user.sub} userEmail={user.name}/>} />
 			<Route exact path="/taken" element={<UserTaken userGUID={user}/>} />
-			<Route exact path="/profile" element={<Profile userGUID={user.sub}/>} />
 			<Route exact path="/ads" element={<Ads/>} />
-			{/* <Route exact path="/books/:id" element={<Book />} /> */}
 			<Route exact path="/analytics" element={<Analytics />} />
+			<Route exact path="/profile" element={<Profile userGUID={user.sub}/>} />
 			</Routes>
 		</BrowserRouter>
 		)

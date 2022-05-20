@@ -28,8 +28,8 @@ const UserHeader = () => {
   const { logout, user } = useAuth0();
 
   return (
-    <div className="user-menu">
-      <nav className="user-nav">
+    <div className="menu">
+      <nav className="nav">
         <CustomLink to={"/home"}>
           <MdTableRows /> Ads
         </CustomLink>

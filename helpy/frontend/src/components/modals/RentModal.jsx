@@ -23,7 +23,7 @@ const RentModal = ({ modalIsOpen, closeModal, ad }) => {
           Authorization: `Bearer ${token.__raw}`
         },
     };
-    fetch(`http://localhost:8000/api/users/ad/${user.sub}/${id}/${isPublisher}`, requestOptions)
+    fetch(`${process.env.REACT_APP_URL}/users/ad/${user.sub}/${id}/${isPublisher}`, requestOptions)
         .then(response => console.log(response.json()));
   }
 

@@ -13,7 +13,7 @@ const UserTaken = () => {
 	const { user } = useAuth0();
 	
 	const callBackendAPI = async () => {
-		const response = await fetch(`http://localhost:8000/api/ads/customer/${user.sub}?keywords=${encodeURIComponent(JSON.stringify(keywords))}`);
+		const response = await fetch(`${process.env.REACT_APP_URL}/ads/customer/${user.sub}?keywords=${encodeURIComponent(JSON.stringify(keywords))}`);
 		const body = await response.json();
 
 		if (response.status !== 200) {

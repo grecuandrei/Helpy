@@ -12,11 +12,11 @@
   @apply flex flex-col w-screen overflow-y-auto gap-7;
 }
 
-.user-menu {
+.menu {
   @apply w-full bg-orange-faded flex flex-row pr-10 pl-10 pt-4 pb-2 justify-between items-center gap-12;
 }
 
-.user-nav {
+.nav {
   @apply flex flex-row w-[90%] gap-5;
 }
 
