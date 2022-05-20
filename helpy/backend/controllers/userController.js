@@ -154,7 +154,7 @@ exports.update = async (req, res) => {
                 message: `Cannot update user with id=${id}. Maybe user was not found!`
             });
         } else {
-            console.log('[UserController][Update][INFO]:' + ' ' + "User was updated successfully.");
+            console.log('[UserController][Update][INFO]:' + ' ' + `User was updated successfully with id=${id}.`);
             res.status(200).send({
                 message: "User was updated successfully."
             });

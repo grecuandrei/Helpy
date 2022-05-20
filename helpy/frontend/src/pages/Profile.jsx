@@ -13,10 +13,11 @@ const Profile = ( ) => {
     const [userBD, setUserBD] = useState({})
 
     const profileFields = [
-        { key: "Name", value: "Jake Markel" },
-        { key: "Email", value: "markel.jake@gmail.com" },
-        { key: "Phone", value: "+40 754 342 3223" },
-        { key: "Address", value: "Street Lake 64" },
+        { key: "Name", value: userBD.name },
+        { key: "Surname", value: userBD.surname },
+        { key: "Email", value: userBD.email },
+        { key: "Phone Number", value: userBD.phone },
+        { key: "PID", value: userBD.pid },
     ];
     
     const columns = [
@@ -43,7 +44,7 @@ const Profile = ( ) => {
     ];
 	
 	const callBackendAPI = async () => {
-		const response = await fetch(`http://localhost:8000/api/users/guid/${user.sub}`);
+		const response = await fetch(`${process.env.REACT_APP_URL}/users/guid/${user.sub}`);
 		const body = await response.json();
 
 		if (response.status !== 200) {
