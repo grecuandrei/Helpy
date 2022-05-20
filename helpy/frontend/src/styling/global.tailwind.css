@@ -371,4 +371,37 @@ input[type=checkbox] {
     bottom: 0;
     left: 0;
     right: 0;
-  }
+}
+
+/* navigation */
+
+.nav-link {
+    @apply h-12 w-64 pl-4 rounded-[6px] flex border-solid border-2 items-center font-semibold gap-2 opacity-50 text-lg;
+}
+
+.active {
+    @apply w-64 text-white bg-orange-secondary opacity-100;
+}
+
+/* header */
+
+.profile-container {
+    @apply flex flex-row justify-end w-auto gap-2;
+}
+
+.profile-info {
+    @apply flex flex-col justify-end font-semibold;
+}
+
+.profile-info>a {
+    @apply underline w-auto text-orange-secondary;
+}
+
+.signout {
+    @apply decoration-transparent w-auto text-black text-right opacity-50;
+    cursor: pointer;
+}
+
+.profile-link {
+    @apply font-bold text-lg w-20;
+}
