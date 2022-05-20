@@ -147,7 +147,7 @@ exports.update = async (req, res) => {
     }
 
     try {
-        const result = await UserService.updateUser(id, req.body)
+        const result = await UserService.updateUserByGuid(id, req.body)
         if (!result) {
             console.log('[UserController][Update][ERROR]:' + ' ' + `Cannot update user with id=${id}. Maybe user was not found!`);
             res.status(404).send({
