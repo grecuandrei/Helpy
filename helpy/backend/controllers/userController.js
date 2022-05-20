@@ -32,6 +32,7 @@ exports.create = async (req, res) => {
             await UserService.assignRole(req.body.guid)
         } catch(err) {
             console.log('[UserController][Create][ERROR]:' + ' ' + "Some error occurred while assigning publisher role.");
+            console.log(err)
             res.status(500).send({
                 message:
                     err.message
@@ -57,6 +58,7 @@ exports.create = async (req, res) => {
         console.log('[UserController][Create][INFO]:' + ' ' + 'User was sucessfully added!');
         res.status(201).send(result);
     } catch(err) {
+        console.log(err)
         console.log('[UserController][Create][ERROR]:' + ' ' + "Some error occurred while creating the user.");
         res.status(500).send({
             message:

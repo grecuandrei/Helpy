@@ -1,32 +1,29 @@
-import React , {useEffect, useState, useRef} from "react";
+import React , {useEffect, useState } from "react";
 import Modal from "react-modal";
-import { MdOutlineClose, MdDelete, MdSave} from "react-icons/md";
+import { MdOutlineClose, MdSave} from "react-icons/md";
 import Button from "../Button";
 import Input from "../Input";
-import { authSettings } from "../../AuthSettings";
 import { useAuth0} from "@auth0/auth0-react";
-import { Navigate } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
-const AccountModal = ({ modalIsOpen, closeModal, userGUID }) => {
+const AccountModal = ({ modalIsOpen, closeModal, userBD }) => {
+	console.log(userBD)
 	const [phone, setPhone] = useState('');
-	const [isPublisher, setIsPublisher] = useState(false);
 	const [pid, setPid] = useState('');
 	const [name, setName] = useState('');
 	const [surname, setSurname] = useState('');
-    const { getIdTokenClaims, logout, user} = useAuth0();
+    const { getIdTokenClaims, user} = useAuth0();
 	const getToken = async () => {  
         token = await getIdTokenClaims()  
     }  
     let token = getToken()
 
 	useEffect(() => {
-		if (user && user[authSettings.rolesKey].length === 1) {
-		  setIsPublisher(true)
-		}
-	  }, [user]);
+		setName(userBD.name)
+		setSurname(userBD.surname)
+		setPhone(userBD.phone)
+		setPid(userBD.pid)
+	  }, [user, userBD.name, userBD.surname, userBD.phone, userBD.pid]);
 
-	const navigate = useNavigate();
 
 	const editAccount = () => {
 		let body = {}
@@ -50,37 +47,14 @@ const AccountModal = ({ modalIsOpen, closeModal, userGUID }) => {
 			},
 			body: JSON.stringify(body)
 		};
-		fetch(`${process.env.REACT_APP_URL}/users/${userGUID}`, requestOptions)
+		fetch(`${process.env.REACT_APP_URL}/users/${user.sub}`, requestOptions)
 			.then(response => console.log(response.json()));
 	};
 
-	const refreshPage = ()=>{
+	const refreshPage = () => {
 		window.location.reload();
 	}
-
-	const confirm = ()=> {
-		return alert("Are you sure?");
-	}
-
-	const deleteProfile = () => {
-		if(window.confirm("You want to delete account")){
-			const requestOptions = {
-			method: 'DELETE',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${token.__raw}`,
-			},
-			};
-			fetch(`${process.env.REACT_APP_URL}/users/${userGUID}/${isPublisher}`, requestOptions)
-			.then(response => {
-				console.log(response.json()) 
-				if(response.status === 200){
-					logout({ returnTo: window.location.origin })
-					closeModal()
-				} 
-			});
-		}
-	}
+	
 
 	return (
 		<Modal
@@ -105,11 +79,6 @@ const AccountModal = ({ modalIsOpen, closeModal, userGUID }) => {
 			<Button type="button" onClick={() => { editAccount(); closeModal(); refreshPage()}}>
 				<MdSave /> Save changes
 			</Button>
-			<Button
-				className="delete-button"
-				onClick={deleteProfile}>
-				<MdDelete /> Delete account
-          	</Button>
 		</form>
 		</Modal>
 	);
