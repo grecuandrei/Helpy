@@ -23,8 +23,6 @@ export function CustomLink({ children, to, ...props }) {
     </div>
   );
 }
-// const response = await fetch(`${process.env.REACT_APP_URL}/users/guid/${user.sub}`);
-// 		const body = await response.json();
 
 const AdminHeader = () => {
   const { logout, user } = useAuth0();

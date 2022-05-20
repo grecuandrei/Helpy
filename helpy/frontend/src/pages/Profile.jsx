@@ -72,7 +72,7 @@ const Profile = ( ) => {
                 }}
             />
             <div className="row-between">
-                <h2>{userBD.name}</h2>
+                <h2>{userBD.name} {userBD.surname}</h2>
                 <Button onClick={() => setOpenedModal(true)}>
                     <MdEdit /> Edit
                 </Button>

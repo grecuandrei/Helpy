@@ -92,6 +92,18 @@ thead>tr {
     @apply h-4 w-4;
 }
 
+.buttond {
+    @apply flex w-fit items-center justify-center gap-2 px-4 py-2 text-lg font-semibold text-white rounded-full bg-orange;
+}
+
+.buttond:disabled {
+    @apply bg-gray;
+}
+
+.buttond svg {
+    @apply h-4 w-4;
+}
+
 .icon-button {
     @apply text-black bg-transparent stroke-2;
 }

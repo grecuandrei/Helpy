@@ -1,13 +1,15 @@
 import React , {useEffect, useState, useRef} from "react";
 import Modal from "react-modal";
-import { MdOutlineClose } from "react-icons/md";
+import { MdOutlineClose, MdDelete, MdSave} from "react-icons/md";
 import Button from "../Button";
 import Input from "../Input";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const AccountModal = ({ modalIsOpen, closeModal, userGUID }) => {
-	const [email, setEmail] = useState('');
 	const [phone, setPhone] = useState('');
+	const [pid, setPid] = useState('');
+	const [name, setName] = useState('');
+	const [surname, setSurname] = useState('');
     const { getIdTokenClaims } = useAuth0();
 	const getToken = async () => {  
         token = await getIdTokenClaims()  
@@ -16,11 +18,17 @@ const AccountModal = ({ modalIsOpen, closeModal, userGUID }) => {
 
 	const editAccount = () => {
 		let body = {}
-		if (email !== '') {
-			body['email'] = email
-		}
 		if (phone !== '') {
 			body['phone'] = phone
+		}
+		if (pid !== '') {
+			body['pid'] = pid
+		}
+		if (name !== '') {
+			body['name'] = name
+		}
+		if (surname !== '') {
+			body['surname'] = surname
 		}
 		const requestOptions = {
 			method: 'PUT',
@@ -33,6 +41,10 @@ const AccountModal = ({ modalIsOpen, closeModal, userGUID }) => {
 		fetch(`${process.env.REACT_APP_URL}/users/${userGUID}`, requestOptions)
 			.then(response => console.log(response.json()));
 	};
+
+	const refreshPage = ()=>{
+		window.location.reload();
+	}
 
 	return (
 		<Modal
@@ -50,11 +62,19 @@ const AccountModal = ({ modalIsOpen, closeModal, userGUID }) => {
 		</div>
 		<div className="line" />
 		<form>
-			<Input label="Email" placeholder="Your Email" value={email} onChange={e => setEmail(e.target.value)}/>
+			<Input label="Name" placeholder="Your Name" value={name} onChange={e => setName(e.target.value)}/>
+			<Input label="Surname" placeholder="Your Surname" value={surname} onChange={e => setSurname(e.target.value)}/>
 			<Input label="Phone" placeholder="Your phone number" value={phone} onChange={e => setPhone(e.target.value)}/>
-			<Button type="button" onClick={() => { editAccount(); closeModal()}}>
-				Save
+			<Input label="PID" placeholder="Your PID" value={pid} onChange={e => setPid(e.target.value)}/>
+			<Button type="button" onClick={() => { editAccount(); closeModal(); refreshPage()}}>
+				<MdSave /> Save changes
 			</Button>
+			<Button
+				className="delete-button"
+				onClick={() => alert("Are you sure?")}
+				>
+				<MdDelete /> Delete account
+          	</Button>
 		</form>
 		</Modal>
 	);
