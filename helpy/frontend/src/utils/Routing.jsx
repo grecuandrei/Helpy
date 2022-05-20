@@ -4,6 +4,7 @@ import Analytics from "../pages/Admin/Analytics";
 import UserAds from "../pages/User/Ads";
 import UserTaken from "../pages/User/Taken";
 import Ads from "../pages/Admin/Ads";
+import Ad from "../pages/Admin/Ad";
 import Account from "../pages/User/Account";
 import { useAuth0 } from "@auth0/auth0-react";
 import Profile from "../pages/Profile";
@@ -65,6 +66,7 @@ const Router = () => {
 			<Route exact path="/register" element={<Register userGUID={user.sub} userEmail={user.name}/>} />
 			<Route exact path="/taken" element={<UserTaken userGUID={user}/>} />
 			<Route exact path="/ads" element={<Ads/>} />
+			<Route exact path="/ads/:id" element={<Ad/>} />
 			<Route exact path="/analytics" element={<Analytics />} />
 			<Route exact path="/profile" element={<Profile userGUID={user.sub}/>} />
 			</Routes>

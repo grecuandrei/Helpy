@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { MdOutlineClose } from "react-icons/md";
 
 const Keywords = (props) => {
-  const { label, keywords, setKeywords, ...rest } = props;
+  const { label, keywords, setKeywords, maxKeywords, ...rest } = props;
   const [value, setValue] = useState("");
 
   const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && keywords.length < maxKeywords) {
       console.log(keywords, value, setValue);
       setKeywords((k) => k.concat([value]));
       setValue("");
@@ -17,10 +17,8 @@ const Keywords = (props) => {
     setValue(event.target.value);
   };
 
-  const removeKeyword = (keyword) => {
-    console.log(keyword)
-    setKeywords(keywords.filter(item => item !== keyword))
-    // setValue(event.target.value);
+  const removeKeyword = (index) => {
+    setKeywords(keywords.filter((_, i) => index !== i))
   };
 
   return (
@@ -38,7 +36,7 @@ const Keywords = (props) => {
       {keywords.length > 0 && (
         <div className="keyword-list">
           {keywords.map((keyword, index) => (
-            <span key={index} onClick={ () => { removeKeyword(keyword) }}><MdOutlineClose />{keyword}</span>
+            <span key={index} onClick={ () => { removeKeyword(index) }}><MdOutlineClose />{keyword}</span>
           ))}
         </div>
       )}

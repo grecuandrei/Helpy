@@ -35,7 +35,7 @@ const UserAds = () => {
 			setAvailableAds(res)
 		})
 		.catch(err => console.log(err));
-	}, [keywords]);
+	}, [keywords, openedModal, openedViewModal]);
 
 	const handleClick = (ad) => {
 		setAd(ad);
@@ -77,6 +77,7 @@ const UserAds = () => {
 				setKeywords={setKeywords}
 				label="Keywords"
 				placeholder="Press enter to save keyword"
+				maxKeywords={10}
 			/>
 			<div className="books">
 				{availableAds.map((ad, index) => (

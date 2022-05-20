@@ -3,7 +3,7 @@ const ads = require("../controllers/adController.js");
 const checkJwt = require("../middleware/jwtCheck");
 
 module.exports = app => {
-    router.post("/", checkJwt, ads.create);
+    router.post("/:guid", checkJwt, ads.create);
     router.get("/:id", ads.findOne);
     router.get("/", ads.findAll);// all ADs untaken based on title and/or array of keywords.
     router.get("/customer/:guid", ads.findAllCustomer); // these are all ads taken by customer

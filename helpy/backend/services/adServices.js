@@ -1,6 +1,6 @@
 const Ad = require('../models/adModel');
 const UserService = require('./userServices');
-const KeywordService = require('../models/keywordModel');
+const KeywordService = require('./keywordsServices');
 const activeAds = require('../metrics/prometheus').activeAds;
 
 // Create ad
@@ -10,6 +10,7 @@ async function saveAd(ad) {
         activeAds.inc(1)
         return res;
     } catch (err) {
+        console.log(err)
         throw Error(err)
     };
 }
@@ -18,7 +19,7 @@ module.exports.saveAd = saveAd;
 // Find ad by id
 async function findOne(id) {
     try {
-        const ad = await Ad.findById(id)
+        const ad = await Ad.findById(id).populate('keywords', 'name')
         return ad;
     } catch(err) {
         throw Error(err)
@@ -63,7 +64,7 @@ async function findAllPublisher(title, keywords, guid) {
 
         const user = await UserService.findOneByGuid(guid)
     
-        const ads = await Ad.find({...condition, publisherId: user.id}).populate('keywords', 'name')
+        const ads = await Ad.find({...condition, publisherId: user.id}, {'title': 1, 'description': 1, 'keywords': 1, 'endDate': 1}).populate('keywords', 'name')
         return ads;
     } catch(err) {
         throw Error(err)

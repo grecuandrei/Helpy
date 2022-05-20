@@ -12,8 +12,10 @@ const Table = ({ data, columns, noHref }) => {
       data,
     });
 
+    console.log(data)
+
   const handleRowClick = (index) => {
-    if (!noHref) navigate(`/ads/${index}`, { queryParams: { id: index } });
+    if (!noHref) navigate(`/ads/${index}`, { state: {adId: data[index].id } });
   };
 
   // Render the UI for your table

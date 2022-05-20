@@ -6,9 +6,9 @@ module.exports = app => {
     router.post("/", checkJwt, users.create);
     router.get("/:id", users.findOne);
     router.get("/guid/:guid", users.findByGuid); // find user by guid
+    router.get("/findCustomer/:id", users.findCustomerFromAd); // find customer with this adid
     router.put("/:id", checkJwt, users.update);
     router.delete("/:id", checkJwt, users.delete);
-    router.patch("/review/:id/:reviewId", checkJwt, users.review); // updates the score as well
     router.patch("/ad/:guid/:adId/:isPublisher", checkJwt, users.reserveAd); // takes an ad as well
     app.use('/api/users', router);
 };

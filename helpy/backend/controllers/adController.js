@@ -1,6 +1,7 @@
 const Ad = require('../models/adModel');
 const KeywordService = require('../services/keywordsServices');
 const AdService = require('../services/adServices');
+const UserService = require('../services/userServices');
 
 // Create and Save a new Ads
 exports.create = async (req, res) => {
@@ -9,8 +10,8 @@ exports.create = async (req, res) => {
     //  Validate request
     if (!req.body.title) {
         message = "title can not be empty!";
-    } else if (!req.body.publisherId) {
-        message = "publisherId can not be empty!";
+    } else if (!req.params.guid) {
+        message = "publisherGuid can not be empty!";
     } else if (!req.body.description) {
         message = "description can not be empty!";
     } else if (!req.body.address) {
@@ -46,23 +47,26 @@ exports.create = async (req, res) => {
         }
     }
 
+    const user = await UserService.findOneByGuid(req.params.guid)
+
     // Create a Ad
     const ad = new Ad({
-        publisherId: req.body.publisherId,
+        publisherId: user.id,
         title: req.body.title,
         description: req.body.description,
         address: req.body.address,
-        endDate: req.body.endDate,
+        endDate: new Date(req.body.endDate),
         keywords: keywords
     });
 
     // Save Ad in the database
     try {
         const result = await AdService.saveAd(ad)
-        console.log('[AdController][Create][INFO]:' + ' ad: ' + title + ' was sucessfully published by: ' + req.body.publisherId);
+        console.log('[AdController][Create][INFO]:' + ' ad: ' + req.body.title + ' was sucessfully published by: ' + user.name);
         res.status(201).send(result);
     } catch (err) {
         console.log('[AdController][Create][ERROR]:' + " Some error occurred while creating the ad.");
+        console.log(err)
         res.status(500).send({
             message:
                 err.message
@@ -122,7 +126,7 @@ exports.findAll = async (req, res) => {
 
 // Retrieve all ADs from the database.
 exports.findAllPublisher = async (req, res) => {
-    if (!req.params.id) {
+    if (!req.params.guid) {
         console.log( '[AdController][FindAllPublisher][Error]:' + 'Params can not be empty!');
         res.status(400).send({message: "Params can not be empty!"});
         return;
@@ -186,6 +190,25 @@ exports.update = async (req, res) => {
 
     const {id} = req.params;
 
+    let keywords = []
+    for (const keyword of req.body.keywords) {
+        try {
+            const result = await KeywordService.saveKeyword(keyword)
+            if (result) {
+                keywords.push(result._id)
+                console.log('[AdController][Create][INFO]:' + ' keyword: ' + keyword + ' was sucessfully added');
+            }
+        } catch (err) {
+            console.log('[AdController][Create][ERROR]:' + " Some error occurred while creating the keyword.");
+            res.status(500).send({
+                message:
+                    err.message
+                    || "Some error occurred while creating the keyword."
+            });
+        }
+    }
+    req.body.keywords = keywords
+
     try {
         const result = await AdService.updateAd(id, req.body)
         if (!result) {
@@ -201,6 +224,7 @@ exports.update = async (req, res) => {
         }
     } catch(err) {
         console.log('[AdController][Update][ERROR]: ' + "Error updating ad with id: " + id);
+        console.log(err)
         res.status(500).send({
             message:
                 err.message

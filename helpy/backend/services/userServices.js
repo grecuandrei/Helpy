@@ -157,6 +157,16 @@ async function removeAdFromCustomers(id) {
 }
 module.exports.removeAdFromCustomers = removeAdFromCustomers;
 
+async function findCustomerFromAd(id) {
+    try {
+        const result = await User.findOne({'adsIds': id})
+        return result;
+    } catch (err) {
+        throw Error(err)
+    }
+}
+module.exports.findCustomerFromAd = findCustomerFromAd;
+
 // Reserve ad
 async function reserveAd(guid, adId, isPublisher) {
     try {

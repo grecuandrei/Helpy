@@ -1,127 +1,153 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Button from "../../components/Button";
 import AdminLayout from "../../utils/AdminLayout";
 import { MdEdit, MdDelete } from "react-icons/md";
-import BookModal from "../../components/modals/BookModal";
 import Table from "../../components/Table";
 import Section from "../../components/Section";
+import { useLocation } from "react-router-dom";
+import EditAdModal from "../../components/modals/EditAdModal";
+import { useAuth0 } from "@auth0/auth0-react";
 
-const Book = () => {
+const Ad = () => {
   const [openedModal, setOpenedModal] = useState(false);
+  const [ad, setAd] = useState({});
+  const [adFields, setAdFields] = useState([{ key: "Title", value: "" },
+  { key: "Description", value: "" },
+  { key: "Keywords", value: "" },
+  { key: "LastRentalDate", value: "" }]);
+  const [customerFields, setCustomerFields] = useState([{}]);
+  const [available, setAvailable] = useState("Available");
+  const {state} = useLocation();
+  const { getIdTokenClaims } = useAuth0();
+	const getToken = async () => {  
+        token = await getIdTokenClaims()  
+    }  
+    let token = getToken()
 
-  const bookFields = [
-    { key: "Title", value: "Harry Potter" },
-    { key: "Author", value: "J.K. Rowling" },
-    { key: "Genre", value: "J.K. Rowling" },
-    { key: "Rental Days", value: "5 days" },
-    { key: "Keywords", value: "best, book, fantasy, hp, dumbledore" },
-  ];
-
-  const rentalFields = [
-    { key: "Name", value: "Jake Markel" },
-    { key: "Email", value: "markel.jake@gmail.com" },
-    { key: "Period", value: "12 May 2021 - 25 May 2021" },
-    { key: "Days left", value: "5 days" },
-  ];
-
-  const columns = [
-    {
-      Header: "Title",
-      accessor: "title",
-    },
-    {
-      Header: "Author",
-      accessor: "author",
-    },
-    {
-      Header: "Start date",
-      accessor: "startDate",
-    },
-    {
-      Header: "End date",
-      accessor: "endDate",
-    },
-  ];
-
-  const data = useMemo(
+  const columns = useMemo(
     () => [
       {
-        title: "Harry Potter",
-        author: "JK Rowling",
-        startDate: "10 March 2021",
-        endDate: "11 March 2021",
+        Header: "Name",
+        accessor: "name",
       },
       {
-        title: "Harry Potter",
-        author: "JK Rowling",
-        startDate: "10 March 2021",
-        endDate: "11 March 2021",
+        Header: "Email",
+        accessor: "email",
       },
       {
-        title: "Harry Potter",
-        author: "JK Rowling",
-        startDate: "10 March 2021",
-        endDate: "11 March 2021",
+        Header: "Phone",
+        accessor: "phone",
       },
     ],
     []
   );
 
+	useEffect(() => {
+		const callBackendAPI = async () => {
+      const response = await fetch(`${process.env.REACT_APP_URL}/ads/${state.adId}`);
+      const body = await response.json();
+  
+      if (response.status !== 200) {
+        throw Error(body.message)
+      }
+      setAd(body)
+      setAdFields([
+        { key: "Title", value: body.title },
+        { key: "Description", value: body.description },
+        { key: "Keywords", value: body.keywords.length !== 0 ? '#' + body.keywords.map(e => e.name).join(" #") : "no keywords" },
+        { key: "Last Rental Date", value: body.endDate.split('T')[0] },
+      ]);
+      setAvailable(body.taken ? "Unavailable" : "Available")
+    };
+    const callBackendAPI1 = async () => {
+      const response = await fetch(`${process.env.REACT_APP_URL}/users/findCustomer/${state.adId}`);
+      const body = await response.json();
+  
+      if (response.status !== 200) {
+        throw Error(body.message)
+      }
+      setCustomerFields([
+        { "name": body.name,
+        "email":body.email,
+        "phone": body.phone }
+    ]);
+    };
+    callBackendAPI();
+    callBackendAPI1();
+	}, [openedModal]);
+
+  const deleteAd = () => {
+    const requestOptions = {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token.__raw}`,
+      },
+    };
+    fetch(`${process.env.REACT_APP_URL}/ads/${ad.id}`, requestOptions)
+      .then(response => console.log(response.json()));
+  }
+
   return (
     <AdminLayout>
-      <BookModal
+      <EditAdModal
         modalIsOpen={openedModal}
         closeModal={() => {
           setOpenedModal(false);
         }}
+        adId={state.adId}
       />
       <div className="row-between">
-        <h2>Harry Potter</h2>
+        <div className="row-center">
+          <h2>{ad.title}</h2>
+          <Button disabled={ad.taken}>
+            { available}
+          </Button>
+        </div>
         <div className="row-center">
           <Button onClick={() => setOpenedModal(true)}>
             <MdEdit /> Edit
           </Button>
           <Button
             className="delete-button"
-            onClick={() => alert("Are you sure?")}
+            onClick={() => deleteAd()}
           >
             <MdDelete /> Delete
           </Button>
         </div>
       </div>
       <div className="flex flex-col gap-10">
-        <Section title={"Book Details"} fields={bookFields} />
-        <Section title={"Current Rentals"} fields={rentalFields} />
+        <Section title={"Ad Details"} fields={adFields} />
         <div className="flex flex-col gap-5">
           <p className="section-title">Book Statistics</p>
           <div className="flex gap-5">
             <div className="statistic-card">
               <div className="card-statistic">
-                <p>81</p>
-                <p>rentals</p>
+                <p>{ad.likes}</p>
+                <p>Likes</p>
               </div>
             </div>
             <div className="statistic-card">
               <div className="card-statistic">
-                <p>2 days</p>
-                <p>avg. rental time</p>
+                <p>{ad.views}</p>
+                <p>Views</p>
               </div>
             </div>
             <div className="statistic-card">
               <div className="card-statistic">
-                <p>1.5 days</p>
-                <p>avg. in-time completion</p>
+                <p>{ad.createdAt ? ad.createdAt.split('T')[0] : ""}</p>
+                <p>Created at</p>
               </div>
             </div>
           </div>
         </div>
         <div className="flex flex-col gap-5 w-full p-[1px]">
-          <p className="section-title">Rental History</p>
-          <Table data={data} columns={columns} noHref />
+          <p className="section-title">Rented by</p>
+          <Table data={customerFields} columns={columns} noHref={true} />
         </div>
       </div>
     </AdminLayout>
   );
 };
 
-export default Book;
+export default Ad;

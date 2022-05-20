@@ -154,7 +154,7 @@ exports.update = async (req, res) => {
                 message: `Cannot update user with id=${id}. Maybe user was not found!`
             });
         } else {
-            console.log('[UserController][Update][INFO]:' + ' ' + `User was updated successfully with id=${id}.`);
+            console.log('[UserController][Update][INFO]:' + ' ' + "User was updated successfully.");
             res.status(200).send({
                 message: "User was updated successfully."
             });
@@ -189,7 +189,7 @@ exports.delete = async (req, res) => {
             });
         } else {
             console.log('[UserController][Delete][INFO]:' + ' ' + "User was deleted successfully!");
-            res.send({
+            res.status(200).send({
                 message: "User was deleted successfully!"
             });
         }
@@ -203,71 +203,36 @@ exports.delete = async (req, res) => {
     }
 };
 
-// Push review into user reviews array
-exports.review = async (req, res) => {
-    // let message;
-    // if (!req.params.id) {
-    //     message = "req.params.guid can not be empty!"
-    // } else if (!req.params.reviewId) {
-    //     message = "req.params.adId can not be empty!"
-    // }
+// find a customer based on an ad
+exports.findCustomerFromAd = async (req, res) => {
+    const {id} = req.params;
 
-    // if (message) {
-    //     console.log('[UserController][UpdateReviews][ERROR]:' + ' ' + message);
-    //     return res.status(400).send({
-    //         message: message
-    //     });
-    // }
+    if (!id) {
+        console.log('[UserController][FindCustomerFromAd][ERROR]:' + ' ' + "req.params cannot be empty");
+        res.status(400).send({
+            message: "Bad request"
+        });
+    }
 
-    // const {id, reviewId, isPublisher} = req.params;
-
-    // const user = await User.findById(id)
-
-    // if (user.isPublisher) {
-    //     const review = await Review.findById({_id: reviewId})
-
-    //     let newScore = user.score;
-    //     if (newScore !== 0) {
-    //         newScore = (newScore + review.score) / 2.0
-    //     }
-
-    //     const query = {
-    //         $push: {
-    //             reviewsIds: reviewId
-    //         },
-    //         score: newScore
-    //     }
-
-    //     await User.findByIdAndUpdate(id, {
-    //         ...query
-    //     }, {useFindAndModify: false})
-    //         .then(data => {
-    //             if (!data) {
-    //                 console.log('[UserController][UpdateReviews][ERROR]:' + ' ' + `Cannot update User with id=${id}. Maybe user was not found!`);
-    //                 res.status(404).send({
-    //                     message: `Cannot update User with id=${id}. Maybe user was not found!`
-    //                 });
-    //             } else {
-    //                 console.log('[UserController][UpdateReviews][INFO]:' + ' ' + "User was updated successfully.");
-    //                 Ad.findByIdAndUpdate({_id:reviewId}, {reviewed: true}) // TODO test this
-    //                 res.status(200).send({
-    //                     message: "User was updated successfully."
-    //                 });
-    //             }
-    //         })
-    //         .catch(err => {
-    //             console.log('[UserController][UpdateReviews][ERROR]:' + ' ' + "Error updating user with id: " + id);
-    //             res.status(500).send({
-    //                 message: "Error updating user with id=" + id
-    //             });
-    //         });
-    // } else { 
-    //     console.log('[UserController][UpdateReviews][ERROR]:' + ' ' + "Unauthorized to do this action!");
-    //     res.status(401).send({
-    //         message: "Unauthorized to do this action!"
-    //     });
-    // }
-    res.status(404).send()
+    try {
+        const result = await UserService.findCustomerFromAd(id)
+        if (!result) {
+            console.log('[UserController][FindCustomerFromAd][ERROR]:' + ' ' + `Cannot retrieve user with adid=${id}. Maybe user was not found!`);
+            res.status(404).send({
+                message: `Cannot retrieve user with adid=${id}. Maybe user was not found!`
+            });
+        } else {
+            console.log('[UserController][findCustomerFromAd][INFO]:' + ' ' + "User was found successfully!");
+            res.status(200).send(result);
+        }
+    } catch(err) {
+        console.log('[UserController][FindCustomerFromAd][ERROR]:' + ' ' + "Could not retriev user with adid: " + id);
+        res.status(500).send({
+            message:
+                err.message
+                || `Cannot retrieve user with adid=${id}. Maybe user was not found!`
+        });
+    }
 };
 
 // Reserve ad

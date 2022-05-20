@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 import Button from "../../components/Button";
 import Table from "../../components/Table";
 import AdminLayout from "../../utils/AdminLayout";
 import { MdAdd } from "react-icons/md";
-import BookModal from "../../components/modals/BookModal";
+import AddAdModal from "../../components/modals/AddAdModal";
 
 const Ads = () => {
   const columns = useMemo(
@@ -13,116 +14,62 @@ const Ads = () => {
         accessor: "title",
       },
       {
-        Header: "Author",
-        accessor: "author",
+        Header: "Description",
+        accessor: "description",
       },
       {
-        Header: "Genre",
-        accessor: "genre",
+        Header: "Keywords",
+        accessor: "keywords",
       },
       {
-        Header: "Days",
-        accessor: "days",
-      },
-      {
-        Header: "Added on",
-        accessor: "added_on",
-      },
-    ],
-    []
-  );
-  const data = useMemo(
-    () => [
-      {
-        title: "Harry Potter",
-        author: "JK Rowling",
-        genre: "Fantasy",
-        days: "3 days",
-        added_on: "12 March 2014",
-      },
-      {
-        title: "Harry Potter",
-        author: "JK Rowling",
-        genre: "Fantasy",
-        days: "3 days",
-        added_on: "12 March 2014",
-      },
-      {
-        title: "Harry Potter",
-        author: "JK Rowling",
-        genre: "Fantasy",
-        days: "3 days",
-        added_on: "12 March 2014",
-      },
-      {
-        title: "Harry Potter",
-        author: "JK Rowling",
-        genre: "Fantasy",
-        days: "3 days",
-        added_on: "12 March 2014",
-      },
-      {
-        title: "Harry Potter",
-        author: "JK Rowling",
-        genre: "Fantasy",
-        days: "3 days",
-        added_on: "12 March 2014",
-      },
-      {
-        title: "Harry Potter",
-        author: "JK Rowling",
-        genre: "Fantasy",
-        days: "3 days",
-        added_on: "12 March 2014",
-      },
-      {
-        title: "Harry Potter",
-        author: "JK Rowling",
-        genre: "Fantasy",
-        days: "3 days",
-        added_on: "12 March 2014",
-      },
-      {
-        title: "Harry Potter",
-        author: "JK Rowling",
-        genre: "Fantasy",
-        days: "3 days",
-        added_on: "12 March 2014",
-      },
-      {
-        title: "Harry Potter",
-        author: "JK Rowling",
-        genre: "Fantasy",
-        days: "3 days",
-        added_on: "12 March 2014",
-      },
-      {
-        title: "Harry Potter",
-        author: "JK Rowling",
-        genre: "Fantasy",
-        days: "3 days",
-        added_on: "12 March 2014",
+        Header: "Available Until",
+        accessor: "endDate",
       },
     ],
     []
   );
 
+	const { user } = useAuth0();
+  const [ads, setAds] = useState([])
   const [openedModal, setOpenedModal] = useState(false);
+
+  const callBackendAPI = async () => {
+		const response = await fetch(`${process.env.REACT_APP_URL}/ads/publisher/${user.sub}`);
+		const body = await response.json();
+
+		if (response.status !== 200) {
+		throw Error(body.message)
+		}
+		return body;
+	};
+
+	useEffect(() => {
+		callBackendAPI()
+		.then(res => {
+      for (let ad of res) {
+        ad.keywords = '#' + ad.keywords.map(e => e.name).join(" #")
+        ad.endDate = ad.endDate.split('T')[0]
+      }
+			setAds(res)
+		})
+		.catch(err => console.log(err));
+	}, [openedModal]);
+
   return (
     <AdminLayout>
-      <BookModal
+      <AddAdModal
         modalIsOpen={openedModal}
         closeModal={() => {
           setOpenedModal(false);
         }}
       />
       <div className="row-between">
-        <h2>{data.length} Books</h2>
+        <h2>{ads.length} Ads</h2>
         <Button onClick={() => setOpenedModal(true)}>
-          <MdAdd /> Add Book
+          <MdAdd /> Add a new ad
         </Button>
       </div>
-      <Table data={data} columns={columns} />
+      <Table data={ads} columns={columns} />
     </AdminLayout>
   );
 };
