@@ -5,9 +5,9 @@ import UserAds from "../pages/User/Ads";
 import UserTaken from "../pages/User/Taken";
 import Ads from "../pages/Admin/Ads";
 import Ad from "../pages/Admin/Ad";
-import Account from "../pages/User/Account";
+import ProfileAdmin from "../pages/Admin/ProfileAdmin";
 import { useAuth0 } from "@auth0/auth0-react";
-import Profile from "../pages/Profile";
+import Profile from "../pages/User/Profile";
 import Register from "../components/modals/Register";
 import { Navigate } from "react-router-dom";
 import Loading from "../components/Loading";
@@ -69,6 +69,7 @@ const Router = () => {
 			<Route exact path="/ads/:id" element={<Ad/>} />
 			<Route exact path="/analytics" element={<Analytics />} />
 			<Route exact path="/profile" element={<Profile userGUID={user.sub}/>} />
+			<Route exact path="/profileAdmin" element={<ProfileAdmin userGUID={user.sub}/>} />
 			</Routes>
 		</BrowserRouter>
 		)

@@ -55,7 +55,7 @@ const AdminHeader = () => {
 				<CustomLink to={"/analytics"}>
 					<MdLeaderboard /> Analytics
 				</CustomLink>
-        <CustomLink to={"/profile"}>
+        <CustomLink to={"/profileAdmin"}>
           <MdAccountBox /> Profile
         </CustomLink>
       </nav>

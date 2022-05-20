@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import UserLayout from "../utils/UserLayout";
+import AdminLayout from "../../utils/AdminLayout";
 import { useAuth0 } from "@auth0/auth0-react";
-import Button from "../components/Button";
-import AccountModal from "../components/modals/AccountModal";
+import Button from "../../components/Button";
+import AccountModal from "../../components/modals/AccountModal";
 import { MdEdit } from "react-icons/md";
-import Section from "../components/Section";
-import Table from "../components/Table";
+import Section from "../../components/Section";
+import Table from "../../components/Table";
 
 const Profile = ( ) => {
     const [openedModal, setOpenedModal] = useState(false);
@@ -63,7 +63,7 @@ const Profile = ( ) => {
 	}, []);
 
 	return (
-        <UserLayout>
+        <AdminLayout>
             <AccountModal
                 userGUID={user.sub}
                 modalIsOpen={openedModal}
@@ -78,25 +78,21 @@ const Profile = ( ) => {
                 </Button>
             </div>
             <div className="flex flex-col gap-10">
-                <Section title={"Profile Details"} fields={profileFields} />
                 <div className="flex flex-col gap-5">
-                <p className="section-title">Currently Reading</p>
-                <div className="reading-card">
-                    <div className="card-statistic">
-                    <p className="text-lg font-semibold">Tess D’Uberville</p>
-                    <p className="font-semibold opacity-50">
-                        3 days remainted until returning date
-                    </p>
+                    <Section title={"Profile Details"} fields={profileFields} />
+                    <p className="section-title">Rating</p>
+                    <div className="reading-card">
+                        <div className="card-statistic flex flex-col items-center justify-items-center">
+                            <p className="text-lg font-semibold">{userBD.score} / 5</p>
+                        </div>
                     </div>
-                    <Button>Return book</Button>
-                </div>
                 </div>
                 <div className="flex flex-col gap-5 w-full p-[1px]">
                 <p className="section-title">Rental History</p>
                 <Table data={[]} columns={columns} noHref />
                 </div>
             </div>
-        </UserLayout>
+        </AdminLayout>
 	);
 };
 
