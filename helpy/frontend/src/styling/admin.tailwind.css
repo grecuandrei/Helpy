@@ -29,7 +29,7 @@
 }
 
 .active {
-    @apply w-64 text-white bg-black opacity-100;
+    @apply w-64 text-white bg-orange-secondary opacity-100;
 }
 
 

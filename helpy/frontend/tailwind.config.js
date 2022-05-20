@@ -18,7 +18,7 @@ module.exports = {
             white: "#FFFAF9",
             black: "#1C1C1C",
             orange: {
-                faded: "#1A229A0d",
+                faded: "#FDEAE7",
                 accent: "#F89E8F",
                 secondary: "#1A229A",
                 DEFAULT: "#F9CCBF",

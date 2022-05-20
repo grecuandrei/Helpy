@@ -313,6 +313,14 @@ input[type=checkbox] {
 
 /* special info section */
 
+.no-keywords {
+    @apply font-semibold text-lg flex flex-col gap-5 w-auto m-[1px] text-orange;
+}
+
+.line {
+    @apply bg-orange;
+}
+
 .section-container {
     @apply font-semibold text-lg flex flex-col gap-5 w-auto m-[1px];
 }
