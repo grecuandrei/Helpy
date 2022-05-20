@@ -2,9 +2,6 @@ const User = require('../models/userModel');
 const AdService = require('./adServices');
 const ReviewService = require('./reviewServices');
 const activeClients = require('../metrics/prometheus').activeClients;
-const { sendMail } = require("../rabbit/rabbit");
-const { ObjectId } = require('mongodb');
-const { default: mongoose } = require('mongoose');
 
 require('dotenv').config();
 const domain = process.env.AUTH0_DOMAIN;
@@ -17,20 +14,20 @@ registerEmail='This is an auto-generated email! Do not reply!\nHello, you have j
 reserveCustomerEmail='This is an auto-generated email! Do not reply!\nHello, you have just reserve an ad!\n\nCongratulations!!!\n\nRegards,\nHelpy Team!'
 reservePublisherEmail='This is an auto-generated email! Do not reply!\nHello, you had one ad reserved in our application!\n\nCongratulations!!!\n\nRegards,\nHelpy Team!'
 
+const management = new ManagementClient({
+    domain: `${domain}`,
+    clientId: `${client_id}`,
+    clientSecret: `${client_secret}`
+});
+
 // Asign publisher Role
 async function assignRole(userGuid) {
-    const management = new ManagementClient({
-        domain: `${domain}`,
-        clientId: `${client_id}`,
-        clientSecret: `${client_secret}`
-    });
-
     var dataU = { "users" : [ userGuid ]};
 
     try {
         await management.roles.assignUsers({ id: admin_role}, dataU);
-    } catch (e) {
-        console.log(e);
+    } catch (err) {
+        throw Error(err)
     }
 }
 module.exports.assignRole = assignRole;
@@ -102,13 +99,18 @@ module.exports.updateUserByGuid = updateUserByGuid;
 // Delete user
 async function deleteUser(guid, isPublisher) {
     try {
-        const user = await UserService.findOne({guid: guid})
+        const user = await User.findOne({guid: guid})
         if (isPublisher) { // are review-uri si trb sterse
             await ReviewService.deleteAll(user.id)
         } else { // are ad-uri in bd si trb sterse
             // se sterg ad-urile si din lista customerilor daca exista in ele
             await AdService.deleteAllFromPublisher(user.id)
         }
+        await management.users.delete({ id: guid }, function (err) {
+            if (err) {
+                throw Error('Auth0 delteing error')
+            }
+        });
         const res = await User.findByIdAndRemove(user.id)
         if (res) {
             activeClients.dec(1);
