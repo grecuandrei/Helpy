@@ -77,7 +77,7 @@ const Ad = () => {
     };
     callBackendAPI();
     callBackendAPI1();
-	}, [openedModal]);
+	}, [openedModal, state.adId]);
 
   const deleteAd = () => {
     if (window.confirm("Are you sure you want to delete the ad?")) {

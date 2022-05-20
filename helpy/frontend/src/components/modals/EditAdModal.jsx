@@ -34,8 +34,8 @@ const EditAdModal = ({ modalIsOpen, closeModal, adId }) => {
             setKeywords(body.keywords.map(k => k.name))
             setTaken(body.taken)
         };
-    callBackendAPI();
-	}, []);
+        callBackendAPI();
+	}, [adId]);
 
 	const modifyAd = () => {
 		let body = {}

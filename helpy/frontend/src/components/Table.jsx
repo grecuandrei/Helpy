@@ -13,8 +13,6 @@ const Table = ({ data, columns, noHref }) => {
       data,
     });
 
-  console.log(data)
-
   const handleRowClick = (index) => {
     if (!noHref) navigate(`/ads/${index}`, { state: {adId: data[index].id } });
   };
@@ -41,10 +39,9 @@ const Table = ({ data, columns, noHref }) => {
               onClick={() => handleRowClick(i)}
             >
               {row.cells.map((cell) => {
-                console.log(cell)
                 if (cell.column.Header === "Available") {
-                  if (cell.value) return <td>Unavailable</td>
-                  if (!cell.value) return <td>Available</td>
+                  if (cell.value) return <td {...cell.getCellProps()}>Unavailable</td>
+                  if (!cell.value) return <td {...cell.getCellProps()}>Available</td>
                 }
                 return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
               })}

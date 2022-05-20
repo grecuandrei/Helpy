@@ -124,7 +124,7 @@ exports.findAll = async (req, res) => {
     }
 };
 
-// Retrieve all ADs from the database.
+// Retrieve all ADs for publisher
 exports.findAllPublisher = async (req, res) => {
     if (!req.params.guid) {
         console.log( '[AdController][FindAllPublisher][Error]:' + 'Params can not be empty!');
@@ -141,6 +141,30 @@ exports.findAllPublisher = async (req, res) => {
         res.status(200).send(ads);
     } catch (err) {
         console.log('[AdController][FindAllPublisher][ERROR]:' + " Error retrieving ads");
+        res.status(500).send({
+            message:
+                err.message
+                || "Error retrieving ads"
+        });
+    }
+};
+
+// Retrieve all ADs taken for publisher
+exports.findAllPublisherTaken = async (req, res) => {
+    if (!req.params.guid) {
+        console.log( '[AdController][FindAllPublisherTaken][Error]:' + 'Params can not be empty!');
+        res.status(400).send({message: "Params can not be empty!"});
+        return;
+    }
+
+    const {guid} = req.params;
+
+    try {
+        const ads = await AdService.findAllPublisherTaken(guid)
+        console.log('[AdController][FindAllPublisherTaken][INFO]:' + " Ads were succesfully returned");
+        res.status(200).send(ads);
+    } catch (err) {
+        console.log('[AdController][FindAllPublisherTaken][ERROR]:' + " Error retrieving ads");
         res.status(500).send({
             message:
                 err.message
@@ -369,3 +393,88 @@ exports.viewAd = async (req, res) => {
         });
     }
 }
+
+exports.topXLiked = async (req, res) => {
+    if (!req.params.guid) {
+        console.log( '[AdController][TopXLiked][ERROR]:' + 'Params can not be empty!');
+        res.status(400).send({message: "Params can not be empty!"});
+        return;
+    }
+    if (!req.params.x) {
+        console.log( '[AdController][TopXLiked][ERROR]:' + 'Params can not be empty!');
+        res.status(400).send({message: "Params can not be empty!"});
+        return;
+    }
+
+    const {x, guid} = req.params;
+
+    try {
+        const ads = await AdService.topXLiked(x, guid)
+        console.log('[AdController][TopXLiked][INFO]:' + " Ads were succesfully returned");
+        res.status(200).send(ads);
+    } catch (err) {
+        console.log('[AdController][TopXLiked][ERROR]:' + " Error retrieving ads");
+        res.status(500).send({
+            message:
+                err.message
+                || "Error retrieving ads"
+        });
+    }
+};
+
+exports.topXViewed = async (req, res) => {
+    if (!req.params.guid) {
+        console.log( '[AdController][TopXViewed][ERROR]:' + 'Params can not be empty!');
+        res.status(400).send({message: "Params can not be empty!"});
+        return;
+    }
+    if (!req.params.x) {
+        console.log( '[AdController][TopXViewed][ERROR]:' + 'Params can not be empty!');
+        res.status(400).send({message: "Params can not be empty!"});
+        return;
+    }
+
+    const {x, guid} = req.params;
+
+    try {
+        const ads = await AdService.topXViewed(x, guid)
+        console.log('[AdController][TopXViewed][INFO]:' + " Ads were succesfully returned");
+        res.status(200).send(ads);
+    } catch (err) {
+        console.log('[AdController][TopXViewed][ERROR]:' + " Error retrieving ads");
+        res.status(500).send({
+            message:
+                err.message
+                || "Error retrieving ads"
+        });
+    }
+};
+
+exports.topViewedKeyword = async (req, res) => {
+    if (!req.params.guid) {
+        console.log( '[AdController][TopViewedKeyword][ERROR]:' + 'Params can not be empty!');
+        res.status(400).send({message: "Params can not be empty!"});
+        return;
+    }
+    if (!req.params.keyword) {
+        console.log( '[AdController][TopViewedKeyword][ERROR]:' + 'Params can not be empty!');
+        res.status(400).send({message: "Params can not be empty!"});
+        return;
+    }
+
+    const {keyword, guid} = req.params;
+
+    try {
+        const ads = await AdService.topViewedKeyword(keyword, guid)
+        console.log('[AdController][TopViewedKeyword][INFO]:' + " Ads were succesfully returned");
+        res.status(200).send(ads);
+    } catch (err) {
+        console.log(err)
+        console.log('[AdController][TopViewedKeyword][ERROR]:' + " Error retrieving ads");
+        res.status(500).send({
+            message:
+                err.message
+                || "Error retrieving ads"
+        });
+    }
+};

@@ -1,4 +1,5 @@
 const Ad = require('../models/adModel');
+const Keyword = require('../models/keywordModel');
 const UserService = require('./userServices');
 const KeywordService = require('./keywordsServices');
 const activeAds = require('../metrics/prometheus').activeAds;
@@ -71,6 +72,20 @@ async function findAllPublisher(title, keywords, guid) {
     }
 }
 module.exports.findAllPublisher = findAllPublisher;
+
+// Retrieve all ADs for a publisher.
+async function findAllPublisherTaken(guid) {
+    try {
+
+        const user = await UserService.findOneByGuid(guid)
+    
+        const ads = await Ad.find({taken: true, publisherId: user.id}, {'title': 1, 'description': 1, 'keywords': 1, 'endDate': 1}).populate('keywords', 'name')
+        return ads;
+    } catch(err) {
+        throw Error(err)
+    }
+}
+module.exports.findAllPublisherTaken = findAllPublisherTaken;
 
 // Retrieve all ADs for a publisher.
 async function findAllCustomer(keywords, guid) {
@@ -161,3 +176,41 @@ async function makeAvailable(id) {
     }
 }
 module.exports.makeAvailable = makeAvailable
+
+async function topXLiked(x, guid) {
+    try {
+        const user = await UserService.findOneByGuid(guid)
+    
+        const ads = await Ad.find({publisherId: user.id}, {'title': 1, 'id': 1}).sort('-likes').limit(x)
+        return ads;
+    } catch(err) {
+        throw Error(err)
+    }
+}
+module.exports.topXLiked = topXLiked;
+
+async function topXViewed(x, guid) {
+    try {
+        const user = await UserService.findOneByGuid(guid)
+    
+        const ads = await Ad.find({publisherId: user.id}, {'title': 1, 'id': 1}).sort('-views').limit(x)
+        return ads;
+    } catch(err) {
+        throw Error(err)
+    }
+}
+module.exports.topXViewed = topXViewed;
+
+async function topViewedKeyword(keyword, guid) {
+    try {
+        const query = {'name': keyword}
+        const user = await UserService.findOneByGuid(guid)
+        const key = await Keyword.findOne(query)
+    
+        const ads = await Ad.find({keywords: key.id, publisherId: user.id}, {'title': 1, 'id': 1}).sort('-views').limit(3)
+        return ads;
+    } catch(err) {
+        throw Error(err)
+    }
+}
+module.exports.topViewedKeyword = topViewedKeyword;

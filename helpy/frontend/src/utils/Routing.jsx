@@ -46,8 +46,6 @@ const Router = () => {
 		.catch(err => {return err});
 		}, []);
 
-		console.log(userExists === 0)
-
 		if (userExists === 1) {
 			return <Navigate to={"/home"}/>;
 		} else if (userExists === 0) {
