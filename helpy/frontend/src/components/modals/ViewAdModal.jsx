@@ -18,8 +18,6 @@ const ViewAdModal = ({ modalIsOpen, closeModal, ad }) => {
 		setOpenedModal(true);
 	}
 
-	console.log(ad)
-
 	return (
 		<Modal
 			isOpen={modalIsOpen}
@@ -37,32 +35,21 @@ const ViewAdModal = ({ modalIsOpen, closeModal, ad }) => {
 		/>
 		<div className="row-between">
 			<h2>{ad.title}</h2>
-			<Button onClick={closeModal} className="icon-button">
-				<MdOutlineClose />
-			</Button>
-			<h2>{ad.taken}</h2>
-			{ ad.taken && !ad.reviewed &&
-			<Button type="button" onClick={ () => { letReviewAd(ad) }}>
-				<MdAdd />Add Review
-			</Button>
-			}
+			<div className="flex flex-row">
+				{ ad.taken && !ad.reviewed &&
+				<Button type="button" onClick={ () => { letReviewAd(ad) }}>
+					<MdAdd />Add Review
+				</Button>
+				}
+				<Button onClick={closeModal} className="icon-button">
+					<MdOutlineClose />
+				</Button>
+			</div>
 		</div>
 		<div className="line" />
-		<form>
-			<br/>
-			<Input
-			label="Add's name"
-			disabled
-			placeholder="Ad name"
-			value={ad.title}
-			/><br/><br/>
-			{/* <p><MdTableRows />Add's name {ad.title}</p> */}
-			<Input
-			label="Description"
-			disabled
-			placeholder="Ad description"
-			value={ad.description}
-			/><br/><br/>
+		<form className="flex flex-col gap-4 py-6 justify-around content-around">
+			<Input label="Add's name" disabled placeholder="Ad name" value={ad.title}/>
+			<Input label="Description " disabled placeholder="Ad description" value={ad.description} />
 			{ad.keywords.length > 0 ? (
 			<div className="keyword-list">
 				{ad.keywords.map((keyword, index) => (

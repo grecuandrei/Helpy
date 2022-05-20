@@ -172,7 +172,7 @@ label {
 }
 
 .modal-ad {
-    @apply w-[600px] px-16 py-10 bg-white rounded-md;
+    @apply w-fit px-16 py-10 bg-white rounded-md;
 }
 
 

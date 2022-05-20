@@ -40,6 +40,7 @@ exports.create = async (req, res) => {
         const query = { $push: { reviewsIds: result.id }}
         const ad = await AdService.findOne(req.body.adId)
         await UserService.updateUser(ad.publisherId, query)
+        await AdService.updateAd(req.body.adId, {reviewed: true})
         console.log('[ReviewController][Create][INFO]:' + ' ' + "review was sucessfully added!");
         res.status(201).send(result);
     } catch (err) {
