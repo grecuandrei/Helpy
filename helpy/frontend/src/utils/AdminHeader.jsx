@@ -61,7 +61,7 @@ const AdminHeader = () => {
       </nav>
       <div className="profile-container">
         <div className="profile-info">
-          <Link className="profile-link capitalize" to="/profile">
+          <Link className="profile-link capitalize" to="/profileAdmin">
             {userBD.surname}
           </Link>
           <div
