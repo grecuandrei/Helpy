@@ -100,15 +100,16 @@ async function updateUserByGuid(guid, query) {
 module.exports.updateUserByGuid = updateUserByGuid;
 
 // Delete user
-async function deleteUser(id, isPublisher) {
+async function deleteUser(guid, isPublisher) {
     try {
+        const user = await UserService.findOne({guid: guid})
         if (isPublisher) { // are review-uri si trb sterse
-            await ReviewService.deleteAll(id)
+            await ReviewService.deleteAll(user.id)
         } else { // are ad-uri in bd si trb sterse
             // se sterg ad-urile si din lista customerilor daca exista in ele
-            await AdService.deleteAllFromPublisher(id)
+            await AdService.deleteAllFromPublisher(user.id)
         }
-        const res = await User.findByIdAndRemove(id)
+        const res = await User.findByIdAndRemove(user.id)
         if (res) {
             activeClients.dec(1);
         }

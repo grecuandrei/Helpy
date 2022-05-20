@@ -4,13 +4,14 @@ import AdminLayout from "../../utils/AdminLayout";
 import { MdEdit, MdDelete } from "react-icons/md";
 import Table from "../../components/Table";
 import Section from "../../components/Section";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import EditAdModal from "../../components/modals/EditAdModal";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Ad = () => {
   const [openedModal, setOpenedModal] = useState(false);
   const [ad, setAd] = useState({});
+  const navigate = useNavigate();
   const [adFields, setAdFields] = useState([{ key: "Title", value: "" },
   { key: "Description", value: "" },
   { key: "Keywords", value: "" },
@@ -77,15 +78,22 @@ const Ad = () => {
 	}, [openedModal]);
 
   const deleteAd = () => {
-    const requestOptions = {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token.__raw}`,
-      },
-    };
-    fetch(`${process.env.REACT_APP_URL}/ads/${ad.id}`, requestOptions)
-      .then(response => console.log(response.json()));
+    if (window.confirm("Are you sure you want to delete the ad?")) {
+      const requestOptions = {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token.__raw}`,
+        },
+      };
+      fetch(`${process.env.REACT_APP_URL}/ads/${ad.id}`, requestOptions)
+        .then(response => {
+          console.log(response.json())
+          if (response.status === 200) {
+            navigate("/ads")
+          }
+        });
+    }
   }
 
   return (
