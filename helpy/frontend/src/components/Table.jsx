@@ -1,4 +1,5 @@
 import React from "react";
+import { MdSignalCellularNull } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useTable } from "react-table/dist/react-table.development";
 
@@ -12,7 +13,7 @@ const Table = ({ data, columns, noHref }) => {
       data,
     });
 
-    console.log(data)
+  console.log(data)
 
   const handleRowClick = (index) => {
     if (!noHref) navigate(`/ads/${index}`, { state: {adId: data[index].id } });
@@ -40,6 +41,11 @@ const Table = ({ data, columns, noHref }) => {
               onClick={() => handleRowClick(i)}
             >
               {row.cells.map((cell) => {
+                console.log(cell)
+                if (cell.column.Header === "Available") {
+                  if (cell.value) return <td>Unavailable</td>
+                  if (!cell.value) return <td>Available</td>
+                }
                 return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
               })}
             </tr>

@@ -64,7 +64,7 @@ async function findAllPublisher(title, keywords, guid) {
 
         const user = await UserService.findOneByGuid(guid)
     
-        const ads = await Ad.find({...condition, publisherId: user.id}, {'title': 1, 'description': 1, 'keywords': 1, 'endDate': 1}).populate('keywords', 'name')
+        const ads = await Ad.find({...condition, publisherId: user.id}, {'title': 1, 'description': 1, 'keywords': 1, 'endDate': 1, 'taken': 1}).populate('keywords', 'name')
         return ads;
     } catch(err) {
         throw Error(err)

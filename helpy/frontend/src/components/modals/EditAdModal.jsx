@@ -12,6 +12,7 @@ const EditAdModal = ({ modalIsOpen, closeModal, adId }) => {
     const [description, setDescription] = useState("");
     const [address, setAddress] = useState("");
     const [endDate, setEndDate] = useState("");
+    const [taken, setTaken] = useState("");
     const { getIdTokenClaims } = useAuth0();
 	const getToken = async () => {  
         token = await getIdTokenClaims()
@@ -31,6 +32,7 @@ const EditAdModal = ({ modalIsOpen, closeModal, adId }) => {
             setAddress(body.address)
             setEndDate(body.endDate.split('T')[0])
             setKeywords(body.keywords.map(k => k.name))
+            setTaken(body.taken)
         };
     callBackendAPI();
 	}, []);
@@ -86,7 +88,7 @@ const EditAdModal = ({ modalIsOpen, closeModal, adId }) => {
             />
             <Input label="Address" placeholder="Address" value={address} onChange={e => setAddress(e.target.value)}/>
             <Input type="date" label="EndDate" placeholder="Available until" value={endDate} onChange={e => setEndDate(e.target.value)}/>
-            <Button type="button" onClick={() => modifyAd()}>
+            <Button type="button" disabled={taken} onClick={() => modifyAd()}>
                 Save
             </Button>
 		</form>

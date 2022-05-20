@@ -135,7 +135,7 @@ label {
 }
 
 .keyword-list>span {
-    @apply p-4 rounded-3xl bg-orange text-white font-semibold text-sm;
+    @apply flex flex-row items-center justify-items-center p-4 gap-2 rounded-3xl bg-orange text-white font-semibold text-sm;
 }
 
 

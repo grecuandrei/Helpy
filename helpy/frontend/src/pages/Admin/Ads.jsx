@@ -25,6 +25,10 @@ const Ads = () => {
         Header: "Available Until",
         accessor: "endDate",
       },
+      {
+        Header: "Available",
+        accessor: "taken",
+      },
     ],
     []
   );
