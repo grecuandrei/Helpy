@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import UserLayout from "../../utils/UserLayout";
 import { useAuth0 } from "@auth0/auth0-react";
 import Button from "../../components/Button";
@@ -14,6 +14,7 @@ const Profile = ( ) => {
     const [openedModal, setOpenedModal] = useState(false);
     const [isPublisher, setIsPublisher] = useState(false);
     const navigate = useNavigate();
+    const [ads, setAds] = useState([])
     const { getIdTokenClaims, logout, user} = useAuth0();
 	  const getToken = async () => {  
         token = await getIdTokenClaims()  
@@ -29,28 +30,27 @@ const Profile = ( ) => {
         { key: "PID", value: userBD.pid },
     ];
     
-    const columns = [
+    const columns = useMemo(
+      () => [
         {
           Header: "Title",
           accessor: "title",
         },
         {
-          Header: "Author",
-          accessor: "author",
+          Header: "Description",
+          accessor: "description",
         },
         {
-          Header: "Start date",
-          accessor: "startDate",
+          Header: "Keywords",
+          accessor: "keywords",
         },
         {
-          Header: "End date",
+          Header: "Available Until",
           accessor: "endDate",
         },
-        {
-          Header: "Total time",
-          accessor: "total",
-        },
-    ];
+      ],
+      []
+    );
 	
 	const callBackendAPI = async () => {
 		const response = await fetch(`${process.env.REACT_APP_URL}/users/guid/${user.sub}`);
@@ -72,6 +72,28 @@ const Profile = ( ) => {
 		})
 		.catch(err => console.log(err));
 	}, [user]);
+
+  const callBackendAPI2 = async () => {
+		const response = await fetch(`${process.env.REACT_APP_URL}/ads/customer/${user.sub}`);
+		const body = await response.json();
+
+		if (response.status !== 200) {
+		throw Error(body.message)
+		}
+		return body;
+	};
+
+	useEffect(() => {
+		callBackendAPI2()
+		.then(res => {
+      for (let ad of res) {
+        ad.keywords = '#' + ad.keywords.map(e => e.name).join(" #")
+        ad.endDate = ad.endDate.split('T')[0]
+      }
+			setAds(res)
+		})
+		.catch(err => console.log(err));
+	}, []);
 
   const deleteProfile = () => {
 		if(window.confirm("You want to delete account")){
@@ -121,7 +143,7 @@ const Profile = ( ) => {
                 <Section title={"Profile Details"} fields={profileFields} />
                 <div className="flex flex-col gap-5 w-full p-[1px]">
                 <p className="section-title">Rental History</p>
-                <Table data={[]} columns={columns} noHref />
+                <Table data={ads} columns={columns} noHref = {true}/>
                 </div>
             </div>
         </UserLayout>

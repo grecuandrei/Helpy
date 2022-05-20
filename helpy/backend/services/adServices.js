@@ -77,7 +77,7 @@ async function findAllCustomer(keywords, guid) {
     try {
         const user = await UserService.findOneByGuid(guid)
 
-        if (keywords === '[]') {
+        if (keywords === '[]' || keywords === undefined) {
             return user.adsIds;
         }
         let ads = []
