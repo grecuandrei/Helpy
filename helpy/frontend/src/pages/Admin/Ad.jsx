@@ -14,6 +14,7 @@ const Ad = () => {
   const navigate = useNavigate();
   const [adFields, setAdFields] = useState([{ key: "Title", value: "" },
   { key: "Description", value: "" },
+  { key: "Address", value: ""},
   { key: "Keywords", value: "" },
   { key: "LastRentalDate", value: "" }]);
   const [customerFields, setCustomerFields] = useState([{}]);
@@ -55,6 +56,7 @@ const Ad = () => {
       setAdFields([
         { key: "Title", value: body.title },
         { key: "Description", value: body.description },
+        { key: "Address", value: body.address},
         { key: "Keywords", value: body.keywords.length !== 0 ? '#' + body.keywords.map(e => e.name).join(" #") : "no keywords" },
         { key: "Last Rental Date", value: body.endDate.split('T')[0] },
       ]);

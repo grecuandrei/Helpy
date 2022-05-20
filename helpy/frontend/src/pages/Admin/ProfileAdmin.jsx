@@ -13,9 +13,9 @@ const Profile = ( ) => {
     const [userBD, setUserBD] = useState({})
 
     const profileFields = [
+        { key: "Email", value: userBD.email },
         { key: "Name", value: userBD.name },
         { key: "Surname", value: userBD.surname },
-        { key: "Email", value: userBD.email },
         { key: "Phone Number", value: userBD.phone },
         { key: "PID", value: userBD.pid },
     ];

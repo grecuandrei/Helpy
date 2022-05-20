@@ -54,9 +54,9 @@ const AccountModal = ({ modalIsOpen, closeModal, userGUID }) => {
 			.then(response => console.log(response.json()));
 	};
 
-	// const refreshPage = ()=>{
-	// 	window.location.reload();
-	// }
+	const refreshPage = ()=>{
+		window.location.reload();
+	}
 
 	const confirm = ()=> {
 		return alert("Are you sure?");
@@ -102,7 +102,7 @@ const AccountModal = ({ modalIsOpen, closeModal, userGUID }) => {
 			<Input label="Surname" placeholder="Your Surname" value={surname} onChange={e => setSurname(e.target.value)}/>
 			<Input label="Phone" placeholder="Your phone number" value={phone} onChange={e => setPhone(e.target.value)}/>
 			<Input label="PID" placeholder="Your PID" value={pid} onChange={e => setPid(e.target.value)}/>
-			<Button type="button" onClick={() => { editAccount(); closeModal()}}>
+			<Button type="button" onClick={() => { editAccount(); closeModal(); refreshPage()}}>
 				<MdSave /> Save changes
 			</Button>
 			<Button
