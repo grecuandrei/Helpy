@@ -14,6 +14,7 @@ module.exports = app => {
     router.patch('/likeAd/:id', checkJwt, ads.likeAd);
     router.patch('/unlikeAd/:id', checkJwt, ads.unlikeAd);
     router.patch('/viewAd/:id', checkJwt, ads.viewAd);
+    router.patch('/renew/:id', checkJwt, ads.renewAd);
     router.get('/topViewedKeyword/:keyword/:guid', ads.topViewedKeyword);
     router.get('/topXViewed/:x/:guid', ads.topXViewed);
     router.get('/topXLiked/:x/:guid', ads.topXLiked);

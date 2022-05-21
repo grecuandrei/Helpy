@@ -20,7 +20,7 @@ const Ad = () => {
   const [customerFields, setCustomerFields] = useState([{}]);
   const [available, setAvailable] = useState("Available");
   const {state} = useLocation();
-  const { getIdTokenClaims } = useAuth0();
+  const { user, getIdTokenClaims } = useAuth0();
 	const getToken = async () => {  
         token = await getIdTokenClaims()  
     }  
@@ -99,8 +99,25 @@ const Ad = () => {
   }
 
   const makeAvailable = () => {
-
+    if (window.confirm("Are you sure you want to make the ad available again?")) {
+      const requestOptions = {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token.__raw}`,
+        },
+      };
+      fetch(`${process.env.REACT_APP_NODE_API}/ads/renew/${ad.id}`, requestOptions)
+        .then(response => {
+          console.log(response.json())
+          if (response.status === 200) {
+            navigate("/ads")
+          }
+        });
+    }
   }
+
+  console.log(ad.reviewed)
 
   return (
     <AdminLayout>
@@ -123,7 +140,7 @@ const Ad = () => {
             <MdEdit /> Edit
           </Button>
           <Button
-            onClick={() => makeAvailable()}
+            onClick={() => makeAvailable()} disabled={!ad.taken}
           >
             <MdPostAdd /> Make ad available
           </Button>

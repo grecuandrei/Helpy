@@ -2,6 +2,7 @@ const Ad = require('../models/adModel');
 const Keyword = require('../models/keywordModel');
 const UserService = require('./userServices');
 const KeywordService = require('./keywordsServices');
+const userModel = require('../models/userModel');
 const activeAds = require('../metrics/prometheus').activeAds;
 
 // Create ad
@@ -166,6 +167,19 @@ async function makeAvailable(id) {
     }
 }
 module.exports.makeAvailable = makeAvailable
+
+async function renewAd(id) {
+    try {
+        await userModel.updateOne({adsIds: id}, {$pull: {adsIds: id}})
+    
+        const res = await updateAd(id, {taken: false})
+        return res;
+    } catch(err) {
+        console.log(err)
+        throw Error(err)
+    }
+}
+module.exports.renewAd = renewAd;
 
 async function topXLiked(x, guid) {
     try {

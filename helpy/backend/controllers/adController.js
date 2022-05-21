@@ -393,6 +393,37 @@ exports.viewAd = async (req, res) => {
     }
 }
 
+exports.renewAd = async (req, res) => {
+    if (!req.params) { // req.publisher
+        console.log('[AdController][RenewAd][ERROR]: ' + "Client is not authenticated!");
+        return res.json({message: "Unauthenticated"});
+    }
+
+    const {id} = req.params;
+
+    try {
+        const result = await AdService.renewAd(id)
+        if (!result) {
+            console.log('[AdController][RenewAd][ERROR]: ' + `Cannot update ad with id=${id}. Maybe ad was not found!`);
+            res.status(404).send({
+                message: `Cannot update ad with id=${id}. Maybe ad was not found!`
+            });
+        } else {
+            console.log('[AdController][RenewAd][INFO]: ' + "Ad was sucessfully updated!");
+            res.status(200).send({
+                message: "Ad was updated successfully."
+            });
+        }
+    } catch(err) {
+        console.log('[AdController][RenewAd][ERROR]: ' + "Could not update ad with id: " + id);
+        res.status(500).send({
+            message:
+                err.message
+                || "Error updating ad with id=" + id
+        });
+    }
+}
+
 exports.topXLiked = async (req, res) => {
     if (!req.params.guid) {
         console.log( '[AdController][TopXLiked][ERROR]:' + 'Params can not be empty!');
