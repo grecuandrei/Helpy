@@ -209,35 +209,29 @@ const Analytics = () => {
   );
 
   const labels1 = useMemo(
-    () => viewedAds.slice(0, value).map(el => el.title),
-    [value, viewedAds]
+    () => viewedAds.map(el => el.title),
+    [value]
   );
 
   const data1 = useMemo(
     () => ({
       labels: labels1,
-<<<<<<< HEAD
       datasets: [
         {
           data: viewedAds.map(el => el.views),
           borderColor: "#FDEAE7",
           backgroundColor: "#FDEAC10",
-=======
-      datasets: [{
-          data: viewedAds.slice(0, value).map(el => el.views),
-          borderColor: "#B6A0F2",
-          backgroundColor: "#B6A0F2",
->>>>>>> 8f0fa75045b4fd8fbc1b008a6d7fc73a8420bc66
           innerHeight: "250px",
           borderRadius: 8,
           datalabels: {
-            offset: -75,
-            anchor: "end",
+            offset: 5,
+            anchor: "start",
             align: "end",
           },
-      }]
-  }),
-    [labels1, value, viewedAds]
+        },
+      ],
+    }),
+    [labels1]
   );
 
 
@@ -292,7 +286,7 @@ const func = (e) => {
 
   console.log(keyword);
   console.log(keyAds);
-  console.log(labels1);
+  console.log(labels2);
   
 
   return (
@@ -322,7 +316,7 @@ const func = (e) => {
         <div className="graph">
           <p className="section-title mb-4">Top {value > 0 ? value : "X"} Most Viewed Ads</p>
           <Bar
-            options={options({dataset:labels1})}
+            options={options("Product")}
             data={data1}
             plugins={[ChartDataLabels]}
           />
