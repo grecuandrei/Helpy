@@ -127,7 +127,7 @@ const Analytics = () => {
   };
   const callBackendAPI4 = async () => {
     // console.log(keyword);
-    const response = await fetch(`${process.env.REACT_APP_URL}/ads/topViewedKeyword/${keyword}/${user.sub}`);
+    const response = await fetch(`${process.env.REACT_APP_NODE_API}/ads/topViewedKeyword/${keyword}/${user.sub}`);
     const body = await response.json();
     if (response.status !== 200) {
         throw Error(body.message)

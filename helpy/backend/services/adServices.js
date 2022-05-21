@@ -207,8 +207,14 @@ async function topViewedKeyword(keyword, guid) {
         const query = {'name': keyword}
         const user = await UserService.findOneByGuid(guid)
         const key = await Keyword.findOne(query)
+
+        const ads = []
+        if (key) {
+            ads = await Ad.find({keywords: key.id, publisherId: user.id}, {'title': 1, 'id': 1, 'views':1}).sort('-views').limit(3)
+        } else {
+            ads = await Ad.find({publisherId: user.id}, {'title': 1, 'id': 1, 'views':1}).sort('-views').limit(3)
+        }
     
-        const ads = await Ad.find({keywords: key.id, publisherId: user.id}, {'title': 1, 'id': 1, 'views':1}).sort('-views').limit(3)
         return ads;
     } catch(err) {
         throw Error(err)
