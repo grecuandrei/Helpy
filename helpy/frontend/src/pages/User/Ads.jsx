@@ -63,6 +63,7 @@ const UserAds = () => {
 				modalIsOpen={openedModal}
 				closeModal={() => {
 					setOpenedModal(false);
+					window.location.reload();
 				}}
 			/>
 			<ViewAdModal
