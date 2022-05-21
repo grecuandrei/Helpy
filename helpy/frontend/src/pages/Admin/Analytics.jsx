@@ -88,63 +88,64 @@ const Analytics = () => {
   const [viewedAds, setViewedAds] = useState([]);
   const [keyAds, setKeyAds] = useState([]);
 
+  const callBackendAPI = async () => {
+    const response = await fetch(`${process.env.REACT_APP_URL}/ads/publisher/${user.sub}`);
+    const body = await response.json();
+
+    if (response.status !== 200) {
+        throw Error(body.message)
+    }
+    setAllAds(body)
+  };
+  const callBackendAPI1 = async () => {
+    const response = await fetch(`${process.env.REACT_APP_URL}/ads/publisherTaken/${user.sub}`);
+    const body = await response.json();
+
+    if (response.status !== 200) {
+        throw Error(body.message)
+    }
+    setTakenAds(body)
+  };
+  const callBackendAPI2 = async () => {
+    const response = await fetch(`${process.env.REACT_APP_URL}/ads/topXLiked/${value}/${user.sub}`);
+    const body = await response.json();
+
+    if (response.status !== 200) {
+        throw Error(body.message)
+    }
+    setLikedAds(body)
+  };
+  const callBackendAPI3 = async () => {
+    // console.log(value);
+    const response = await fetch(`${process.env.REACT_APP_URL}/ads/topXViewed/${value}/${user.sub}`);
+    const body = await response.json();
+
+    if (response.status !== 200) {
+        throw Error(body.message)
+    }
+    setViewedAds(body)
+  };
+  const callBackendAPI4 = async () => {
+    // console.log(keyword);
+    const response = await fetch(`${process.env.REACT_APP_URL}/ads/topViewedKeyword/${keyword}/${user.sub}`);
+    const body = await response.json();
+    if (response.status !== 200) {
+        throw Error(body.message)
+    }
+    setKeyAds(body)
+  };
+
   useEffect(() => {
-    const callBackendAPI = async () => {
-      const response = await fetch(`${process.env.REACT_APP_URL}/ads/publisher/${user.sub}`);
-      const body = await response.json();
-  
-      if (response.status !== 200) {
-          throw Error(body.message)
-      }
-      setAllAds(body)
-    };
-    const callBackendAPI1 = async () => {
-      const response = await fetch(`${process.env.REACT_APP_URL}/ads/publisherTaken/${user.sub}`);
-      const body = await response.json();
-  
-      if (response.status !== 200) {
-          throw Error(body.message)
-      }
-      setTakenAds(body)
-    };
-    const callBackendAPI2 = async () => {
-      const response = await fetch(`${process.env.REACT_APP_URL}/ads/topXLiked/${3}/${user.sub}`);
-      const body = await response.json();
-  
-      if (response.status !== 200) {
-          throw Error(body.message)
-      }
-      setLikedAds(body)
-    };
-    const callBackendAPI3 = async () => {
-      const response = await fetch(`${process.env.REACT_APP_URL}/ads/topXViewed/${4}/${user.sub}`);
-      const body = await response.json();
-  
-      if (response.status !== 200) {
-          throw Error(body.message)
-      }
-      setViewedAds(body)
-    };
-    const callBackendAPI4 = async () => {
-      const response = await fetch(`${process.env.REACT_APP_URL}/ads/topViewedKeyword/${'meal'}/${user.sub}`);
-      const body = await response.json();
-  
-      if (response.status !== 200) {
-          throw Error(body.message)
-      }
-      setKeyAds(body)
-    };
     callBackendAPI();
     callBackendAPI1();
     callBackendAPI2();
     callBackendAPI3();
     callBackendAPI4();
-  }, []);
+  }, [value, keyword]);
 
   // console.log(likedAds);
   // console.log(viewedAds);
-  console.log(keyAds);
-
+  // console.log(keyAds);
   const labels = useMemo(
     () => [...Array(value)].map((_, index) => `${index + 1}`),
     [value]
@@ -174,6 +175,46 @@ const Analytics = () => {
     [labels]
   );
 
+  const labels1 = useMemo(
+    () => viewedAds.map(el => el.title),
+    [value]
+  );
+
+  const data1 = useMemo(
+    () => ({
+      labels,
+      datasets: [
+        {
+          data: viewedAds
+            .map(el => el.views),
+          borderColor: "#B6A0F2",
+          backgroundColor: "#B6A0F2",
+          innerHeight: "250px",
+          borderRadius: 8,
+          datalabels: {
+            offset: 5,
+            anchor: "start",
+            align: "end",
+          },
+        },
+      ],
+    }),
+    [labels1]
+  );
+
+  
+
+  // console.log(value);
+  // console.log(labels);
+  // console.log(data);
+
+  console.log(labels);
+  console.log(data);
+  console.log("pauza---");
+  // console.log(likedAds);
+  console.log(labels1);
+  console.log(data1);
+
   return (
     <AdminLayout>
       <div className="row-between">
@@ -192,7 +233,7 @@ const Analytics = () => {
             type="number"
             value={value}
             onChange={(e) =>
-              setValue(e.target.value && parseInt(e.target.value))
+              {e.target.value > 0 ? setValue(e.target.value && parseInt(e.target.value)) : setValue(0);}
             }
             label="Top Number"
             placeholder="Introduce a top number"
@@ -201,8 +242,9 @@ const Analytics = () => {
         <div className="graph">
           <p className="section-title mb-4">Top {value > 0 ? value : "X"} Most Liked Ads</p>
           <Bar
-            options={options("Author")}
-            data={data}
+            options={options("Product")}
+            data={data1}
+            label={labels1}
             plugins={[ChartDataLabels]}
           />
         </div>
@@ -216,7 +258,7 @@ const Analytics = () => {
         </div>
         <div className="analytic-section">
           <Input
-            type="number"
+            type="string"
             value={keyword}
             onChange={(e) =>
               setKeyword(e.target.value)

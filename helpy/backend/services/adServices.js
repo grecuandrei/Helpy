@@ -181,7 +181,7 @@ async function topXLiked(x, guid) {
     try {
         const user = await UserService.findOneByGuid(guid)
     
-        const ads = await Ad.find({publisherId: user.id}, {'title': 1, 'id': 1}).sort('-likes').limit(x)
+        const ads = await Ad.find({publisherId: user.id}, {'title': 1, 'id': 1, 'likes':1}).sort('-likes').limit(x)
         return ads;
     } catch(err) {
         throw Error(err)
@@ -192,8 +192,9 @@ module.exports.topXLiked = topXLiked;
 async function topXViewed(x, guid) {
     try {
         const user = await UserService.findOneByGuid(guid)
+        if(x === 0) return undefined;
     
-        const ads = await Ad.find({publisherId: user.id}, {'title': 1, 'id': 1}).sort('-views').limit(x)
+        const ads = await Ad.find({publisherId: user.id}, {'title': 1, 'id': 1, 'views':1}).sort('-views').limit(x)
         return ads;
     } catch(err) {
         throw Error(err)
@@ -207,7 +208,7 @@ async function topViewedKeyword(keyword, guid) {
         const user = await UserService.findOneByGuid(guid)
         const key = await Keyword.findOne(query)
     
-        const ads = await Ad.find({keywords: key.id, publisherId: user.id}, {'title': 1, 'id': 1}).sort('-views').limit(3)
+        const ads = await Ad.find({keywords: key.id, publisherId: user.id}, {'title': 1, 'id': 1, 'views':1}).sort('-views').limit(3)
         return ads;
     } catch(err) {
         throw Error(err)
