@@ -117,7 +117,6 @@ const Ad = () => {
     }
   }
 
-  console.log(ad.reviewed)
 
   return (
     <AdminLayout>
@@ -140,7 +139,7 @@ const Ad = () => {
             <MdEdit /> Edit
           </Button>
           <Button
-            onClick={() => makeAvailable()} disabled={!ad.taken}
+            onClick={() => makeAvailable()} disabled={ad.taken === false || ad.reviewed === false}
           >
             <MdPostAdd /> Make ad available
           </Button>
