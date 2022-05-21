@@ -22,7 +22,7 @@ const AdCard = ({ title, description, address, keywords, id, taken, reviewed, pu
         </div>
       <div className="flex flex-row justify-between">
         {!taken && <Button onClick={() => handleClick({ title, description, keywords, id })}>Rent</Button>}
-        {taken && <Button disabled>Unavailable</Button>}
+        {taken && <Button disabled>Reserved</Button>}
         <div className="flex flex-col items-end">
           <p>Published by</p>
           <p>{publisherName}</p>

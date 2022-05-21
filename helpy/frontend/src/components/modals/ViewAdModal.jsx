@@ -9,6 +9,7 @@ import { MdTableRows, MdAllInbox, MdAccountBox } from "react-icons/md";
 
 const ViewAdModal = ({ modalIsOpen, closeModal, ad }) => {
 	const [openedModal, setOpenedModal] = useState(false);
+	const [rev, setRev] = useState(ad.reviewed)
 	const [currentAd, setAd] = useState({reviewed: false, description:"", title:"", keywords:[], likes: 0, view: 0, address: "", endDate: null, publisherId: null, taken: false});
 	const { user } = useAuth0();
 
@@ -31,12 +32,13 @@ const ViewAdModal = ({ modalIsOpen, closeModal, ad }) => {
 			modalIsOpen={openedModal}
 			closeModal={() => {
 				setOpenedModal(false);
+				setRev(!rev)
 			}}
 		/>
 		<div className="row-between">
 			<h2>{ad.title}</h2>
 			<div className="flex flex-row">
-				{ ad.taken && !ad.reviewed &&
+				{ ad.taken && !ad.reviewed && !rev &&
 				<Button type="button" onClick={ () => { letReviewAd(ad); }}>
 					<MdAdd />Add Review
 				</Button>
