@@ -43,7 +43,6 @@ const UserTaken = () => {
 				modalIsOpen={openedViewModal}
 				closeModal={() => {
 				setOpenedViewModal(false);
-					window.location.reload()
 				}}
 			/>
 			<Keywords

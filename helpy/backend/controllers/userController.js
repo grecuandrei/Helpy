@@ -29,7 +29,7 @@ exports.create = async (req, res) => {
     }
 
     // Asign publisher role
-    if (req.body.isPublisher == 'true') {
+    if (req.body.isPublisher == true) {
         try {
             await UserService.assignRole(req.body.guid)
         } catch(err) {
@@ -51,7 +51,7 @@ exports.create = async (req, res) => {
         surname: req.body.surname,
         phone: req.body.phone,
         pid: req.body.pid,
-        isPublisher: req.body.isPublisher === 'true' ? true : false
+        isPublisher: req.body.isPublisher ? true : false
     });
 
     // Save user in the database
