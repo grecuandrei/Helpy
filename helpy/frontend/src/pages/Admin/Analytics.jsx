@@ -217,13 +217,13 @@ const Analytics = () => {
       labels: labels1,
       datasets: [{
         data: viewedAds.slice(0, value).map(el => el.views),
-        borderColor: "#B6A0F2",
-        backgroundColor: "#B6A0F2",
+        borderColor: "#FDEAE7",
+        backgroundColor: "#FDEAE7",
         innerHeight: "250px",
         borderRadius: 8,
         datalabels: {
-          offset: -75,
-          anchor: "end",
+          offset: 5,
+          anchor: "start",
           align: "end",
         },
       }]
@@ -231,15 +231,15 @@ const Analytics = () => {
     [labels1, value, viewedAds]
   );
 
-
+  
   const labels2 = useMemo(
-    () => keyAds.map(el => el.title),
-    [value]
+    () => keyAds.slice(0, value).map(el => el.title),
+    [keyAds.length, keyAds]
   );
 
   const data2 = useMemo(
     () => ({
-      labels,
+      labels : labels2,
       datasets: [
         {
           data: keyAds
@@ -256,7 +256,7 @@ const Analytics = () => {
         },
       ],
     }),
-    [labels]
+    [labels2]
   );
 
 
@@ -283,7 +283,7 @@ const func = (e) => {
 
   console.log(keyword);
   console.log(keyAds);
-  console.log(labels1);
+  console.log(labels2);
   
 
   return (
@@ -313,16 +313,8 @@ const func = (e) => {
         <div className="graph">
           <p className="section-title mb-4">Top {value > 0 ? value : "X"} Most Viewed Ads</p>
           <Bar
-            options={options({dataset:labels1})}
+            options={options("Product")}
             data={data1}
-            plugins={[ChartDataLabels]}
-          />
-        </div>
-        <div className="graph">
-          <p className="section-title mb-4">Top {value > 0 ? value : "X"} Most Viewed Ads</p>
-          <Bar
-            options={options("Genre")}
-            data={data}
             plugins={[ChartDataLabels]}
           />
         </div>
