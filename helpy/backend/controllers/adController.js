@@ -108,10 +108,10 @@ exports.findOne = async (req, res) => {
 
 // Retrieve all ADs untaken from the database based on title and/or array of keywords.
 exports.findAll = async (req, res) => {
-    const {title, keywords} = req.query;
+    const {keywords} = req.query;
 
     try {
-        const ads = await AdService.findAll(title, keywords)
+        const ads = await AdService.findAll(keywords)
         console.log('[AdController][FindAll][INFO]:' + " Ads were succesfully returned");
         res.status(200).send(ads);
     } catch (err) {
@@ -133,10 +133,9 @@ exports.findAllPublisher = async (req, res) => {
     }
 
     const {guid} = req.params;
-    const {title, keywords} = req.query;
 
     try {
-        const ads = await AdService.findAllPublisher(title, keywords, guid)
+        const ads = await AdService.findAllPublisher(guid)
         console.log('[AdController][FindAllPublisher][INFO]:' + " Ads were succesfully returned");
         res.status(200).send(ads);
     } catch (err) {

@@ -29,43 +29,33 @@ async function findOne(id) {
 module.exports.findOne = findOne;
 
 // Retrieve all ADs untaken from the database based on title and/or array of keywords.
-async function findAll(title, keywords) {
+async function findAll(keywords) {
     try {
-        let condition = title ? {title: {$regex: new RegExp(title), $options: "i"}} : {};
+        const ads = await Ad.find({taken: false}).populate('keywords', 'name')
 
-        if (keywords !== '[]') {
-            const keywordsName = JSON.parse(keywords)
-            const query = {name: {$in: keywordsName}}
-            const toKeep = {_id: 1}
-            const keywordsIds = JSON.stringify(keywordsName) !== JSON.stringify([]) ? await KeywordService.findKeywords(query, toKeep) : undefined;
-            condition = keywordsIds ? {...condition, 'keywords': {$all: keywordsIds}} : condition
+        if (keywords === '[]' || keywords === undefined) {
+            return ads;
         }
-    
-        const ads = await Ad.find({...condition, taken: false}).populate('keywords', 'name')
-        return ads;
+        const keywordsName = JSON.parse(keywords)
+        let finalAds = []
+        for (let ad of ads) {
+            if (keywordsName.every(element => {return ad.keywords.map(a => a.name).includes(element);})) {
+                finalAds.push(ad)
+            }
+        }
+        return finalAds;
     } catch(err) {
-        console.log(err)
         throw Error(err)
     }
 }
 module.exports.findAll = findAll;
 
 // Retrieve all ADs for a publisher.
-async function findAllPublisher(title, keywords, guid) {
+async function findAllPublisher(guid) {
     try {
-        let condition = title ? {title: {$regex: new RegExp(title), $options: "i"}} : {};
-
-        if (keywords) {
-            const keywordsName = JSON.parse(keywords)
-            const query = {name: {$in: keywordsName}}
-            const toKeep = {_id: 1}
-            const keywordsIds = JSON.stringify(keywordsName) !== JSON.stringify([]) ? await KeywordService.findKeywords(query, toKeep) : undefined;
-            condition = keywordsIds ? {...condition, 'keywords': {$all: keywordsIds}} : condition
-        }
-
         const user = await UserService.findOneByGuid(guid)
     
-        const ads = await Ad.find({...condition, publisherId: user.id}, {'title': 1, 'description': 1, 'keywords': 1, 'endDate': 1, 'taken': 1}).populate('keywords', 'name')
+        const ads = await Ad.find({publisherId: user.id}, {'title': 1, 'description': 1, 'keywords': 1, 'endDate': 1, 'taken': 1}).populate('keywords', 'name')
         return ads;
     } catch(err) {
         throw Error(err)
