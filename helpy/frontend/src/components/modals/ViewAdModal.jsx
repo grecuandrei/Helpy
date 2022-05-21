@@ -37,7 +37,7 @@ const ViewAdModal = ({ modalIsOpen, closeModal, ad }) => {
 			<h2>{ad.title}</h2>
 			<div className="flex flex-row">
 				{ ad.taken && !ad.reviewed &&
-				<Button type="button" onClick={ () => { letReviewAd(ad) }}>
+				<Button type="button" onClick={ () => { letReviewAd(ad); }}>
 					<MdAdd />Add Review
 				</Button>
 				}

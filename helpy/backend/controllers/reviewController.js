@@ -37,13 +37,13 @@ exports.create = async (req, res) => {
     // Save review in the database
     try {
         const result = await ReviewService.saveReview(review)
-        const query = { $push: { reviewsIds: result.id }}
         const ad = await AdService.findOne(req.body.adId)
-        await UserService.updateUser(ad.publisherId, query)
+        await UserService.updateReviewsScore(ad.publisherId, result.id, result.score, customer.isPublisher)
         await AdService.updateAd(req.body.adId, {reviewed: true})
         console.log('[ReviewController][Create][INFO]:' + ' ' + "review was sucessfully added!");
         res.status(201).send(result);
     } catch (err) {
+        console.log(err)
         console.log('[ReviewController][Create][ERROR]:' + ' ' + "Some error occurred while creating the review.");
         res.status(500).send({
             message:

@@ -127,7 +127,7 @@ module.exports.deleteUser = deleteUser;
 
 async function updateReviewsScore(id, reviewId, reviewScore, isPublisher) {
     try {
-        if (isPublisher === 'true') {
+        if (isPublisher === false) {
             const user = await findOne(id)
             let newScore = user.score;
             if (newScore !== 0) {
@@ -144,7 +144,7 @@ async function updateReviewsScore(id, reviewId, reviewScore, isPublisher) {
             const result = await updateUser(id, query)
             return result;
         } else {
-            throw Error('Can\'t perform this action as a customer!')
+            throw Error('Can\'t perform this action as a publisher!')
         }
     } catch (err) {
         throw Error(err)
