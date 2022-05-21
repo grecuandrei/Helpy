@@ -129,7 +129,7 @@ const Ad = () => {
       <div className="flex flex-col gap-10">
         <Section title={"Ad Details"} fields={adFields} />
         <div className="flex flex-col gap-5">
-          <p className="section-title">Book Statistics</p>
+          <p className="section-title">Ad Statistics</p>
           <div className="flex gap-5">
             <div className="statistic-card">
               <div className="card-statistic">

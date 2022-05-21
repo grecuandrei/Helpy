@@ -6,9 +6,9 @@ const AdCard = ({ title, description, address, keywords, id, taken, reviewed, pu
   const keywordsName = keywords.map((keyword) => {return keyword.name});
 
   return (
-    <div className={`book-card ${taken && "rented"}`}>
-      <div className="book-card-details" onClick={() => viewModal({ title, description, keywords, id, address, likes, views, endDate, taken, reviewed, publisherId })}>
-        <div className="book-group">
+    <div className={`ad-card ${taken && "rented"}`}>
+      <div className="ad-card-details" onClick={() => viewModal({ title, description, keywords, id, address, likes, views, endDate, taken, reviewed, publisherId })}>
+        <div className="ad-group">
           <div className="card-heading">
             <p>{description}</p> <BsDot /> <p>{address}</p>
           </div>

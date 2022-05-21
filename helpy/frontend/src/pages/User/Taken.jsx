@@ -51,7 +51,7 @@ const UserTaken = () => {
 				placeholder="Press enter to save keyword"
 				maxKeywords={10}
 			/>
-			<div className="books">
+			<div className="ads">
 				{availableAds.map((ad, index) => (
 				<AdCard key={index} {...ad} viewModal={openViewAd} />))}
 			</div>

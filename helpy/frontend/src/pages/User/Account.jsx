@@ -76,7 +76,7 @@ const Account = () => {
                 3 days remainted until returning date
               </p>
             </div>
-            <Button>Return book</Button>
+            <Button>Return ad</Button>
           </div>
         </div>
         <div className="flex flex-col gap-5 w-full p-[1px]">
