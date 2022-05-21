@@ -46,20 +46,7 @@ export const options = (entity) => ({
     tooltip: {
       enabled: true,
     },
-    datalabels: {
-      formatter: (v, context) => `${entity} ${context.dataIndex + 1}`,
-      font: {
-        weight: "bold",
-      },
-      labels: {
-        title: {
-          display: false,
-        },
-        value: {
-          color: "#111111",
-        },
-      },
-    },
+    datalabels: entity,
   },
   scales: {
     x: {
@@ -116,7 +103,6 @@ const Analytics = () => {
     return body;
   };
   const callBackendAPI3 = async () => {
-    // console.log(value);
     const response = await fetch(`${process.env.REACT_APP_NODE_API}/ads/topXViewed/${value}/${user.sub}`);
     const body = await response.json();
 
@@ -126,7 +112,6 @@ const Analytics = () => {
     return body;
   };
   const callBackendAPI4 = async () => {
-    // console.log(keyword);
     const response = await fetch(`${process.env.REACT_APP_NODE_API}/ads/topViewedKeyword/${keyword}/${user.sub}`);
     const body = await response.json();
     if (response.status !== 200) {
@@ -176,38 +161,6 @@ const Analytics = () => {
 
   }, [keyword]);
 
-  // console.log(likedAds);
-  // console.log(viewedAds);
-  // console.log(keyAds);
-  const labels = useMemo(
-    () => [...Array(value)].map((_, index) => `${index + 1}`),
-    [value]
-  );
-
-  const data = useMemo(
-    () => ({
-      labels,
-      datasets: [
-        {
-          data: labels
-            .map(() => Math.random() * 100)
-            .sort()
-            .reverse(),
-          borderColor: "#B6A0F2",
-          backgroundColor: "#B6A0F2",
-          innerHeight: "250px",
-          borderRadius: 8,
-          datalabels: {
-            offset: -75,
-            anchor: "end",
-            align: "end",
-          },
-        },
-      ],
-    }),
-    [labels]
-  );
-
   const labels1 = useMemo(
     () => viewedAds.slice(0, value).map(el => el.title),
     [value, viewedAds]
@@ -230,11 +183,10 @@ const Analytics = () => {
   }),
     [labels1, value, viewedAds]
   );
-
   
   const labels2 = useMemo(
-    () => keyAds.slice(0, value).map(el => el.title),
-    [keyAds.length, keyAds]
+    () => keyAds.slice(0, 3).map(el => el.title),
+    [keyAds]
   );
 
   const data2 = useMemo(
@@ -259,8 +211,6 @@ const Analytics = () => {
     [labels2]
   );
 
-
-
   
 const func = (e) => {
   if(e.target.value < 0) {
@@ -270,22 +220,8 @@ const func = (e) => {
   } else {
     setValue(e.target.value && parseInt(e.target.value));
   }
-
-  // setValue(e.target.value && parseInt(e.target.value));
-
-  // e.target.value > 0 ? setValue(e.target.value && parseInt(e.target.value)) : setValue(0);
-  // e.target.value < allAds.length ? setValue(e.target.value && parseInt(e.target.value)) : setValue(allAds.length);
 }
-
-
-  // console.log(viewedAds);
-  // console.log(labels1);
-
-  console.log(keyword);
-  console.log(keyAds);
-  console.log(labels2);
   
-
   return (
     <AdminLayout>
       <div className="row-between">
@@ -313,7 +249,7 @@ const func = (e) => {
         <div className="graph">
           <p className="section-title mb-4">Top {value > 0 ? value : "X"} Most Viewed Ads</p>
           <Bar
-            options={options("Product")}
+            options={options(labels1)}
             data={data1}
             plugins={[ChartDataLabels]}
           />
@@ -332,7 +268,7 @@ const func = (e) => {
         <div className="graph my-12">
           <p className="section-title mb-4">Top 3 Most viewed ads based on keyword {keyword !== '' ? keyword : "X"} </p>
           <Bar
-            options={options("Keyword")}
+            options={options(labels2)}
             data={data2}
             plugins={[ChartDataLabels]}
           />
