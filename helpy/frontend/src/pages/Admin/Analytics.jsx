@@ -95,7 +95,7 @@ const Analytics = () => {
     if (response.status !== 200) {
         throw Error(body.message)
     }
-    setAllAds(body)
+    return body;
   };
   const callBackendAPI1 = async () => {
     const response = await fetch(`${process.env.REACT_APP_NODE_API}/ads/publisherTaken/${user.sub}`);
@@ -104,7 +104,7 @@ const Analytics = () => {
     if (response.status !== 200) {
         throw Error(body.message)
     }
-    setTakenAds(body)
+    return body;
   };
   const callBackendAPI2 = async () => {
     const response = await fetch(`${process.env.REACT_APP_NODE_API}/ads/topXLiked/${value}/${user.sub}`);
@@ -113,7 +113,7 @@ const Analytics = () => {
     if (response.status !== 200) {
         throw Error(body.message)
     }
-    setLikedAds(body)
+    return body;
   };
   const callBackendAPI3 = async () => {
     // console.log(value);
@@ -123,7 +123,7 @@ const Analytics = () => {
     if (response.status !== 200) {
         throw Error(body.message)
     }
-    setViewedAds(body)
+    return body;
   };
   const callBackendAPI4 = async () => {
     // console.log(keyword);
@@ -132,16 +132,49 @@ const Analytics = () => {
     if (response.status !== 200) {
         throw Error(body.message)
     }
-    setKeyAds(body)
+    return body;
   };
 
   useEffect(() => {
-    callBackendAPI();
-    callBackendAPI1();
-    callBackendAPI2();
-    callBackendAPI3();
-    callBackendAPI4();
-  }, [value, keyword]);
+    callBackendAPI()
+		.then(res => {
+			setAllAds(res)
+		})
+		.catch(err => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    callBackendAPI1()
+		.then(res => {
+			setTakenAds(res)
+		})
+		.catch(err => console.log(err));
+  }, []);
+
+    useEffect(() => {
+    callBackendAPI2()
+		.then(res => {
+      setLikedAds(res)
+		})
+		.catch(err => console.log(err));
+  }, []);
+
+    useEffect(() => {
+    callBackendAPI3()
+		.then(res => {
+      setViewedAds(res)
+		})
+		.catch(err => console.log(err));
+  }, []);
+
+    useEffect(() => {
+    callBackendAPI4()
+		.then(res => {
+      setKeyAds(res)
+		})
+		.catch(err => console.log(err));
+
+  }, [keyword]);
 
   // console.log(likedAds);
   // console.log(viewedAds);
@@ -185,10 +218,9 @@ const Analytics = () => {
       labels,
       datasets: [
         {
-          data: viewedAds
-            .map(el => el.views),
-          borderColor: "#B6A0F2",
-          backgroundColor: "#B6A0F2",
+          data: viewedAds.map(el => el.views),
+          borderColor: "#FDEAE7",
+          backgroundColor: "#FDEAC10",
           innerHeight: "250px",
           borderRadius: 8,
           datalabels: {
@@ -202,18 +234,60 @@ const Analytics = () => {
     [labels1]
   );
 
+
+  const labels2 = useMemo(
+    () => keyAds.map(el => el.title),
+    [value]
+  );
+
+  const data2 = useMemo(
+    () => ({
+      labels,
+      datasets: [
+        {
+          data: keyAds
+            .map(el => el.views),
+          borderColor: "#FDEAE7",
+          backgroundColor: "#FDEAC10",
+          innerHeight: "250px",
+          borderRadius: 8,
+          datalabels: {
+            offset: 5,
+            anchor: "start",
+            align: "end",
+          },
+        },
+      ],
+    }),
+    [labels]
+  );
+
+
+
   
+const func = (e) => {
+  if(e.target.value < 0) {
+    setValue(0);
+  } else if(e.target.value > allAds.length) {
+    setValue(allAds.length && parseInt(allAds.length));
+  } else {
+    setValue(e.target.value && parseInt(e.target.value));
+  }
 
-  // console.log(value);
-  // console.log(labels);
-  // console.log(data);
+  // setValue(e.target.value && parseInt(e.target.value));
 
-  console.log(labels);
-  console.log(data);
-  console.log("pauza---");
-  // console.log(likedAds);
-  console.log(labels1);
-  console.log(data1);
+  // e.target.value > 0 ? setValue(e.target.value && parseInt(e.target.value)) : setValue(0);
+  // e.target.value < allAds.length ? setValue(e.target.value && parseInt(e.target.value)) : setValue(allAds.length);
+}
+
+
+  // console.log(viewedAds);
+  // console.log(labels1);
+
+  console.log(keyword);
+  console.log(keyAds);
+  console.log(labels2);
+  
 
   return (
     <AdminLayout>
@@ -233,18 +307,17 @@ const Analytics = () => {
             type="number"
             value={value}
             onChange={(e) =>
-              {e.target.value > 0 ? setValue(e.target.value && parseInt(e.target.value)) : setValue(0);}
+              {func(e)}
             }
             label="Top Number"
             placeholder="Introduce a top number"
           />
         </div>
         <div className="graph">
-          <p className="section-title mb-4">Top {value > 0 ? value : "X"} Most Liked Ads</p>
+          <p className="section-title mb-4">Top {value > 0 ? value : "X"} Most Viewed Ads</p>
           <Bar
             options={options("Product")}
             data={data1}
-            label={labels1}
             plugins={[ChartDataLabels]}
           />
         </div>
@@ -268,10 +341,10 @@ const Analytics = () => {
           />
         </div>
         <div className="graph my-12">
-          <p className="section-title mb-4">Top 3 Most viewed ad based on keyword {keyword !== '' ? keyword : "X"} </p>
+          <p className="section-title mb-4">Top 3 Most viewed ads based on keyword {keyword !== '' ? keyword : "X"} </p>
           <Bar
             options={options("Keyword")}
-            data={data}
+            data={data2}
             plugins={[ChartDataLabels]}
           />
         </div>
