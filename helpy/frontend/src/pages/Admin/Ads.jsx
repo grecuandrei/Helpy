@@ -38,7 +38,7 @@ const Ads = () => {
   const [openedModal, setOpenedModal] = useState(false);
 
   const callBackendAPI = async () => {
-		const response = await fetch(`${process.env.REACT_APP_URL}/ads/publisher/${user.sub}`);
+		const response = await fetch(`${process.env.REACT_APP_NODE_API}/ads/publisher/${user.sub}`);
 		const body = await response.json();
 
 		if (response.status !== 200) {

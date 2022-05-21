@@ -46,7 +46,7 @@ const Ad = () => {
 
 	useEffect(() => {
 		const callBackendAPI = async () => {
-      const response = await fetch(`${process.env.REACT_APP_URL}/ads/${state.adId}`);
+      const response = await fetch(`${process.env.REACT_APP_NODE_API}/ads/${state.adId}`);
       const body = await response.json();
   
       if (response.status !== 200) {
@@ -63,7 +63,7 @@ const Ad = () => {
       setAvailable(body.taken ? "Unavailable" : "Available")
     };
     const callBackendAPI1 = async () => {
-      const response = await fetch(`${process.env.REACT_APP_URL}/users/findCustomer/${state.adId}`);
+      const response = await fetch(`${process.env.REACT_APP_NODE_API}/users/findCustomer/${state.adId}`);
       const body = await response.json();
   
       if (response.status !== 200) {
@@ -88,7 +88,7 @@ const Ad = () => {
           Authorization: `Bearer ${token.__raw}`,
         },
       };
-      fetch(`${process.env.REACT_APP_URL}/ads/${ad.id}`, requestOptions)
+      fetch(`${process.env.REACT_APP_NODE_API}/ads/${ad.id}`, requestOptions)
         .then(response => {
           console.log(response.json())
           if (response.status === 200) {

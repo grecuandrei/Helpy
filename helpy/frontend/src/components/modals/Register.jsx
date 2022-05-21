@@ -5,6 +5,7 @@ import loggo from "../../assets/logo.svg";
 import bg from "../../assets/hero-left.png"
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import Loading from "../../components/Loading";
 
 const Register = ({ userGUID, userEmail }) => {
     const [name, setName] = useState('');
@@ -36,9 +37,10 @@ const Register = ({ userGUID, userEmail }) => {
                 isPublisher: checked
             })
         };
-        fetch(`${process.env.REACT_APP_URL}/users/`, requestOptions)
+        fetch(`${process.env.REACT_APP_NODE_API}/users/`, requestOptions)
             .then(response => {
                 if (response.status !== 500) {
+                    
                     navigate("/home");
                 } else {
                     console.log(response.json())

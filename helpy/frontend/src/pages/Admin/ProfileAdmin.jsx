@@ -55,7 +55,7 @@ const Profile = ( ) => {
         if (user && user[authSettings.rolesKey] === 1) {
             setIsPublisher(true);
         }
-		const response = await fetch(`${process.env.REACT_APP_URL}/users/guid/${user.sub}`);
+		const response = await fetch(`${process.env.REACT_APP_NODE_API}/users/guid/${user.sub}`);
 		const body = await response.json();
 
 		if (response.status !== 200) {
@@ -75,7 +75,7 @@ const Profile = ( ) => {
 
 
     const callBackendAPI2 = async () => {
-		const response = await fetch(`${process.env.REACT_APP_URL}/ads/publisher/${user.sub}`);
+		const response = await fetch(`${process.env.REACT_APP_NODE_API}/ads/publisher/${user.sub}`);
 		const body = await response.json();
 
 		if (response.status !== 200) {
@@ -105,7 +105,7 @@ const Profile = ( ) => {
 				Authorization: `Bearer ${token.__raw}`,
 			},
 			};
-			fetch(`${process.env.REACT_APP_URL}/users/${user.sub}/${isPublisher}`, requestOptions)
+			fetch(`${process.env.REACT_APP_NODE_API}/users/${user.sub}/${isPublisher}`, requestOptions)
 			.then(response => {
 				console.log(response.json()) 
 				if(response.status === 200){

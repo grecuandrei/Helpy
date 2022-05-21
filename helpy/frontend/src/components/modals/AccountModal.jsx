@@ -47,7 +47,7 @@ const AccountModal = ({ modalIsOpen, closeModal, userBD }) => {
 			},
 			body: JSON.stringify(body)
 		};
-		fetch(`${process.env.REACT_APP_URL}/users/${user.sub}`, requestOptions)
+		fetch(`${process.env.REACT_APP_NODE_API}/users/${user.sub}`, requestOptions)
 			.then(response => console.log(response.json()));
 	};
 

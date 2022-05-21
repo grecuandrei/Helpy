@@ -33,7 +33,7 @@ const AddAdModal = ({ modalIsOpen, closeModal }) => {
           keywords: keywords,
         })
     };
-    fetch(`${process.env.REACT_APP_URL}/ads/${user.sub}`, requestOptions)
+    fetch(`${process.env.REACT_APP_NODE_API}/ads/${user.sub}`, requestOptions)
         .then(response => {
             if (response.status !== 500) {
               closeModal();

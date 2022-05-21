@@ -28,14 +28,14 @@ const ReviewModal = ({ modalIsOpen, closeModal, ad }) => {
             adId: ad.id
         })
     };
-    fetch(`${process.env.REACT_APP_URL}/reviews/`, requestOptions)
+    fetch(`${process.env.REACT_APP_NODE_API}/reviews/`, requestOptions)
         .then(response => {
             if (response.status === 200) {
                 const requestOptionsUpdateUser = {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' }
                 };
-                fetch(`${process.env.REACT_APP_URL}/users/review/${ad.publisherId}/${ad.id}`, requestOptionsUpdateUser)
+                fetch(`${process.env.REACT_APP_NODE_API}/users/review/${ad.publisherId}/${ad.id}`, requestOptionsUpdateUser)
                     .then(resp => {console.log(resp)});
             }
         })

@@ -24,7 +24,7 @@ const Router = () => {
 	}, [ isAuthenticated, loginWithRedirect]);
 
 	const callBackendAPI = async () => {
-		const response = await fetch(`${process.env.REACT_APP_URL}/users/guid/${user.sub}`);
+		const response = await fetch(`${process.env.REACT_APP_NODE_API}/users/guid/${user.sub}`);
 		const body = await response.json();
 
 		if (response.status !== 200 && response.status !== 404) {

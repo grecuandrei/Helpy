@@ -53,7 +53,7 @@ const Profile = ( ) => {
     );
 	
 	const callBackendAPI = async () => {
-		const response = await fetch(`${process.env.REACT_APP_URL}/users/guid/${user.sub}`);
+		const response = await fetch(`${process.env.REACT_APP_NODE_API}/users/guid/${user.sub}`);
 		const body = await response.json();
 
 		if (response.status !== 200) {
@@ -74,7 +74,7 @@ const Profile = ( ) => {
 	}, [user]);
 
   const callBackendAPI2 = async () => {
-		const response = await fetch(`${process.env.REACT_APP_URL}/ads/customer/${user.sub}`);
+		const response = await fetch(`${process.env.REACT_APP_NODE_API}/ads/customer/${user.sub}`);
 		const body = await response.json();
 
 		if (response.status !== 200) {
@@ -104,13 +104,12 @@ const Profile = ( ) => {
 				Authorization: `Bearer ${token.__raw}`,
 			},
 			};
-			fetch(`${process.env.REACT_APP_URL}/users/${user.sub}/${isPublisher}`, requestOptions)
+			fetch(`${process.env.REACT_APP_NODE_API}/users/${user.sub}/${isPublisher}`, requestOptions)
 			.then(response => {
 				console.log(response.json()) 
 				if(response.status === 200){
-          Loading()
-					navigate("/")
-					logout({ returnTo: window.location.origin })
+					logout({ returnTo: `${process.env.REACT_APP_URL}` })
+          window.location.reload();
 				} 
 			});
 		}

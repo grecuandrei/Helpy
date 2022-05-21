@@ -11,9 +11,20 @@ const AdminLayout = ({ children }) => {
 
   /* inseamna ca are utilizator ca si rol, deci nu poate vedea partea de admin */
   useEffect(() => {
-    if (user && user[authSettings.rolesKey].length === 0) {
-      navigate("/home");
-    }
+    const callBackendAPI = async () => {
+      const response = await fetch(`${process.env.REACT_APP_NODE_API}/users/guid/${user.sub}`);
+      const body = await response.json();
+  
+      if (response.status !== 200) {
+      throw Error(body.message)
+      }
+      return body;
+    };
+    callBackendAPI().then(result => {
+      if (!result.isPublisher) {
+        navigate("/home");
+      }
+    })
   }, [ navigate, user]);
 
   return (

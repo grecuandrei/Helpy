@@ -29,6 +29,11 @@ const schema = mongoose.Schema(
             type: Number,
             default: 0
         },
+        isPublisher: {
+            type: Boolean,
+            default: false,
+            required: true
+        },
         reviewsIds: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'review'

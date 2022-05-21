@@ -21,7 +21,7 @@ const EditAdModal = ({ modalIsOpen, closeModal, adId }) => {
 
     useEffect(() => {
         const callBackendAPI = async () => {
-            const response = await fetch(`${process.env.REACT_APP_URL}/ads/${adId}`);
+            const response = await fetch(`${process.env.REACT_APP_NODE_API}/ads/${adId}`);
             const body = await response.json();
         
             if (response.status !== 200) {
@@ -53,7 +53,7 @@ const EditAdModal = ({ modalIsOpen, closeModal, adId }) => {
 			},
 			body: JSON.stringify(body)
 		};
-		fetch(`${process.env.REACT_APP_URL}/ads/${adId}`, requestOptions)
+		fetch(`${process.env.REACT_APP_NODE_API}/ads/${adId}`, requestOptions)
 			.then(response => {
                 if (response.status === 200) {
                     closeModal();

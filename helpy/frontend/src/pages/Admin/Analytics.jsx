@@ -89,7 +89,7 @@ const Analytics = () => {
   const [keyAds, setKeyAds] = useState([]);
 
   const callBackendAPI = async () => {
-    const response = await fetch(`${process.env.REACT_APP_URL}/ads/publisher/${user.sub}`);
+    const response = await fetch(`${process.env.REACT_APP_NODE_API}/ads/publisher/${user.sub}`);
     const body = await response.json();
 
     if (response.status !== 200) {
@@ -98,7 +98,7 @@ const Analytics = () => {
     setAllAds(body)
   };
   const callBackendAPI1 = async () => {
-    const response = await fetch(`${process.env.REACT_APP_URL}/ads/publisherTaken/${user.sub}`);
+    const response = await fetch(`${process.env.REACT_APP_NODE_API}/ads/publisherTaken/${user.sub}`);
     const body = await response.json();
 
     if (response.status !== 200) {
@@ -107,7 +107,7 @@ const Analytics = () => {
     setTakenAds(body)
   };
   const callBackendAPI2 = async () => {
-    const response = await fetch(`${process.env.REACT_APP_URL}/ads/topXLiked/${value}/${user.sub}`);
+    const response = await fetch(`${process.env.REACT_APP_NODE_API}/ads/topXLiked/${value}/${user.sub}`);
     const body = await response.json();
 
     if (response.status !== 200) {
@@ -117,7 +117,7 @@ const Analytics = () => {
   };
   const callBackendAPI3 = async () => {
     // console.log(value);
-    const response = await fetch(`${process.env.REACT_APP_URL}/ads/topXViewed/${value}/${user.sub}`);
+    const response = await fetch(`${process.env.REACT_APP_NODE_API}/ads/topXViewed/${value}/${user.sub}`);
     const body = await response.json();
 
     if (response.status !== 200) {

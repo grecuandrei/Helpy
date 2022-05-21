@@ -10,11 +10,21 @@ const UserLayout = ({ children }) => {
   const navigate = useNavigate();
 
   /* inseamna ca are admin ca si rol, deci nu poate vedea partea de utilizator */
-  console.log(user[authSettings.rolesKey])
   useEffect(() => {
-    if (user && user[authSettings.rolesKey].length === 1) {
-      navigate("/ads");
-    }
+    const callBackendAPI = async () => {
+      const response = await fetch(`${process.env.REACT_APP_NODE_API}/users/guid/${user.sub}`);
+      const body = await response.json();
+  
+      if (response.status !== 200) {
+      throw Error(body.message)
+      }
+      return body;
+    };
+    callBackendAPI().then(result => {
+      if (result.isPublisher || (user && user[authSettings.rolesKey].length === 1)) {
+        navigate("/ads");
+      }
+    })
   }, [navigate, user]);
 
   return (

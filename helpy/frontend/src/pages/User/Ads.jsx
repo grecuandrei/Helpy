@@ -20,7 +20,7 @@ const UserAds = () => {
 	  let token = getToken()
 	
 	const callBackendAPI = async () => {
-		const response = await fetch(`${process.env.REACT_APP_URL}/ads/?keywords=${encodeURIComponent(JSON.stringify(keywords))}`);
+		const response = await fetch(`${process.env.REACT_APP_NODE_API}/ads/?keywords=${encodeURIComponent(JSON.stringify(keywords))}`);
 		const body = await response.json();
 
 		if (response.status !== 200) {
@@ -52,7 +52,7 @@ const UserAds = () => {
 				Authorization: `Bearer ${token.__raw}`
 		   	},
 		};
-		fetch(`${process.env.REACT_APP_URL}/ads/viewAd/${ad.id}`, requestOptions)
+		fetch(`${process.env.REACT_APP_NODE_API}/ads/viewAd/${ad.id}`, requestOptions)
 			.then(response => console.log(response.json()));
 	};
 
