@@ -17,12 +17,12 @@ const AccountModal = ({ modalIsOpen, closeModal, userBD }) => {
     }  
     let token = getToken()
 
-	useEffect(() => {
-		setName(userBD.name)
-		setSurname(userBD.surname)
-		setPhone(userBD.phone)
-		setPid(userBD.pid)
-	  }, [user, userBD.name, userBD.surname, userBD.phone, userBD.pid]);
+	// useEffect(() => {
+	// 	setName(userBD.name)
+	// 	setSurname(userBD.surname)
+	// 	setPhone(userBD.phone)
+	// 	setPid(userBD.pid)
+	//   }, [user, userBD.name, userBD.surname, userBD.phone, userBD.pid]);
 
 
 	const editAccount = () => {
