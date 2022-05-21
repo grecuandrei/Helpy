@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const Ad = require('../models/adModel');
 const AdService = require('./adServices');
 const ReviewService = require('./reviewServices');
 const activeClients = require('../metrics/prometheus').activeClients;
@@ -166,6 +167,10 @@ module.exports.removeAdFromCustomers = removeAdFromCustomers;
 async function findCustomerFromAd(id) {
     try {
         const result = await User.findOne({'adsIds': id})
+        // console.log(result)
+        if (result === null) {
+            return []
+        }
         return result;
     } catch (err) {
         throw Error(err)
@@ -179,7 +184,7 @@ async function reserveAd(guid, adId, isPublisher) {
         if (isPublisher === 'false') {
             // const user = await findOneByGuid(guid)
             // sendMail(user.email, reserveCustomerEmail)
-            // const ad = await Ad.findOne(adId).populate('publisherId')
+            // const ad = await Ad.findOne({id: adId}).populate('publisherId')
             // sendMail(ad.publisherId.email, reservePublisherEmail)
             const query = {
                 $push: {
