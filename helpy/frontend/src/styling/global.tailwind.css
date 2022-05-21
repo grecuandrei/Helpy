@@ -8,7 +8,7 @@
 /* width */
 
 ::-webkit-scrollbar {
-    width: 5px;
+    width: 0px;
 }
 
 
@@ -81,7 +81,7 @@ thead>tr {
 /* button */
 
 .button {
-    @apply flex w-fit items-center justify-center gap-2 px-4 py-2 text-lg font-semibold text-white rounded-full bg-orange-secondary;
+    @apply flex w-fit items-center justify-center gap-2 px-4 py-2 text-lg font-semibold text-white rounded-lg bg-orange-secondary;
 }
 
 .button:disabled {
@@ -93,7 +93,7 @@ thead>tr {
 }
 
 .buttond {
-    @apply flex w-fit items-center justify-center gap-2 px-4 py-2 text-lg font-semibold text-white rounded-full bg-orange;
+    @apply flex w-fit items-center justify-center gap-2 px-4 py-2 text-lg font-semibold text-white rounded-lg bg-orange;
 }
 
 .buttond:disabled {
@@ -135,7 +135,7 @@ label {
 }
 
 .keyword-list>span {
-    @apply flex flex-row items-center justify-items-center p-4 gap-2 rounded-3xl bg-orange text-white font-semibold text-sm;
+    @apply flex flex-row items-center justify-items-center p-4 gap-2 rounded-lg bg-orange text-white font-semibold text-sm;
 }
 
 
@@ -178,11 +178,6 @@ label {
 
 /* modalReg */
 
-/* .ReactModal__Overlay,
-.ReactModal__Overlay--after-open {
-    @apply flex justify-center items-center bg-gray-background !important;
-} */
-
 .register-row {
     @apply flex flex-row content-evenly;
 }
@@ -194,17 +189,6 @@ label {
     position: fixed;
     right: 1px;
     outline: none;
-
-
-    /* transform: translate(140%, 0%);  */
-    /* height:100vh; 
-    min-height: 100px;
-
-    /* background: none; */
-    /* @apply w-[465px] h-screen px-16 py-10 bg-white rounded-md;
-    position: relative;
-    float: right;
-    outline: none; */
 }
 
 .modalReg>img {
@@ -214,10 +198,6 @@ label {
 
 .modalReg form {
     @apply flex flex-col gap-2;
-}
-
-.modalReg .line {
-    @apply h-[1px] bg-black my-2 rounded-md;
 }
 
 .modalReg>form>button {
@@ -234,95 +214,14 @@ label {
 }
 
 /* text for the checkbox */
-/* .shiftText-right{
-    transform: translate(20%, 0%);
-}
-
-.shift-checkbox{
-    transform: translate(-400%, 120%);
-    width: 25px;
-    height: 25px;
-}
-
-input[type=checkbox] {
-    width: 25px;
-    height: 25px;
-    transform: translate(-100px, 30px);
-
-} */
-
-/* text for the checkbox */
 .checkbox-reg{
     @apply flex flex-col items-center justify-center gap-3;
 }
 
-input[type=checkbox] {
-    transform: scale(1.5);
+/* toggle button */
+input:checked ~ .radio {
+    @apply text-white bg-orange-secondary;
 }
-/* special check toggle */
-
-/* .switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-  }
-  
-  .switch input { 
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-  
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-  
-  input:checked + .slider {
-    background-color: #2196F3;
-  }
-  
-  input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
-  }
-  
-  input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-  }
-  
-  /* Rounded sliders */
-  /*  
-  .slider.round {
-    border-radius: 34px;
-  }
-  
-  .slider.round:before {
-    border-radius: 50%;
-  } */
-
-
 /* special info section */
 
 .no-keywords {

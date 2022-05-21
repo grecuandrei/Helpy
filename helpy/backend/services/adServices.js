@@ -31,7 +31,7 @@ module.exports.findOne = findOne;
 // Retrieve all ADs untaken from the database based on title and/or array of keywords.
 async function findAll(keywords) {
     try {
-        const ads = await Ad.find({taken: false}).populate('keywords', 'name')
+        const ads = await Ad.find({taken: false}).populate('keywords', 'name').populate('publisherId', 'name surname')
 
         if (keywords === '[]' || keywords === undefined) {
             return ads;

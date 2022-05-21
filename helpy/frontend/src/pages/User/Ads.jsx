@@ -81,7 +81,7 @@ const UserAds = () => {
 			/>
 			<div className="ads">
 				{availableAds.map((ad, index) => (
-					<AdCard key={index} {...ad} handleClick={handleClick} viewModal={openViewAd}/>))
+					<AdCard key={index} {...ad} publisherName={availableAds[index]['publisherId']['name']}  handleClick={handleClick} viewModal={openViewAd}/>))
 				}
 			</div>
 		</UserLayout>

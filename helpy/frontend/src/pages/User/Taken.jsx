@@ -35,6 +35,7 @@ const UserTaken = () => {
 		setOpenedViewModal(true);
 	};
 
+
 	return (
 		<UserLayout>
 			<ViewAdModal
@@ -53,7 +54,7 @@ const UserTaken = () => {
 			/>
 			<div className="ads">
 				{availableAds.map((ad, index) => (
-				<AdCard key={index} {...ad} viewModal={openViewAd} />))}
+				<AdCard key={index} {...ad} publisherName={availableAds[index]['publisherId']['name']} viewModal={openViewAd} />))}
 			</div>
 		</UserLayout>
 	);

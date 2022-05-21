@@ -20,20 +20,6 @@
   @apply flex flex-row w-[90%] gap-5;
 }
 
-/* tabs */
-.ad-tabs {
-  @apply flex gap-5;
-}
-
-.ad-tabs > div {
-  @apply py-2 px-3 rounded-3xl cursor-pointer  bg-transparent text-black opacity-50 font-semibold text-sm;
-}
-
-.ad-tabs > div.active {
-  @apply opacity-100;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
-}
-
 /* ads layout */
 .ads {
   @apply flex flex-wrap gap-4 m-[1px];
@@ -42,7 +28,7 @@
 /* ad card */
 
 .ad-card {
-  @apply pb-6 pl-6 rounded-3xl flex flex-col gap-3 min-w-[300px];
+  @apply pb-6 px-4 rounded-3xl flex flex-col justify-between gap-3 min-w-[300px];
   box-shadow: 0px 0px 2px #7b61ff;
 }
 
@@ -54,7 +40,7 @@
   box-shadow: 0px 0px 2px #999999;
 }
 
-.boadok-group {
+.ad-group {
   @apply flex flex-col gap-1;
 }
 

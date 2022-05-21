@@ -62,9 +62,12 @@ async function findOneByGuid(userGuid) {
         const user = await User.findOne({guid: userGuid})
             .populate({
                 path : 'adsIds',
-                    populate : {
+                    populate : [{
                         path : 'keywords'
-                    }
+                    },
+                    {
+                        path: 'publisherId',
+                    }]
             })
             .populate('reviewsIds')
         return user;
