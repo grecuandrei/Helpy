@@ -20,8 +20,11 @@ const AdCard = ({ title, description, address, keywords, id, taken, reviewed, pu
           {keywords.length > 0 && ("#"+keywordsName.join(" #"))}
         </div>
       </div>
-      {!taken && <Button onClick={() => handleClick({ title, description, keywords, id })}>Rent</Button>}
-      {taken && <Button disabled>Unavailable</Button>}
+      <div className="flex flex-row justify-between">
+        {!taken && <Button onClick={() => handleClick({ title, description, keywords, id })}>Rent</Button>}
+        {taken && <Button disabled>Unavailable</Button>}
+        {<Button onClick={() => handleClick({ title, description, keywords, id })}>Rent</Button>}
+      </div>
     </div>
   );
 };

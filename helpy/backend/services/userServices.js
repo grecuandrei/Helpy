@@ -35,7 +35,7 @@ module.exports.assignRole = assignRole;
 // Create user
 async function saveUser(user) {
     try {
-        // sendMail("samoilescusebastian@gmail.com", registerEmail) // req.body.email
+        // sendMail(user.email, registerEmail)
         const res = await user.save()
         activeClients.inc(1);
         return res;
@@ -175,9 +175,9 @@ async function reserveAd(guid, adId, isPublisher) {
     try {
         if (isPublisher === 'false') {
             // const user = await findOneByGuid(guid)
-            // sendMail("samoilescusebastian@gmail.com", reserveCustomerEmail) // user.email
+            // sendMail(user.email, reserveCustomerEmail)
             // const ad = await Ad.findOne(adId).populate('publisherId')
-            // sendMail("samoilescusebastian@gmail.com", reservePublisherEmail) // ad.publisherId.email
+            // sendMail(ad.publisherId.email, reservePublisherEmail)
             const query = {
                 $push: {
                     adsIds: adId
