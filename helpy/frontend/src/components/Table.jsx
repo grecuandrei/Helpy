@@ -40,7 +40,7 @@ const Table = ({ data, columns, noHref }) => {
             >
               {row.cells.map((cell) => {
                 if (cell.column.Header === "Available") {
-                  if (cell.value) return <td {...cell.getCellProps()}>Unavailable</td>
+                  if (cell.value) return <td {...cell.getCellProps()}>Reserved</td>
                   if (!cell.value) return <td {...cell.getCellProps()}>Available</td>
                 }
                 return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;

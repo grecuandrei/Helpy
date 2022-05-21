@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import Button from "../../components/Button";
 import AdminLayout from "../../utils/AdminLayout";
-import { MdEdit, MdDelete } from "react-icons/md";
+import { MdEdit, MdDelete, MdPostAdd } from "react-icons/md";
 import Table from "../../components/Table";
 import Section from "../../components/Section";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -98,6 +98,10 @@ const Ad = () => {
     }
   }
 
+  const makeAvailable = () => {
+
+  }
+
   return (
     <AdminLayout>
       <EditAdModal
@@ -115,8 +119,13 @@ const Ad = () => {
           </Button>
         </div>
         <div className="row-center">
-          <Button onClick={() => setOpenedModal(true)}>
+          <Button onClick={() => setOpenedModal(true)} disabled={ad.taken}>
             <MdEdit /> Edit
+          </Button>
+          <Button
+            onClick={() => makeAvailable()}
+          >
+            <MdPostAdd /> Make ad available
           </Button>
           <Button
             className="delete-button"
