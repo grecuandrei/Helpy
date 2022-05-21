@@ -215,7 +215,7 @@ const Analytics = () => {
 
   const data1 = useMemo(
     () => ({
-      labels,
+      labels: labels1,
       datasets: [
         {
           data: viewedAds.map(el => el.views),
